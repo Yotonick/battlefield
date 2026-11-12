@@ -63,6 +63,12 @@ custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 text = "Продолжить"
 
+[node name="TeamButton" type="Button" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "Сменить команду"
+
 [node name="LeaveButton" type="Button" parent="Center/Panel/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 38)

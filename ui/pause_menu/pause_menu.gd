@@ -4,6 +4,7 @@ extends CanvasLayer
 
 @onready var _info: Label = %Info
 @onready var _resume_button: Button = %ResumeButton
+@onready var _team_button: Button = %TeamButton
 @onready var _leave_button: Button = %LeaveButton
 @onready var _quit_button: Button = %QuitButton
 
@@ -11,6 +12,7 @@ extends CanvasLayer
 func _ready() -> void:
 	visible = false
 	_resume_button.pressed.connect(close)
+	_team_button.pressed.connect(_on_team_pressed)
 	_leave_button.pressed.connect(_on_leave_pressed)
 	_quit_button.pressed.connect(_on_quit_pressed)
 
@@ -39,12 +41,21 @@ func open() -> void:
 			", ".join(addresses) if not addresses.is_empty() else "?", Network.port]
 	else:
 		_info.text = "Пинг до хоста: %d мс" % Network.get_ping_ms()
+	var rules: TdmRules = TdmRules.get_rules(get_tree())
+	_team_button.visible = rules != null and rules.get_local_team() != TdmRules.TEAM_NONE
 	_resume_button.grab_focus()
 
 
 func close() -> void:
 	visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _on_team_pressed() -> void:
+	var team_select: Node = get_tree().get_first_node_in_group(&"team_select")
+	visible = false
+	if team_select != null:
+		team_select.call(&"open")
 
 
 func _on_leave_pressed() -> void:

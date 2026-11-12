@@ -20,6 +20,9 @@ signal player_registered_on_host(peer_id: int)
 ## Сеть остановлена: ошибка, хост ушёл, кик или выход по желанию.
 ## Пустая причина = вышли сами.
 signal session_ended(reason: String)
+## У клиента: хост прислал настройки матча (карта, лимиты). Сцена матча
+## загружает карту только после этого.
+signal match_settings_received
 
 enum Mode { NONE, HOST, CLIENT }
 
@@ -44,6 +47,11 @@ var last_join_address: String = "127.0.0.1"
 var port: int = DEFAULT_PORT
 ## Сообщение для меню после возврата (почему вылетели).
 var last_end_reason: String = ""
+## Карта и лимиты. На хосте — из меню, у клиента — от хоста.
+var match_settings: MatchSettings = MatchSettings.new()
+## Для быстрых тестов (--team=): сразу выбрать команду (0 — авто, 1, 2).
+## −1 — показать экран выбора.
+var requested_team: int = -1
 
 var _pending_mode: Mode = Mode.NONE
 var _pending_address: String = ""
@@ -109,6 +117,11 @@ func _finish_leave(reason: String) -> void:
 	session_ended.emit(reason)
 	get_tree().change_scene_to_file(MENU_SCENE)
 	_ending = false
+
+
+## Сцена матча ещё не подняла сеть, но уже ясно, что мы будем хостом.
+func is_pending_host() -> bool:
+	return _pending_mode == Mode.HOST
 
 
 func is_host() -> bool:
@@ -258,10 +271,20 @@ func _register_on_host(requested_name: String, version: String) -> void:
 	var final_name: String = _sanitize_name(requested_name, peer_id)
 	players[peer_id] = final_name
 	print("[net] зарегистрирован «%s» (%d)" % [final_name, peer_id])
+	# Сначала настройки (клиент загрузит карту), потом всё остальное:
+	# reliable-пакеты одного канала приходят по порядку.
+	_receive_match_settings.rpc_id(peer_id, match_settings.to_dict())
 	_broadcast_player_list()
 	_announce_joined.rpc(peer_id, final_name)
 	player_joined.emit(peer_id, final_name)
 	player_registered_on_host.emit(peer_id)
+
+
+@rpc("authority", "reliable")
+func _receive_match_settings(data: Dictionary) -> void:
+	match_settings.apply_dict(data)
+	print("[net] настройки матча: %s" % str(match_settings.to_dict()))
+	match_settings_received.emit()
 
 
 @rpc("authority", "reliable")
@@ -332,6 +355,9 @@ func _load_settings() -> void:
 		player_name = str(config.get_value("player", "name", ""))
 		last_join_address = str(config.get_value("network", "last_address", last_join_address))
 		port = int(config.get_value("network", "port", DEFAULT_PORT))
+		var saved: Variant = config.get_value("match", "settings", {})
+		if saved is Dictionary:
+			match_settings.apply_dict(saved as Dictionary)
 	if player_name.is_empty():
 		player_name = OS.get_environment("USERNAME").left(MAX_NAME_LENGTH)
 	if player_name.is_empty():
@@ -343,6 +369,7 @@ func save_settings() -> void:
 	config.set_value("player", "name", player_name)
 	config.set_value("network", "last_address", last_join_address)
 	config.set_value("network", "port", port)
+	config.set_value("match", "settings", match_settings.to_dict())
 	config.save(SETTINGS_PATH)
 
 
@@ -351,6 +378,8 @@ func save_settings() -> void:
 ##   --join=127.0.0.1     подключиться
 ##   --name=Вася          имя (не сохраняется в настройки)
 ##   --port=7777
+##   --team=1|2|0         сразу выбрать команду (0 — авто)
+##   --map=town|test_range  --kills=30  --round-time=600 (сек)  --results-time=15
 func _apply_command_line() -> void:
 	var args := PackedStringArray()
 	args.append_array(OS.get_cmdline_args())
@@ -366,6 +395,16 @@ func _apply_command_line() -> void:
 			player_name = arg.trim_prefix("--name=").left(MAX_NAME_LENGTH)
 		elif arg.begins_with("--port="):
 			port = arg.trim_prefix("--port=").to_int()
+		elif arg.begins_with("--team="):
+			requested_team = clampi(arg.trim_prefix("--team=").to_int(), 0, 2)
+		elif arg.begins_with("--map="):
+			match_settings.apply_dict({"map": arg.trim_prefix("--map=")})
+		elif arg.begins_with("--kills="):
+			match_settings.apply_dict({"kills": arg.trim_prefix("--kills=").to_int()})
+		elif arg.begins_with("--round-time="):
+			match_settings.apply_dict({"time": arg.trim_prefix("--round-time=").to_int()})
+		elif arg.begins_with("--results-time="):
+			match_settings.apply_dict({"results": arg.trim_prefix("--results-time=").to_float()})
 	if want_host:
 		_pending_mode = Mode.HOST
 		get_tree().change_scene_to_file(MATCH_SCENE)

@@ -11,7 +11,10 @@ extends CharacterBody3D
 ## Бой (шаг 3): здоровье, смерть и респавн решает хост. Выстрел владелец
 ## делает у себя (пуля для вида) и шлёт хосту; хост пускает «настоящую» пулю
 ## и проверяет попадание по бойцам «в прошлом» (компенсация пинга).
-## Здоровье, «жив», убийства и смерти хост рассылает через HostSync.
+## Здоровье, «жив», убийства, смерти и команду хост рассылает через HostSync.
+##
+## Команды (шаг 4): цвет тела по команде; имя над головой видно только у
+## своих (и сквозь стены); пули сквозь своих пролетают — огня по своим нет.
 
 enum Stance { STAND, CROUCH }
 
@@ -26,6 +29,8 @@ const MAX_HEALTH: float = 100.0
 const HISTORY_SECONDS: float = 0.6
 ## Больше этого пинга не компенсируем, секунд.
 const MAX_REWIND: float = 0.3
+## Цвет тела по команде (greybox, до настоящих моделей).
+const TEAM_BODY_COLORS: Array[Color] = [Color(0.36, 0.42, 0.3), Color(0.3, 0.4, 0.55), Color(0.58, 0.34, 0.28)]
 
 ## Только на хосте: бойца убили.
 signal killed_on_host(victim: Player, killer_id: int, headshot: bool)
@@ -138,6 +143,17 @@ var alive: bool = true:
 		_on_alive_changed()
 var kills: int = 0
 var deaths: int = 0
+## Номер команды (TdmRules.TEAM_*). Меняет только хост.
+var team: int = 0:
+	set(value):
+		if team == value:
+			return
+		team = value
+		if is_node_ready():
+			_apply_team_visuals()
+
+## Только у владельца: бойца «заморозили» (итоги раунда) — ввод не читается.
+var frozen: bool = false
 
 # Поля, которые рассылает MultiplayerSynchronizer (см. player.tscn).
 # Пишет их только владелец, остальные только читают.
@@ -173,6 +189,9 @@ var _pending_kick: Vector2 = Vector2.ZERO
 var _history: Array[HitPose] = []
 var _server_shot_times: Array[float] = []
 var _awaiting_respawn: bool = false
+var _body_material: StandardMaterial3D
+## Команда своего бойца, под которую сейчас настроена подпись (−1 — ещё не настроена).
+var _label_for_team: int = -1
 
 @onready var _collision: CollisionShape3D = $CollisionShape3D
 @onready var _body_mesh: MeshInstance3D = $BodyMesh
@@ -185,10 +204,11 @@ var _awaiting_respawn: bool = false
 
 
 ## Вызывается до добавления в дерево (на всех машинах одинаково).
-func setup(peer_id: int, player_name: String, spawn_transform: Transform3D) -> void:
+func setup(peer_id: int, player_name: String, spawn_transform: Transform3D, team_id: int) -> void:
 	name = str(peer_id)
 	self.peer_id = peer_id
 	display_name = player_name
+	team = team_id
 	transform = spawn_transform
 	set_multiplayer_authority(peer_id)
 	# Здоровье и счёт принадлежат хосту, а не владельцу бойца.
@@ -227,6 +247,9 @@ func _ready() -> void:
 		_write_net_state()
 	else:
 		_sync.synchronized.connect(_on_net_state_received)
+	_body_material = (_body_mesh.mesh.surface_get_material(0) as StandardMaterial3D).duplicate() as StandardMaterial3D
+	_body_mesh.material_override = _body_material
+	_apply_team_visuals()
 	_apply_alive_visuals()
 
 
@@ -260,6 +283,7 @@ func _process(delta: float) -> void:
 		_update_camera(delta)
 	else:
 		_update_remote_head(delta)
+		_update_name_label()
 
 
 ## Телепорт (спавн/респавн) без «размазывания» интерполяцией.
@@ -319,11 +343,11 @@ func _apply_pending_kick(delta: float) -> void:
 func _read_input() -> InputState:
 	if debug_input != null:
 		var forced: InputState = debug_input
-		if not alive:
+		if not alive or frozen:
 			return InputState.new()
 		return forced
 	var input := InputState.new()
-	if not alive:
+	if not alive or frozen:
 		return input
 	# Курсор свободен (меню паузы, окно не в фокусе) — боец стоит.
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -666,7 +690,7 @@ func fire_shot(origin: Vector3, direction: Vector3) -> void:
 	var bullets: BulletManager = _get_bullets()
 	var is_host: bool = multiplayer.is_server()
 	if bullets != null:
-		bullets.spawn(origin, direction, weapon.weapon, peer_id, is_host, 0.0, true)
+		bullets.spawn(origin, direction, weapon.weapon, peer_id, team, is_host, 0.0, true)
 	if is_host:
 		_client_shot_fx.rpc(origin, direction)
 	else:
@@ -689,7 +713,7 @@ func _server_fire(origin: Vector3, direction: Vector3) -> void:
 	var rewind: float = clampf(float(Network.get_peer_rtt_ms(sender)) / 1000.0, 0.0, MAX_REWIND)
 	var bullets: BulletManager = _get_bullets()
 	if bullets != null:
-		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, true, rewind, false)
+		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, team, true, rewind, false)
 	weapon.play_remote_shot()
 	_client_shot_fx.rpc(origin, direction)
 
@@ -701,7 +725,7 @@ func _client_shot_fx(origin: Vector3, direction: Vector3) -> void:
 		return
 	var bullets: BulletManager = _get_bullets()
 	if bullets != null:
-		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, false, 0.0, false)
+		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, team, false, 0.0, false)
 	weapon.play_remote_shot()
 
 
@@ -848,9 +872,35 @@ func _apply_alive_visuals() -> void:
 	if alive:
 		_body_mesh.rotation = Vector3.ZERO
 		_apply_stance_shape(_capsule.height)
-		_name_label.visible = not is_multiplayer_authority()
+		_label_for_team = -1  # подпись снова покажет _update_name_label
 	else:
 		_body_mesh.scale = Vector3.ONE
 		_body_mesh.rotation = Vector3(PI * 0.5, 0.0, 0.0)
 		_body_mesh.position = Vector3(0.0, 0.36, 0.0)
 		_name_label.visible = false
+
+
+# --- Команда --------------------------------------------------------------
+
+func _apply_team_visuals() -> void:
+	if _body_material != null:
+		_body_material.albedo_color = TEAM_BODY_COLORS[clampi(team, 0, TEAM_BODY_COLORS.size() - 1)]
+	_label_for_team = -1
+
+
+## Подпись над чужим бойцом: у своих — имя цветом команды, видно сквозь стены;
+## у врагов подписи нет (иначе находили бы их по именам).
+func _update_name_label() -> void:
+	var local_team: int = _get_local_team()
+	if local_team == _label_for_team:
+		return
+	_label_for_team = local_team
+	var friendly: bool = team != 0 and team == local_team
+	_name_label.visible = friendly and alive
+	_name_label.no_depth_test = friendly
+	_name_label.modulate = TdmRules.TEAM_COLORS[clampi(team, 0, 2)]
+
+
+func _get_local_team() -> int:
+	var rules: TdmRules = TdmRules.get_rules(get_tree())
+	return rules.get_local_team() if rules != null else 0

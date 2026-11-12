@@ -108,22 +108,34 @@ func _on_hit_confirmed(headshot: bool, killed: bool) -> void:
 	_audio.play()
 
 
-func _on_kill_announced(killer_id: int, killer_name: String, victim_id: int,
-		victim_name: String, headshot: bool) -> void:
+func _on_kill_announced(killer_id: int, killer_name: String, killer_team: int, victim_id: int,
+		victim_name: String, victim_team: int, headshot: bool) -> void:
 	var my_id: int = multiplayer.get_unique_id()
 	if victim_id == my_id:
 		_killer_name = killer_name
 		_respawn_at_ms = Time.get_ticks_msec() + int(Match.RESPAWN_DELAY * 1000.0)
-	var label := Label.new()
-	label.text = "%s  [%s%s]  %s" % [killer_name, "АК", " ✚голова" if headshot else "", victim_name]
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	label.add_theme_font_size_override(&"font_size", 17)
-	label.add_theme_constant_override(&"outline_size", 5)
-	label.add_theme_color_override(&"font_outline_color", Color.BLACK)
-	if killer_id == my_id:
-		label.add_theme_color_override(&"font_color", Color(1.0, 0.85, 0.4))
-	elif victim_id == my_id:
-		label.add_theme_color_override(&"font_color", Color(1.0, 0.5, 0.45))
+	# Имена цветом команд; строка, где участвуем мы, — на тёмной подложке.
+	var line := RichTextLabel.new()
+	line.bbcode_enabled = true
+	line.fit_content = true
+	line.autowrap_mode = TextServer.AUTOWRAP_OFF
+	line.scroll_active = false
+	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	line.add_theme_font_size_override(&"normal_font_size", 17)
+	line.add_theme_constant_override(&"outline_size", 5)
+	line.add_theme_color_override(&"font_outline_color", Color.BLACK)
+	line.size_flags_horizontal = Control.SIZE_SHRINK_END
+	line.text = "%s  [color=#d8d8d0][АК%s][/color]  %s" % [
+		_colored_name(killer_name, killer_team, killer_id == my_id),
+		" ✚голова" if headshot else "",
+		_colored_name(victim_name, victim_team, victim_id == my_id)]
+	if killer_id == my_id or victim_id == my_id:
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color(0, 0, 0, 0.35)
+		style.content_margin_left = 6.0
+		style.content_margin_right = 6.0
+		line.add_theme_stylebox_override(&"normal", style)
+	var label: Control = line
 	_killfeed.add_child(label)
 	while _killfeed.get_child_count() > KILLFEED_MAX:
 		_killfeed.get_child(0).free()
@@ -131,6 +143,13 @@ func _on_kill_announced(killer_id: int, killer_name: String, victim_id: int,
 	tween.tween_interval(KILLFEED_LIFETIME)
 	tween.tween_property(label, ^"modulate:a", 0.0, 0.6)
 	tween.tween_callback(label.queue_free)
+
+
+func _colored_name(player_name: String, team: int, is_me: bool) -> String:
+	var color: Color = TdmRules.TEAM_COLORS[clampi(team, 0, 2)]
+	var safe: String = player_name.replace("[", "(").replace("]", ")")
+	var text: String = "[color=#%s]%s[/color]" % [color.to_html(false), safe]
+	return "[b]%s[/b]" % text if is_me else text
 
 
 # --- Рисование ------------------------------------------------------------
@@ -243,9 +262,9 @@ func _build() -> void:
 	_killfeed = VBoxContainer.new()
 	_killfeed.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	_killfeed.offset_left = -520.0
-	_killfeed.offset_top = 16.0
+	_killfeed.offset_top = 84.0  # ниже счёта команд (TdmHud)
 	_killfeed.offset_right = -18.0
-	_killfeed.offset_bottom = 200.0
+	_killfeed.offset_bottom = 270.0
 	_killfeed.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	_killfeed.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_killfeed)

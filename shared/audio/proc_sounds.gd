@@ -26,6 +26,10 @@ static func get_sound(sound_name: StringName) -> AudioStreamWAV:
 			stream = _make(0.09, _headshot_sample)
 		&"impact":
 			stream = _make(0.08, _impact_sample)
+		&"round_start":
+			stream = _make(0.9, _round_start_sample)
+		&"round_end":
+			stream = _make(1.4, _round_end_sample)
 		_:
 			stream = _make(0.01, _click_sample)
 	_cache[sound_name] = stream
@@ -91,3 +95,17 @@ static func _headshot_sample(t: float, _rng: RandomNumberGenerator, _state: Arra
 
 static func _impact_sample(t: float, rng: RandomNumberGenerator, state: Array[float]) -> float:
 	return _lowpass(rng.randf_range(-1.0, 1.0), 0.35, state, 0) * exp(-t * 55.0) * 0.7
+
+
+## Начало раунда: два коротких сигнала, второй выше.
+static func _round_start_sample(t: float, _rng: RandomNumberGenerator, _state: Array[float]) -> float:
+	var freq: float = 520.0 if t < 0.35 else 780.0
+	var local: float = fmod(t, 0.35) if t < 0.7 else t - 0.35
+	var env: float = minf(local * 40.0, 1.0) * exp(-local * 6.0)
+	return (sin(TAU * freq * t) + sin(TAU * freq * 2.0 * t) * 0.25) * env * 0.3
+
+
+## Конец раунда: длинный низкий гудок с затуханием.
+static func _round_end_sample(t: float, _rng: RandomNumberGenerator, _state: Array[float]) -> float:
+	var env: float = minf(t * 20.0, 1.0) * exp(-t * 2.2)
+	return (sin(TAU * 220.0 * t) + sin(TAU * 330.0 * t) * 0.6 + sin(TAU * 440.0 * t) * 0.3) * env * 0.25

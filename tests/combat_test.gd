@@ -7,12 +7,28 @@ extends Node
 ##   --test=target       мишень: стоит, бегает влево-вправо, потом встаёт вплотную
 ##   --test=observer     подключиться позже и напечатать здоровье/счёт всех бойцов
 ##
+## TDM (шаг 4), все с --map=test_range:
+##   --test=tdm_shooter  хост, --team=1: стреляет в союзника (урона быть не должно),
+##                       потом во врага до конца раунда; ждёт новый раунд
+##   --test=tdm_mate     --team=1: союзник-мишень
+##   --test=tdm_enemy    --team=2: враг-мишень
+##   --test=tdm_idle     раунд по времени (--round-time=6): ждём ничью
+##
+## Карта (шаг 4):
+##   --test=town         хост, --map=town: точки спавна, подъём по пандусам,
+##                       скриншоты с --screens=папка
+##
+## Стрелок и мишень (shooter/target) — в разных командах: --team=1 и --team=2.
+##
 ## Фазы мишени по числу её смертей: 0 — стоит (в тело), 1 — бегает (в тело),
 ## 2 — стоит (в голову), 3 — подходит вплотную к стрелку (проверка расталкивания).
 
 const TARGET_SPOT := Vector3(0.0, 0.05, -12.0)
 const SHOOTER_SPOT := Vector3(0.0, 0.05, 8.0)
+const MATE_SPOT := Vector3(-3.0, 0.05, -12.0)
+const ENEMY_SPOT := Vector3(3.0, 0.05, -12.0)
 const TIMEOUT: float = 75.0
+const FLOOR_HEIGHT_TEST: float = 3.3
 
 var mode: String = ""
 var _match: Match
@@ -50,6 +66,9 @@ func _physics_process(delta: float) -> void:
 	if _time > TIMEOUT:
 		_finish("таймаут")
 		return
+	if mode == "ui":
+		_ui_tick()
+		return
 	if _me == null:
 		_me = _match.get_local_player()
 		if _me == null:
@@ -64,6 +83,16 @@ func _physics_process(delta: float) -> void:
 			_shooter_tick(delta)
 		"target":
 			_target_tick(delta)
+		"tdm_shooter":
+			_tdm_shooter_tick(delta)
+		"tdm_mate":
+			_tdm_target_tick(MATE_SPOT)
+		"tdm_enemy":
+			_tdm_target_tick(ENEMY_SPOT)
+		"tdm_idle":
+			_tdm_idle_tick()
+		"town":
+			_town_tick(delta)
 		"observer":
 			if _time > 3.0:
 				for node: Node in get_tree().get_nodes_in_group(Player.PLAYERS_GROUP):
@@ -192,7 +221,7 @@ func _on_hit_confirmed(headshot: bool, killed: bool) -> void:
 	var stats: Vector2i = _hits_per_phase.get(phase, Vector2i.ZERO)
 	stats.x += 1
 	_hits_per_phase[phase] = stats
-	if mode == "shooter":
+	if mode == "shooter" or mode == "tdm_shooter":
 		_snap.call_deferred("kill" if killed else ("head" if headshot else "hit"))
 	print("[test] попадание%s%s (всего %d из %d выстрелов)" % [
 		" в голову" if headshot else "", ", УБИТ" if killed else "", _hits, _shots])
@@ -233,6 +262,258 @@ func _target_tick(delta: float) -> void:
 			print("[test] мишень встала вплотную к стрелку")
 		if _phase_time > 12.0:
 			_finish("мишень")
+
+
+# --- TDM ------------------------------------------------------------------
+
+var _tdm_stage: int = 0
+var _tdm_stage_time: float = 0.0
+var _tdm_mate_hits: int = 0
+var _tdm_shots_at_end: int = 0
+
+
+func _rules() -> TdmRules:
+	return TdmRules.get_rules(get_tree())
+
+
+func _find_by_team(team: int) -> Player:
+	for node: Node in get_tree().get_nodes_in_group(Player.PLAYERS_GROUP):
+		var soldier := node as Player
+		if soldier != null and soldier != _me and soldier.team == team:
+			return soldier
+	return null
+
+
+func _aim_at(target: Player, height: float) -> void:
+	var to: Vector3 = target.global_position + Vector3.UP * height - _me.get_eye_position()
+	_me.set_look(atan2(-to.x, -to.z), atan2(to.y, Vector2(to.x, to.z).length()))
+
+
+func _tdm_shooter_tick(delta: float) -> void:
+	var rules: TdmRules = _rules()
+	var mate: Player = _find_by_team(TdmRules.TEAM_BLUE)
+	var enemy: Player = _find_by_team(TdmRules.TEAM_RED)
+	_tdm_stage_time += delta
+	_input.fire_held = false
+	_input.aim_held = false
+	if _me.alive and _me.global_position.distance_to(SHOOTER_SPOT) > 1.0 and not _me.frozen:
+		_me.teleport(Transform3D(Basis.IDENTITY, SHOOTER_SPOT))
+	match _tdm_stage:
+		0:
+			# Ждём обоих и начала раунда.
+			if mate != null and enemy != null and rules.phase == TdmRules.Phase.PLAYING \
+					and mate.global_position.distance_to(MATE_SPOT) < 1.0 \
+					and enemy.global_position.distance_to(ENEMY_SPOT) < 1.0:
+				_next_tdm_stage("стреляем в союзника")
+		1:
+			_aim_at(mate, 1.0)
+			_input.aim_held = true
+			_input.fire_held = _me.weapon.aim_amount >= 1.0 and fmod(_tdm_stage_time, 0.8) < 0.45
+			_input.reload_pressed = _me.weapon.ammo == 0
+			if _tdm_stage_time > 4.0:
+				print("[test] TDM: по союзнику выстрелов %d, подтверждённых попаданий %d, здоровье союзника %.0f" % [
+					_shots, _tdm_mate_hits, mate.health])
+				_next_tdm_stage("стреляем во врага")
+		2:
+			if rules.phase == TdmRules.Phase.ENDED:
+				print("[test] TDM: раунд окончен, победитель %s, счёт %d:%d, мои убийства %d, смертей врага %d" % [
+					TdmRules.TEAM_NAMES[rules.winner], rules.scores[1], rules.scores[2], _me.kills, enemy.deaths])
+				_tdm_shots_at_end = _shots
+				_snap("results")
+				_next_tdm_stage("итоги: проверяем заморозку")
+				return
+			if not enemy.alive:
+				return
+			_aim_at(enemy, 1.0)
+			_input.aim_held = true
+			_input.fire_held = _me.weapon.aim_amount >= 1.0 and fmod(_tdm_stage_time, 0.8) < 0.45
+			_input.reload_pressed = _me.weapon.ammo == 0
+		3:
+			# На итогах жмём огонь — выстрелов быть не должно.
+			_aim_at(enemy, 1.0)
+			_input.fire_held = rules.phase == TdmRules.Phase.ENDED
+			if rules.phase == TdmRules.Phase.PLAYING:
+				print("[test] TDM: выстрелов за время итогов %d (frozen=%s)" % [_shots - _tdm_shots_at_end, _me.frozen])
+				_next_tdm_stage("новый раунд")
+		4:
+			if _tdm_stage_time > 1.5:
+				print("[test] TDM: раунд %d, счёт %d:%d, мои убийства %d, смертей врага %d, здоровье врага %.0f" % [
+					rules.round_number, rules.scores[1], rules.scores[2], _me.kills, enemy.deaths, enemy.health])
+				_finish("tdm")
+
+
+func _next_tdm_stage(text: String) -> void:
+	_tdm_stage += 1
+	_tdm_stage_time = 0.0
+	print("[test] TDM этап %d: %s" % [_tdm_stage, text])
+	if _tdm_stage == 2:
+		_tdm_mate_hits = _hits
+
+
+func _tdm_target_tick(spot: Vector3) -> void:
+	var rules: TdmRules = _rules()
+	_input.move = Vector2.ZERO
+	if _me.alive and _me.global_position.distance_to(spot) > 1.0 and not _me.frozen:
+		_me.teleport(Transform3D(Basis.IDENTITY, spot))
+		_me.set_look(PI, 0.0)
+	if rules.phase == TdmRules.Phase.ENDED:
+		_snap("results")
+	if rules.round_number >= 2 and rules.phase == TdmRules.Phase.PLAYING and _phase_time == 0.0:
+		_phase_time = _time
+	if _phase_time > 0.0 and _time - _phase_time > 1.0:
+		print("[test] %s: раунд %d, счёт %d:%d, моё здоровье %.0f, смертей %d" % [mode, rules.round_number,
+			rules.scores[1], rules.scores[2], _me.health, _me.deaths])
+		_finish(mode)
+
+
+func _tdm_idle_tick() -> void:
+	var rules: TdmRules = _rules()
+	if rules.phase == TdmRules.Phase.PLAYING and _phase_time == 0.0:
+		_phase_time = _time
+		print("[test] TDM: раунд начался, лимит %d с" % rules.time_limit)
+	if rules.phase == TdmRules.Phase.ENDED:
+		print("[test] TDM: раунд окончен по времени через %.1f с, победитель «%s», счёт %d:%d" % [
+			_time - _phase_time, TdmRules.TEAM_NAMES[rules.winner], rules.scores[1], rules.scores[2]])
+		_finish(mode)
+
+
+# --- Скриншоты интерфейса (--test=ui, без --team) ------------------------
+
+var _ui_step: int = 0
+
+
+func _ui_tick() -> void:
+	if _ui_step == 0 and _time > 2.5:
+		_ui_step = 1
+		_snap("team_select")
+	elif _ui_step == 1 and _time > 4.0:
+		_ui_step = 2
+		_rules().request_team(TdmRules.TEAM_BLUE)
+	elif _ui_step == 2 and _time > 6.0:
+		_ui_step = 3
+		_snap("hud")
+		Input.action_press(&"player_list")
+	elif _ui_step == 3 and _time > 7.0:
+		_ui_step = 4
+		_snap("scoreboard")
+	elif _ui_step == 4 and _time > 8.5:
+		Input.action_release(&"player_list")
+		_done = true
+		get_tree().quit()
+
+
+# --- Карта «Городок» -----------------------------------------------------
+
+var _town_stage: int = 0
+var _town_ramps: Array[Node] = []
+var _town_ramp_index: int = 0
+var _town_time: float = 0.0
+var _town_max_y: float = 0.0
+var _town_camera: Camera3D
+
+
+func _town_tick(delta: float) -> void:
+	_town_time += delta
+	match _town_stage:
+		0:
+			if _time < 1.0:
+				return
+			_check_spawns()
+			_town_ramps = get_tree().get_nodes_in_group(&"test_ramp")
+			print("[test] карта: пандусов для проверки %d" % _town_ramps.size())
+			_town_stage = 1
+			_town_time = 0.0
+			_town_ramp_index = -1
+			_next_ramp()
+		1:
+			_input.move = Vector2(0, -1)
+			_town_max_y = maxf(_town_max_y, _me.global_position.y)
+			if _town_time > 5.0:
+				var marker := _town_ramps[_town_ramp_index] as Marker3D
+				var top: float = float(marker.get_meta(&"top_height", 3.3))
+				print("[test] пандус %s: высота наверху %.2f м (нужно %.2f) — %s" % [marker.name, _town_max_y, top,
+					"OK" if _town_max_y >= top - 0.1 else "НЕ ДОШЁЛ"])
+				_snap("ramp_%d" % _town_ramp_index)
+				_next_ramp()
+		2:
+			_input.move = Vector2.ZERO
+			if _screens_dir.is_empty() or DisplayServer.get_name() == "headless":
+				_finish("карта")
+				return
+			_town_screens()
+
+
+func _check_spawns() -> void:
+	var space: PhysicsDirectSpaceState3D = _me.get_world_3d().direct_space_state
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = 0.35
+	capsule.height = 1.8
+	for team: int in [1, 2]:
+		var points: Array[Node] = get_tree().get_nodes_in_group(StringName("spawn_team_%d" % team))
+		var bad: int = 0
+		for node: Node in points:
+			var point := node as Node3D
+			var query := PhysicsShapeQueryParameters3D.new()
+			query.shape = capsule
+			query.collision_mask = 1 | 4
+			query.transform = Transform3D(Basis.IDENTITY, point.global_position + Vector3.UP * 0.96)
+			var overlap: Array[Dictionary] = space.intersect_shape(query, 4)
+			var ray := PhysicsRayQueryParameters3D.create(point.global_position + Vector3.UP * 0.5,
+					point.global_position + Vector3.DOWN * 0.5, 1)
+			var ground: Dictionary = space.intersect_ray(ray)
+			if not overlap.is_empty() or ground.is_empty():
+				bad += 1
+				print("[test] плохая точка спавна %s: пересечений %d, земля %s" % [point.get_path(), overlap.size(), not ground.is_empty()])
+		var forward: Vector3 = -(points[0] as Node3D).global_basis.z
+		print("[test] спавны команды %d: %d точек, плохих %d, смотрят на %s" % [team, points.size(), bad,
+			str(forward.snapped(Vector3.ONE * 0.01))])
+
+
+func _next_ramp() -> void:
+	_town_ramp_index += 1
+	_town_time = 0.0
+	_town_max_y = 0.0
+	if _town_ramp_index >= _town_ramps.size():
+		_town_stage = 2
+		_town_time = 0.0
+		return
+	var marker := _town_ramps[_town_ramp_index] as Marker3D
+	_me.teleport(marker.global_transform)
+	_me.set_look(marker.global_rotation.y, -0.2)
+
+
+var _town_shot_index: int = -1
+
+func _town_screens() -> void:
+	# [имя, позиция камеры, точка, куда смотрим]
+	var shots: Array[Array] = [
+		["overview", Vector3(-20, 85, 75), Vector3(0, 0, 0)],
+		["overview_west", Vector3(-95, 35, 30), Vector3(-30, 0, 0)],
+		["street_blue", Vector3(-50, 1.6, 1.0), Vector3(0, 1.5, 0)],
+		["crossroad", Vector3(-6, 1.6, -9), Vector3(10, 1.0, 6)],
+		["north_yards", Vector3(-46, 1.6, -27), Vector3(-20, 1, -15)],
+		["inside_two_storey", Vector3(-22.5, FLOOR_HEIGHT_TEST + 1.6, -11.5), Vector3(-29, 2.5, -15)],
+		["south_block", Vector3(-30, 1.6, 6.2), Vector3(-12, 1.0, 15)],
+		["blue_base", Vector3(-73, 2.2, 12), Vector3(-55, 1, -5)],
+	]
+	if _town_camera == null:
+		_town_camera = Camera3D.new()
+		_town_camera.fov = 75.0
+		_town_camera.far = 800.0
+		add_child(_town_camera)
+		_town_camera.current = true
+	if _town_time < 0.6:
+		return
+	_town_time = 0.0
+	_town_shot_index += 1
+	if _town_shot_index >= shots.size():
+		_finish("карта")
+		return
+	var shot: Array = shots[_town_shot_index]
+	_town_camera.global_position = shot[1] as Vector3
+	_town_camera.look_at(shot[2] as Vector3, Vector3.UP)
+	_snapped.erase(str(shot[0]))
+	_snap.call_deferred(str(shot[0]))
 
 
 func _snap(shot_name: String) -> void:

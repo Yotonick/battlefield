@@ -31,6 +31,8 @@ class Bullet:
 	var origin: Vector3
 	var weapon: WeaponData
 	var shooter_id: int = 0
+	## Команда стрелка: сквозь своих пуля пролетает (огня по своим нет).
+	var shooter_team: int = 0
 	var authoritative: bool = false
 	## На сколько секунд назад смотреть бойцов (только на хосте).
 	var rewind: float = 0.0
@@ -70,7 +72,7 @@ func _ready() -> void:
 
 ## Выпустить пулю. own — пуля своего бойца (трассер начинается дальше от глаз).
 func spawn(origin: Vector3, direction: Vector3, weapon: WeaponData, shooter_id: int,
-		authoritative: bool, rewind: float, own: bool) -> void:
+		shooter_team: int, authoritative: bool, rewind: float, own: bool) -> void:
 	if _bullets.size() >= MAX_BULLETS:
 		_bullets.pop_front()
 	var bullet := Bullet.new()
@@ -80,6 +82,7 @@ func spawn(origin: Vector3, direction: Vector3, weapon: WeaponData, shooter_id: 
 	bullet.velocity = direction.normalized() * weapon.muzzle_velocity
 	bullet.weapon = weapon
 	bullet.shooter_id = shooter_id
+	bullet.shooter_team = shooter_team
 	bullet.authoritative = authoritative
 	bullet.rewind = rewind
 	bullet.own = own
@@ -133,6 +136,8 @@ func _step(bullet: Bullet, delta: float, space: PhysicsDirectSpaceState3D,
 	for node: Node in soldiers:
 		var soldier := node as Player
 		if soldier == null or not soldier.alive or soldier.peer_id == bullet.shooter_id:
+			continue
+		if bullet.shooter_team != 0 and soldier.team == bullet.shooter_team:
 			continue
 		var feet: Vector3
 		var crouched: bool

@@ -1,0 +1,3759 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shared/greybox/greybox_grid.gdshader" id="1_413y2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ud2ey"]
+sky_top_color = Color(0.42, 0.52, 0.64, 1)
+sky_horizon_color = Color(0.7, 0.72, 0.72, 1)
+ground_bottom_color = Color(0.3, 0.31, 0.28, 1)
+ground_horizon_color = Color(0.7, 0.72, 0.72, 1)
+
+[sub_resource type="Sky" id="Sky_wmk8g"]
+sky_material = SubResource("ProceduralSkyMaterial_ud2ey")
+
+[sub_resource type="Environment" id="Environment_76p0c"]
+background_mode = 2
+sky = SubResource("Sky_wmk8g")
+ambient_light_source = 3
+ambient_light_energy = 0.9
+tonemap_mode = 2
+ssao_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.66, 0.68, 0.7, 1)
+fog_density = 0.0035
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmwkv"]
+resource_name = "grass"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.42, 0.46, 0.33, 1)
+shader_parameter/line_color = Color(0.35, 0.39, 0.27, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0c6j"]
+resource_name = "road"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.27, 0.27, 0.27, 1)
+shader_parameter/line_color = Color(0.22, 0.22, 0.22, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0xrsv"]
+resource_name = "dirt"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.45, 0.39, 0.3, 1)
+shader_parameter/line_color = Color(0.38, 0.33, 0.25, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ud550"]
+resource_name = "stone"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.55, 0.55, 0.52, 1)
+shader_parameter/line_color = Color(0.45, 0.45, 0.42, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_83t25"]
+resource_name = "sidewalk"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.55, 0.54, 0.5, 1)
+shader_parameter/line_color = Color(0.46, 0.45, 0.42, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_80sep"]
+resource_name = "plaster"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.73, 0.69, 0.6, 1)
+shader_parameter/line_color = Color(0.6, 0.57, 0.49, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pt3kd"]
+resource_name = "roof"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.42, 0.27, 0.23, 1)
+shader_parameter/line_color = Color(0.34, 0.21, 0.18, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qfaf6"]
+resource_name = "brick"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.58, 0.4, 0.32, 1)
+shader_parameter/line_color = Color(0.47, 0.32, 0.26, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3232o"]
+resource_name = "floor"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.5, 0.44, 0.36, 1)
+shader_parameter/line_color = Color(0.42, 0.37, 0.3, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tjy57"]
+resource_name = "wood"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.45, 0.35, 0.24, 1)
+shader_parameter/line_color = Color(0.36, 0.27, 0.18, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xude6"]
+resource_name = "plaster2"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.64, 0.66, 0.62, 1)
+shader_parameter/line_color = Color(0.52, 0.54, 0.5, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_62gnl"]
+resource_name = "trunk"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.34, 0.26, 0.19, 1)
+shader_parameter/line_color = Color(0.28, 0.21, 0.15, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vfipp"]
+resource_name = "crown"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.24, 0.34, 0.2, 1)
+shader_parameter/line_color = Color(0.2, 0.29, 0.16, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkabi"]
+resource_name = "car"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.33, 0.37, 0.42, 1)
+shader_parameter/line_color = Color(0.27, 0.3, 0.35, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i5b1o"]
+resource_name = "car2"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.5, 0.2, 0.18, 1)
+shader_parameter/line_color = Color(0.42, 0.16, 0.14, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fufrk"]
+resource_name = "wreck"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.22, 0.2, 0.19, 1)
+shader_parameter/line_color = Color(0.17, 0.15, 0.14, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s7bam"]
+resource_name = "concrete"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.62, 0.62, 0.6, 1)
+shader_parameter/line_color = Color(0.5, 0.5, 0.48, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dkdvd"]
+resource_name = "sandbag"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.56, 0.51, 0.38, 1)
+shader_parameter/line_color = Color(0.47, 0.42, 0.3, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivyfu"]
+resource_name = "metal"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.4, 0.42, 0.42, 1)
+shader_parameter/line_color = Color(0.33, 0.35, 0.35, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fq5d3"]
+resource_name = "field"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.55, 0.5, 0.33, 1)
+shader_parameter/line_color = Color(0.47, 0.42, 0.27, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4roq8"]
+resource_name = "hay"
+render_priority = 0
+shader = ExtResource("1_413y2")
+shader_parameter/base_color = Color(0.78, 0.67, 0.36, 1)
+shader_parameter/line_color = Color(0.66, 0.56, 0.28, 1)
+shader_parameter/cell_size = null
+shader_parameter/major_every = null
+shader_parameter/line_width = null
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fyo3g"]
+size = Vector3(2, 20, 92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ls2y8"]
+size = Vector3(2, 20, 92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ayw4w"]
+size = Vector3(156, 20, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_twemt"]
+size = Vector3(156, 20, 2)
+
+[node name="Town" type="Node3D" unique_id=1431109871]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1943268322]
+environment = SubResource("Environment_76p0c")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=462434294]
+transform = Transform3D(-0.76604444, 0.4131759, -0.4924039, 0, 0.76604444, 0.6427876, 0.64278764, 0.49240384, -0.58682406, 0, 30, 0)
+light_energy = 1.1
+shadow_enabled = true
+directional_shadow_max_distance = 160.0
+
+[node name="Ground" type="Node3D" parent="." unique_id=752233345]
+
+[node name="Grass" type="CSGBox3D" parent="Ground" unique_id=1710901337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(320, 1, 240)
+material = SubResource("ShaderMaterial_pmwkv")
+
+[node name="MainRoad" type="CSGBox3D" parent="Ground" unique_id=608343890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
+use_collision = true
+size = Vector3(100, 0.1, 8)
+material = SubResource("ShaderMaterial_x0c6j")
+
+[node name="DirtRoadW" type="CSGBox3D" parent="Ground" unique_id=1688112339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, -0.035, 0)
+use_collision = true
+size = Vector3(40, 0.1, 6)
+material = SubResource("ShaderMaterial_0xrsv")
+
+[node name="DirtRoadE" type="CSGBox3D" parent="Ground" unique_id=341439870]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, -0.035, 0)
+use_collision = true
+size = Vector3(40, 0.1, 6)
+material = SubResource("ShaderMaterial_0xrsv")
+
+[node name="CrossRoad" type="CSGBox3D" parent="Ground" unique_id=1348358268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.029, 0)
+use_collision = true
+size = Vector3(8, 0.1, 96)
+material = SubResource("ShaderMaterial_x0c6j")
+
+[node name="Center" type="Node3D" parent="." unique_id=182949138]
+
+[node name="MonumentBase" type="CSGBox3D" parent="Center" unique_id=792099366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+use_collision = true
+size = Vector3(3.2, 1.2, 3.2)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="MonumentColumn" type="CSGBox3D" parent="Center" unique_id=1240096726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+use_collision = true
+size = Vector3(1, 2.8, 1)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="West" type="Node3D" parent="." unique_id=943326950]
+
+[node name="Streets" type="Node3D" parent="West" unique_id=1844465970]
+
+[node name="WalkMainN" type="CSGBox3D" parent="West/Streets" unique_id=1651236382]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.75, -0.01, -4.75)
+use_collision = true
+size = Vector3(42.5, 0.1, 1.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="WalkMainS" type="CSGBox3D" parent="West/Streets" unique_id=622402245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.75, -0.01, 4.75)
+use_collision = true
+size = Vector3(42.5, 0.1, 1.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="WalkCrossW" type="CSGBox3D" parent="West/Streets" unique_id=969812098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, -0.01, -25.75)
+use_collision = true
+size = Vector3(1.5, 0.1, 40.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="WalkCrossE" type="CSGBox3D" parent="West/Streets" unique_id=781676429]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, -0.01, -25.75)
+use_collision = true
+size = Vector3(1.5, 0.1, 40.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="NorthBlock" type="Node3D" parent="West" unique_id=1390538605]
+
+[node name="HouseA" type="CSGBox3D" parent="West/NorthBlock" unique_id=1298256717]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 1.8, -14)
+use_collision = true
+size = Vector3(8, 3.6, 8)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Inner" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1870333681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(7.4, 3.4, 7.4)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_s_15" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1037079591]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.70000005, 4)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_e_20" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=170375132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.70000005, 2)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_n_0_-27" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1917628075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, -0.24999999, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_n_0_27" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1073248719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, -0.24999999, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_s_0_-27" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=562956100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, -0.24999999, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_w_0_-27" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1510632030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -0.24999999, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_w_0_27" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1125203401]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -0.24999999, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_e_0_-27" type="CSGBox3D" parent="West/NorthBlock/HouseA" unique_id=1425469655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.24999999, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="HouseARoof" type="CSGBox3D" parent="West/NorthBlock" unique_id=1503987515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 3.7, -14)
+use_collision = true
+size = Vector3(8.6, 0.2, 8.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="TwoStorey" type="CSGBox3D" parent="West/NorthBlock" unique_id=27610318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 3.45, -14)
+use_collision = true
+size = Vector3(10, 6.9, 8)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Inner" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1356940896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(9.4, 6.7, 7.4)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Door_s_25" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1973707361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -2.35, 4)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Door_e_10" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1105132115]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -2.35, 1)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_0_-37" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=281209446]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, -1.9, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_0_0" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1526979752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_0_-27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1063670736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1.9, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_0_27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=838084452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1.9, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_e_0_-27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=296163579]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -1.9, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_n_1_-37" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=721035178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 1.4, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_n_1_0" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=224529697]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_n_1_37" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1270153794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 1.4, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_1_-37" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1654391638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 1.4, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_1_0" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1050700792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_1_37" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=1634034807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 1.4, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_1_-27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=955885378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.4, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_1_27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=468794279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.4, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_e_1_-27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=112071778]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.4, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_e_1_27" type="CSGBox3D" parent="West/NorthBlock/TwoStorey" unique_id=954061049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.4, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="TwoStoreyRoof" type="CSGBox3D" parent="West/NorthBlock" unique_id=406060962]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 7, -14)
+use_collision = true
+size = Vector3(10.6, 0.2, 8.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="TwoStoreyFloor2" type="CSGBox3D" parent="West/NorthBlock" unique_id=130113899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 3.175, -14)
+use_collision = true
+size = Vector3(9.4, 0.25, 7.4)
+material = SubResource("ShaderMaterial_3232o")
+
+[node name="StairHole" type="CSGBox3D" parent="West/NorthBlock/TwoStoreyFloor2" unique_id=471232532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.044039324, 0, -2.95)
+operation = 2
+size = Vector3(7.5119214, 1, 1.52)
+material = SubResource("ShaderMaterial_3232o")
+
+[node name="TwoStoreyRamp" type="CSGBox3D" parent="West/NorthBlock" unique_id=1448214568]
+transform = Transform3D(0.9135454, -0.40673664, 0, 0.40673664, 0.9135454, 0, 0, 0, 1, -25.93303, 1.5129682, -16.95)
+use_collision = true
+size = Vector3(8.113358, 0.3, 1.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TwoStoreyRailLong" type="CSGBox3D" parent="West/NorthBlock" unique_id=1281434329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.99404, 3.75, -16.2)
+use_collision = true
+size = Vector3(7.4119215, 0.9, 0.1)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TwoStoreyRailEnd" type="CSGBox3D" parent="West/NorthBlock" unique_id=277518032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.75, 3.75, -16.95)
+use_collision = true
+size = Vector3(0.1, 0.9, 1.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TwoStoreyRampTest" type="Marker3D" parent="West/NorthBlock" unique_id=990373464 groups=["test_ramp"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -30.15, 0.05, -16.95)
+metadata/top_height = 3.3
+
+[node name="HouseB" type="CSGBox3D" parent="West/NorthBlock" unique_id=2137450249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 1.8, -13.5)
+use_collision = true
+size = Vector3(7, 3.6, 7)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Inner" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=1760565573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(6.4, 3.4, 6.4)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_s_-10" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=534016590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.70000005, 3.5)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_e_10" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=899638677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.70000005, 1)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_n_15" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=425680713]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.70000005, -3.5)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_n_0_-22" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=1951482569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, -0.24999999, -3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_22" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=502347457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_-22" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=753775128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_22" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=956075224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -0.24999999, 2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_e_0_-22" type="CSGBox3D" parent="West/NorthBlock/HouseB" unique_id=1466297771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="HouseBRoof" type="CSGBox3D" parent="West/NorthBlock" unique_id=1371489588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 3.7, -13.5)
+use_collision = true
+size = Vector3(7.6, 0.2, 7.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="TableA" type="CSGBox3D" parent="West/NorthBlock" unique_id=875907480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.5, 0.45, -16.5)
+use_collision = true
+size = Vector3(1.8, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TableB" type="CSGBox3D" parent="West/NorthBlock" unique_id=198192055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.45, -12)
+use_collision = true
+size = Vector3(0.9, 0.9, 1.8)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="CabinetTwo" type="CSGBox3D" parent="West/NorthBlock" unique_id=1872400453]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.75, -11.5)
+use_collision = true
+size = Vector3(1.6, 1.5, 0.6)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TableTwoUp" type="CSGBox3D" parent="West/NorthBlock" unique_id=670717452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 3.75, -12.5)
+use_collision = true
+size = Vector3(1.8, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceN0" type="CSGBox3D" parent="West/NorthBlock" unique_id=613708750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.85, 0.4, -24)
+use_collision = true
+size = Vector3(10.299999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceN1" type="CSGBox3D" parent="West/NorthBlock" unique_id=1047286051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0.4, -24)
+use_collision = true
+size = Vector3(14.599998, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceN2" type="CSGBox3D" parent="West/NorthBlock" unique_id=1796365529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.15, 0.4, -24)
+use_collision = true
+size = Vector3(10.299999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceW0" type="CSGBox3D" parent="West/NorthBlock" unique_id=771280643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.4, -20.35)
+use_collision = true
+size = Vector3(0.08, 0.8, 7.299999)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceW1" type="CSGBox3D" parent="West/NorthBlock" unique_id=2106295968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.4, -11.65)
+use_collision = true
+size = Vector3(0.08, 0.8, 7.3)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardDivide0" type="CSGBox3D" parent="West/NorthBlock" unique_id=582888558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 0.4, -21.25)
+use_collision = true
+size = Vector3(0.08, 0.8, 5.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Shed" type="CSGBox3D" parent="West/NorthBlock" unique_id=1886316145]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 1.2, -21.5)
+use_collision = true
+size = Vector3(3.5, 2.4, 2.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Inner" type="CSGBox3D" parent="West/NorthBlock/Shed" unique_id=129785466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+operation = 2
+size = Vector3(3.1, 2.3, 2.1)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Door" type="CSGBox3D" parent="West/NorthBlock/Shed" unique_id=1663634829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -0.2, 1.25)
+operation = 2
+size = Vector3(1, 2.1, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Woodpile" type="CSGBox3D" parent="West/NorthBlock" unique_id=54959437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0.55, -21.5)
+use_collision = true
+size = Vector3(3, 1.1, 1)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardTree1" type="CSGCylinder3D" parent="West/NorthBlock" unique_id=5901801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1.4625, -21)
+use_collision = true
+radius = 0.25
+height = 2.925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="YardTree1Crown" type="CSGCylinder3D" parent="West/NorthBlock" unique_id=72214907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 4.3875, -21)
+radius = 1.95
+height = 4.875
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="YardTree2" type="CSGCylinder3D" parent="West/NorthBlock" unique_id=94614368]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.2375, -20.5)
+use_collision = true
+radius = 0.25
+height = 2.475
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="YardTree2Crown" type="CSGCylinder3D" parent="West/NorthBlock" unique_id=954493823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.7125, -20.5)
+radius = 1.65
+height = 4.125
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="SouthBlock" type="Node3D" parent="West" unique_id=1945433696]
+
+[node name="HouseC" type="CSGBox3D" parent="West/SouthBlock" unique_id=657293569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 1.8, 13.5)
+use_collision = true
+size = Vector3(9, 3.6, 7)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Inner" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1405923779]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(8.4, 3.4, 6.4)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_n_-15" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1868100544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, -0.70000005, -3.5)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_w_0" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1509010829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.70000005, 0)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_n_0_32" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1418716342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, -0.24999999, -3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_-32" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=2020712109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_0" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1991018877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_32" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1939079446]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_-22" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1378668108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_22" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1550069374]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.24999999, 2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_e_0_-22" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1263481534]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_e_0_22" type="CSGBox3D" parent="West/SouthBlock/HouseC" unique_id=1467717377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.24999999, 2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="HouseCRoof" type="CSGBox3D" parent="West/SouthBlock" unique_id=1846857455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 3.7, 13.5)
+use_collision = true
+size = Vector3(9.6, 0.2, 7.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="Shop" type="CSGBox3D" parent="West/SouthBlock" unique_id=939649785]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 1.9, 13)
+use_collision = true
+size = Vector3(12, 3.8, 8)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Inner" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=175381344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(11.4, 3.6, 7.4)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_n" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=1190954707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, -4)
+operation = 2
+size = Vector3(1.6, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_s" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=1388383912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.8, 4)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Vitrine_-3" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=1038561273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, -0.2, -4)
+operation = 2
+size = Vector3(3, 1.8, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Vitrine_3" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=1723486039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, -0.2, -4)
+operation = 2
+size = Vector3(3, 1.8, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_w" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=1887727717]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -0.35, 0)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_e" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=546258128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -0.35, 0)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_s" type="CSGBox3D" parent="West/SouthBlock/Shop" unique_id=1248033461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.35, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="ShopRoof" type="CSGBox3D" parent="West/SouthBlock" unique_id=697831218]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 3.9, 13)
+use_collision = true
+size = Vector3(12.6, 0.2, 8.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="ShopCounter" type="CSGBox3D" parent="West/SouthBlock" unique_id=1628678206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 0.55, 14.6)
+use_collision = true
+size = Vector3(5, 1.1, 0.7)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="ShopShelf1" type="CSGBox3D" parent="West/SouthBlock" unique_id=1533938536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 0.9, 16.3)
+use_collision = true
+size = Vector3(2, 1.8, 0.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="ShopShelf2" type="CSGBox3D" parent="West/SouthBlock" unique_id=666852881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 0.9, 12)
+use_collision = true
+size = Vector3(0.5, 1.8, 2.4)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="RuinsWall0" type="CSGBox3D" parent="West/SouthBlock" unique_id=930679733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 1.25, 10.5)
+use_collision = true
+size = Vector3(4, 2.5, 0.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Breach" type="CSGBox3D" parent="West/SouthBlock/RuinsWall0" unique_id=1757404421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.3, 0)
+operation = 2
+size = Vector3(1.3, 1.1, 1)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall1" type="CSGBox3D" parent="West/SouthBlock" unique_id=353090483]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.7, 0.6, 10.5)
+use_collision = true
+size = Vector3(1.4, 1.2, 0.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall2" type="CSGBox3D" parent="West/SouthBlock" unique_id=1652988681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1, 14)
+use_collision = true
+size = Vector3(0.3, 2, 7)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall3" type="CSGBox3D" parent="West/SouthBlock" unique_id=1915057332]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.6, 15.5)
+use_collision = true
+size = Vector3(0.3, 3.2, 4)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall4" type="CSGBox3D" parent="West/SouthBlock" unique_id=2083861353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.5, 17.5)
+use_collision = true
+size = Vector3(6, 1, 0.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsRubble1" type="CSGBox3D" parent="West/SouthBlock" unique_id=143123016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0.3, 13)
+use_collision = true
+size = Vector3(1.6, 0.6, 1.2)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="RuinsRubble2" type="CSGBox3D" parent="West/SouthBlock" unique_id=185086963]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3, 0.2, 15.8)
+use_collision = true
+size = Vector3(1.2, 0.4, 1.6)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="RuinsBeam" type="CSGBox3D" parent="West/SouthBlock" unique_id=1549633640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.25, 14.5)
+use_collision = true
+size = Vector3(4.5, 0.25, 0.3)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TableC" type="CSGBox3D" parent="West/SouthBlock" unique_id=1543824825]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 0.45, 15)
+use_collision = true
+size = Vector3(1.8, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS0" type="CSGBox3D" parent="West/SouthBlock" unique_id=1193346473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.35, 0.4, 23)
+use_collision = true
+size = Vector3(5.299999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS1" type="CSGBox3D" parent="West/SouthBlock" unique_id=417511068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 0.4, 23)
+use_collision = true
+size = Vector3(12.599998, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS2" type="CSGBox3D" parent="West/SouthBlock" unique_id=836475955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0.4, 23)
+use_collision = true
+size = Vector3(10.599999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS3" type="CSGBox3D" parent="West/SouthBlock" unique_id=1321213047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.65, 0.4, 23)
+use_collision = true
+size = Vector3(5.3, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="GardenWall0" type="CSGBox3D" parent="West/SouthBlock" unique_id=1073420880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5, 0.5, 20.25)
+use_collision = true
+size = Vector3(0.45, 1, 5.5)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="GardenTree" type="CSGCylinder3D" parent="West/SouthBlock" unique_id=1539157119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 1.35, 20.5)
+use_collision = true
+radius = 0.25
+height = 2.7
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="GardenTreeCrown" type="CSGCylinder3D" parent="West/SouthBlock" unique_id=326812161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 4.05, 20.5)
+radius = 1.8
+height = 4.5
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="StreetCover" type="Node3D" parent="West" unique_id=577853754]
+
+[node name="Car1" type="Node3D" parent="West/StreetCover" unique_id=2044692207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 0, -2.2)
+
+[node name="Body" type="CSGBox3D" parent="West/StreetCover/Car1" unique_id=17362537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Cabin" type="CSGBox3D" parent="West/StreetCover/Car1" unique_id=1305340027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Car2" type="Node3D" parent="West/StreetCover" unique_id=870869215]
+transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -17, 0, 2.3)
+
+[node name="Body" type="CSGBox3D" parent="West/StreetCover/Car2" unique_id=508645180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_i5b1o")
+
+[node name="Cabin" type="CSGBox3D" parent="West/StreetCover/Car2" unique_id=595400667]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_i5b1o")
+
+[node name="WreckCross" type="Node3D" parent="West/StreetCover" unique_id=16770987]
+transform = Transform3D(-0.34289777, 0, 0.9393727, 0, 1, 0, -0.9393727, 0, -0.34289777, -1.8, 0, -16)
+
+[node name="Body" type="CSGBox3D" parent="West/StreetCover/WreckCross" unique_id=830300464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="Cabin" type="CSGBox3D" parent="West/StreetCover/WreckCross" unique_id=692539619]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="Car3" type="Node3D" parent="West/StreetCover" unique_id=1076059993]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.2, 0, -32)
+
+[node name="Body" type="CSGBox3D" parent="West/StreetCover/Car3" unique_id=233221379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Cabin" type="CSGBox3D" parent="West/StreetCover/Car3" unique_id=91651517]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Barrier1" type="CSGBox3D" parent="West/StreetCover" unique_id=435921017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49, 0.45, -2)
+use_collision = true
+size = Vector3(0.6, 0.9, 3)
+material = SubResource("ShaderMaterial_s7bam")
+
+[node name="Barrier2" type="CSGBox3D" parent="West/StreetCover" unique_id=80131887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.5, 0.45, 2.6)
+use_collision = true
+size = Vector3(0.6, 0.9, 3)
+material = SubResource("ShaderMaterial_s7bam")
+
+[node name="Sandbags1" type="Node3D" parent="West/StreetCover" unique_id=328889067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -5.8)
+
+[node name="Bags" type="CSGBox3D" parent="West/StreetCover/Sandbags1" unique_id=1124728603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+use_collision = true
+size = Vector3(4, 0.9, 0.7)
+material = SubResource("ShaderMaterial_dkdvd")
+
+[node name="Sandbags2" type="Node3D" parent="West/StreetCover" unique_id=487985900]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.8, 0, -27)
+
+[node name="Bags" type="CSGBox3D" parent="West/StreetCover/Sandbags2" unique_id=2078624276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+use_collision = true
+size = Vector3(3, 0.9, 0.7)
+material = SubResource("ShaderMaterial_dkdvd")
+
+[node name="BusStopBack" type="CSGBox3D" parent="West/StreetCover" unique_id=540111869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 1.1, 5.9)
+use_collision = true
+size = Vector3(3, 2.2, 0.12)
+material = SubResource("ShaderMaterial_ivyfu")
+
+[node name="BusStopRoof" type="CSGBox3D" parent="West/StreetCover" unique_id=726421819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 2.3, 5.4)
+use_collision = true
+size = Vector3(3.2, 0.1, 1.3)
+material = SubResource("ShaderMaterial_ivyfu")
+
+[node name="Crates1" type="CSGBox3D" parent="West/StreetCover" unique_id=635054888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.6, 9.5)
+use_collision = true
+size = Vector3(1.2, 1.2, 1.2)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Crates2" type="CSGBox3D" parent="West/StreetCover" unique_id=493882914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 1.6, 9.4)
+use_collision = true
+size = Vector3(0.8, 0.8, 0.8)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Crates3" type="CSGBox3D" parent="West/StreetCover" unique_id=963560834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 0.45, 10.4)
+use_collision = true
+size = Vector3(0.9, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Outskirts" type="Node3D" parent="West" unique_id=327258713]
+
+[node name="FieldS" type="CSGBox3D" parent="West/Outskirts" unique_id=1572875613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, -0.04, 34.5)
+use_collision = true
+size = Vector3(66, 0.1, 17)
+material = SubResource("ShaderMaterial_fq5d3")
+
+[node name="FieldN" type="CSGBox3D" parent="West/Outskirts" unique_id=918838051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, -0.04, -35)
+use_collision = true
+size = Vector3(30, 0.1, 16)
+material = SubResource("ShaderMaterial_fq5d3")
+
+[node name="FieldWallS0" type="CSGBox3D" parent="West/Outskirts" unique_id=983489613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.5, 0.5, 25.5)
+use_collision = true
+size = Vector3(13, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="FieldWallS1" type="CSGBox3D" parent="West/Outskirts" unique_id=1183897654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0.5, 25.5)
+use_collision = true
+size = Vector3(16, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="FieldWallS2" type="CSGBox3D" parent="West/Outskirts" unique_id=2041879809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0.5, 25.5)
+use_collision = true
+size = Vector3(10, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="FieldWallS3" type="CSGBox3D" parent="West/Outskirts" unique_id=535801686]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0.5, 25.5)
+use_collision = true
+size = Vector3(7, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW0" type="CSGBox3D" parent="West/Outskirts" unique_id=2129485254]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, -22)
+use_collision = true
+size = Vector3(0.45, 1, 8)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW1" type="CSGBox3D" parent="West/Outskirts" unique_id=647226617]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, -11.5)
+use_collision = true
+size = Vector3(0.45, 1, 9)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW20" type="CSGBox3D" parent="West/Outskirts" unique_id=1425846646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, 10.5)
+use_collision = true
+size = Vector3(0.45, 1, 7)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW21" type="CSGBox3D" parent="West/Outskirts" unique_id=909511696]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, 20)
+use_collision = true
+size = Vector3(0.45, 1, 8)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="Hay0" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1277604420]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -66, 0.8, 31)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay1" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1249985826]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -51.3, 0.8, 31)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay2" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1433550586]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -36.6, 0.8, 31)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay3" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1064970196]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -63.9, 0.8, 38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay4" type="CSGCylinder3D" parent="West/Outskirts" unique_id=803081354]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -49.2, 0.8, 38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay5" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1732607426]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -34.5, 0.8, 38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="HayN1" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1400287202]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -62, 0.8, -33)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="HayN2" type="CSGCylinder3D" parent="West/Outskirts" unique_id=102386901]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -52, 0.8, -38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Tractor" type="Node3D" parent="West/Outskirts" unique_id=589051092]
+transform = Transform3D(0.921061, 0, 0.38941833, 0, 1, 0, -0.38941833, 0, 0.921061, -38, 0, 35)
+
+[node name="Body" type="CSGBox3D" parent="West/Outskirts/Tractor" unique_id=258053247]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1, 0)
+use_collision = true
+size = Vector3(2.6, 1, 1.2)
+material = SubResource("ShaderMaterial_i5b1o")
+
+[node name="Cabin" type="CSGBox3D" parent="West/Outskirts/Tractor" unique_id=834654104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 2, 0)
+use_collision = true
+size = Vector3(1.3, 1.2, 1.3)
+material = SubResource("ShaderMaterial_ivyfu")
+
+[node name="WheelL" type="CSGBox3D" parent="West/Outskirts/Tractor" unique_id=861646331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.75, 0.85)
+use_collision = true
+size = Vector3(1.5, 1.5, 0.45)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="WheelR" type="CSGBox3D" parent="West/Outskirts/Tractor" unique_id=306209735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.75, -0.85)
+use_collision = true
+size = Vector3(1.5, 1.5, 0.45)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="FieldTree1" type="CSGCylinder3D" parent="West/Outskirts" unique_id=2140903036]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 1.575, 38)
+use_collision = true
+radius = 0.25
+height = 3.15
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="FieldTree1Crown" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1532426161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 4.725, 38)
+radius = 2.1
+height = 5.25
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="FieldTree2" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1653209841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 1.4625, -30)
+use_collision = true
+radius = 0.25
+height = 2.925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="FieldTree2Crown" type="CSGCylinder3D" parent="West/Outskirts" unique_id=413601744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 4.3875, -30)
+radius = 1.95
+height = 4.875
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="RoadTree1" type="CSGCylinder3D" parent="West/Outskirts" unique_id=975195799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 1.35, -6.2)
+use_collision = true
+radius = 0.25
+height = 2.7
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="RoadTree1Crown" type="CSGCylinder3D" parent="West/Outskirts" unique_id=22423721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 4.05, -6.2)
+radius = 1.8
+height = 4.5
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="RoadTree2" type="CSGCylinder3D" parent="West/Outskirts" unique_id=1089883097]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 1.4625, 6.5)
+use_collision = true
+radius = 0.25
+height = 2.925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="RoadTree2Crown" type="CSGCylinder3D" parent="West/Outskirts" unique_id=874300722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 4.3875, 6.5)
+radius = 1.95
+height = 4.875
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="Base" type="Node3D" parent="West" unique_id=1478222392]
+
+[node name="Barn" type="CSGBox3D" parent="West/Base" unique_id=215348627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 2.5, -17)
+use_collision = true
+size = Vector3(9, 5, 12)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Inner" type="CSGBox3D" parent="West/Base/Barn" unique_id=822761485]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(8.4, 4.8, 11.4)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Gate" type="CSGBox3D" parent="West/Base/Barn" unique_id=1940841074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.7, 0)
+operation = 2
+size = Vector3(0.9, 3.6, 5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Door_s" type="CSGBox3D" parent="West/Base/Barn" unique_id=1768186920]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1.4, 6)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="BarnRoof" type="CSGBox3D" parent="West/Base" unique_id=2113006882]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 5.1, -17)
+use_collision = true
+size = Vector3(9.8, 0.2, 12.8)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="BarnHay1" type="CSGBox3D" parent="West/Base" unique_id=111954982]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.5, 0.6, -20.5)
+use_collision = true
+size = Vector3(2.4, 1.2, 3)
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="BarnHay2" type="CSGBox3D" parent="West/Base" unique_id=1667883907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.8, 1.6, -20.8)
+use_collision = true
+size = Vector3(1.6, 0.8, 1.8)
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="SupplyCrates1" type="CSGBox3D" parent="West/Base" unique_id=1340162756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.5, 0.6, 15)
+use_collision = true
+size = Vector3(2.4, 1.2, 1.2)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="SupplyCrates2" type="CSGBox3D" parent="West/Base" unique_id=568880526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.5, 0.6, 15.5)
+use_collision = true
+size = Vector3(1.2, 1.2, 1.2)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="BaseSandbags" type="Node3D" parent="West/Base" unique_id=1567431967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 0, 11.5)
+
+[node name="Bags" type="CSGBox3D" parent="West/Base/BaseSandbags" unique_id=1419831454]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+use_collision = true
+size = Vector3(5, 0.9, 0.7)
+material = SubResource("ShaderMaterial_dkdvd")
+
+[node name="SpawnPoints" type="Node3D" parent="West/Base" unique_id=46587103]
+
+[node name="Spawn0" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=112341278 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, -8)
+
+[node name="Spawn1" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=1082908856 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, -4)
+
+[node name="Spawn2" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=1013555928 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, 0)
+
+[node name="Spawn3" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=795067276 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, 4)
+
+[node name="Spawn4" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=1964279159 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, 8)
+
+[node name="Spawn5" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=108277392 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, -8)
+
+[node name="Spawn6" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=416885582 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, -4)
+
+[node name="Spawn7" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=1072385602 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, 0)
+
+[node name="Spawn8" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=1744477151 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, 4)
+
+[node name="Spawn9" type="Marker3D" parent="West/Base/SpawnPoints" unique_id=1191831423 groups=["spawn_team_1"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, 8)
+
+[node name="East" type="Node3D" parent="." unique_id=1984730307]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="Streets" type="Node3D" parent="East" unique_id=155166414]
+
+[node name="WalkMainN" type="CSGBox3D" parent="East/Streets" unique_id=1072724135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.75, -0.01, -4.75)
+use_collision = true
+size = Vector3(42.5, 0.1, 1.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="WalkMainS" type="CSGBox3D" parent="East/Streets" unique_id=1706099490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.75, -0.01, 4.75)
+use_collision = true
+size = Vector3(42.5, 0.1, 1.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="WalkCrossW" type="CSGBox3D" parent="East/Streets" unique_id=1962767508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, -0.01, -25.75)
+use_collision = true
+size = Vector3(1.5, 0.1, 40.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="WalkCrossE" type="CSGBox3D" parent="East/Streets" unique_id=123823369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, -0.01, -25.75)
+use_collision = true
+size = Vector3(1.5, 0.1, 40.5)
+material = SubResource("ShaderMaterial_83t25")
+
+[node name="NorthBlock" type="Node3D" parent="East" unique_id=809325564]
+
+[node name="HouseA" type="CSGBox3D" parent="East/NorthBlock" unique_id=596496759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 1.8, -14)
+use_collision = true
+size = Vector3(8, 3.6, 8)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Inner" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=2033690324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(7.4, 3.4, 7.4)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_s_15" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=1770051824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.70000005, 4)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_e_20" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=224129518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.70000005, 2)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_n_0_-27" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=661716257]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, -0.24999999, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_n_0_27" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=466816381]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, -0.24999999, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_s_0_-27" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=96242797]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, -0.24999999, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_w_0_-27" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=585970435]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -0.24999999, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_w_0_27" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=1757184705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -0.24999999, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_e_0_-27" type="CSGBox3D" parent="East/NorthBlock/HouseA" unique_id=1667434831]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.24999999, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="HouseARoof" type="CSGBox3D" parent="East/NorthBlock" unique_id=1900149366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 3.7, -14)
+use_collision = true
+size = Vector3(8.6, 0.2, 8.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="TwoStorey" type="CSGBox3D" parent="East/NorthBlock" unique_id=610403832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 3.45, -14)
+use_collision = true
+size = Vector3(10, 6.9, 8)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Inner" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1821838031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(9.4, 6.7, 7.4)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Door_s_25" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=646155358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -2.35, 4)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Door_e_10" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=563003885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -2.35, 1)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_0_-37" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1163308924]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, -1.9, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_0_0" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=2078362682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_0_-27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1840150820]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1.9, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_0_27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1618613089]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1.9, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_e_0_-27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=160077260]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -1.9, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_n_1_-37" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=398291659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 1.4, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_n_1_0" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=740203299]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_n_1_37" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=773035985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 1.4, -4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_1_-37" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1969405614]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 1.4, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_1_0" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1941551667]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_s_1_37" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1161434913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 1.4, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_1_-27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1508865592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.4, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_w_1_27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=619393099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.4, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_e_1_-27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=1674822401]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.4, -2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Win_e_1_27" type="CSGBox3D" parent="East/NorthBlock/TwoStorey" unique_id=2130832711]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.4, 2.7)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="TwoStoreyRoof" type="CSGBox3D" parent="East/NorthBlock" unique_id=71524203]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 7, -14)
+use_collision = true
+size = Vector3(10.6, 0.2, 8.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="TwoStoreyFloor2" type="CSGBox3D" parent="East/NorthBlock" unique_id=1759710885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 3.175, -14)
+use_collision = true
+size = Vector3(9.4, 0.25, 7.4)
+material = SubResource("ShaderMaterial_3232o")
+
+[node name="StairHole" type="CSGBox3D" parent="East/NorthBlock/TwoStoreyFloor2" unique_id=2046824991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.044039324, 0, -2.95)
+operation = 2
+size = Vector3(7.5119214, 1, 1.52)
+material = SubResource("ShaderMaterial_3232o")
+
+[node name="TwoStoreyRamp" type="CSGBox3D" parent="East/NorthBlock" unique_id=1512359105]
+transform = Transform3D(0.9135454, -0.40673664, 0, 0.40673664, 0.9135454, 0, 0, 0, 1, -25.93303, 1.5129682, -16.95)
+use_collision = true
+size = Vector3(8.113358, 0.3, 1.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TwoStoreyRailLong" type="CSGBox3D" parent="East/NorthBlock" unique_id=1853964961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.99404, 3.75, -16.2)
+use_collision = true
+size = Vector3(7.4119215, 0.9, 0.1)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TwoStoreyRailEnd" type="CSGBox3D" parent="East/NorthBlock" unique_id=366472281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.75, 3.75, -16.95)
+use_collision = true
+size = Vector3(0.1, 0.9, 1.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TwoStoreyRampTest" type="Marker3D" parent="East/NorthBlock" unique_id=1372312189 groups=["test_ramp"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -30.15, 0.05, -16.95)
+metadata/top_height = 3.3
+
+[node name="HouseB" type="CSGBox3D" parent="East/NorthBlock" unique_id=1582620483]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 1.8, -13.5)
+use_collision = true
+size = Vector3(7, 3.6, 7)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Inner" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=1756080930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(6.4, 3.4, 6.4)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_s_-10" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=1524596363]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.70000005, 3.5)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_e_10" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=348536900]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.70000005, 1)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_n_15" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=1552697877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.70000005, -3.5)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_n_0_-22" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=324920830]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, -0.24999999, -3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_22" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=2097351484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_-22" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=876017226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_22" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=91070738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -0.24999999, 2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_e_0_-22" type="CSGBox3D" parent="East/NorthBlock/HouseB" unique_id=1015552714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="HouseBRoof" type="CSGBox3D" parent="East/NorthBlock" unique_id=994507244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 3.7, -13.5)
+use_collision = true
+size = Vector3(7.6, 0.2, 7.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="TableA" type="CSGBox3D" parent="East/NorthBlock" unique_id=821562409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.5, 0.45, -16.5)
+use_collision = true
+size = Vector3(1.8, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TableB" type="CSGBox3D" parent="East/NorthBlock" unique_id=10306374]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.45, -12)
+use_collision = true
+size = Vector3(0.9, 0.9, 1.8)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="CabinetTwo" type="CSGBox3D" parent="East/NorthBlock" unique_id=1233038770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.75, -11.5)
+use_collision = true
+size = Vector3(1.6, 1.5, 0.6)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TableTwoUp" type="CSGBox3D" parent="East/NorthBlock" unique_id=1132363905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 3.75, -12.5)
+use_collision = true
+size = Vector3(1.8, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceN0" type="CSGBox3D" parent="East/NorthBlock" unique_id=2130112249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.85, 0.4, -24)
+use_collision = true
+size = Vector3(10.299999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceN1" type="CSGBox3D" parent="East/NorthBlock" unique_id=995281014]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0.4, -24)
+use_collision = true
+size = Vector3(14.599998, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceN2" type="CSGBox3D" parent="East/NorthBlock" unique_id=57169540]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.15, 0.4, -24)
+use_collision = true
+size = Vector3(10.299999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceW0" type="CSGBox3D" parent="East/NorthBlock" unique_id=1018086890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.4, -20.35)
+use_collision = true
+size = Vector3(0.08, 0.8, 7.299999)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceW1" type="CSGBox3D" parent="East/NorthBlock" unique_id=190655572]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.4, -11.65)
+use_collision = true
+size = Vector3(0.08, 0.8, 7.3)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardDivide0" type="CSGBox3D" parent="East/NorthBlock" unique_id=892827735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 0.4, -21.25)
+use_collision = true
+size = Vector3(0.08, 0.8, 5.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Shed" type="CSGBox3D" parent="East/NorthBlock" unique_id=1377722276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 1.2, -21.5)
+use_collision = true
+size = Vector3(3.5, 2.4, 2.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Inner" type="CSGBox3D" parent="East/NorthBlock/Shed" unique_id=958276129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+operation = 2
+size = Vector3(3.1, 2.3, 2.1)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Door" type="CSGBox3D" parent="East/NorthBlock/Shed" unique_id=1403478028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -0.2, 1.25)
+operation = 2
+size = Vector3(1, 2.1, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Woodpile" type="CSGBox3D" parent="East/NorthBlock" unique_id=110807981]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0.55, -21.5)
+use_collision = true
+size = Vector3(3, 1.1, 1)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardTree1" type="CSGCylinder3D" parent="East/NorthBlock" unique_id=958340055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1.4625, -21)
+use_collision = true
+radius = 0.25
+height = 2.925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="YardTree1Crown" type="CSGCylinder3D" parent="East/NorthBlock" unique_id=1665687846]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 4.3875, -21)
+radius = 1.95
+height = 4.875
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="YardTree2" type="CSGCylinder3D" parent="East/NorthBlock" unique_id=459204429]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.2375, -20.5)
+use_collision = true
+radius = 0.25
+height = 2.475
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="YardTree2Crown" type="CSGCylinder3D" parent="East/NorthBlock" unique_id=1625265532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.7125, -20.5)
+radius = 1.65
+height = 4.125
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="SouthBlock" type="Node3D" parent="East" unique_id=433360147]
+
+[node name="HouseC" type="CSGBox3D" parent="East/SouthBlock" unique_id=140682513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 1.8, 13.5)
+use_collision = true
+size = Vector3(9, 3.6, 7)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Inner" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1672093082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(8.4, 3.4, 6.4)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_n_-15" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=20922719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, -0.70000005, -3.5)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Door_w_0" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1454357927]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.70000005, 0)
+operation = 2
+size = Vector3(0.9, 2.3999999, 1.2)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_n_0_32" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1593823228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, -0.24999999, -3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_-32" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1428431192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_0" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=92654628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_s_0_32" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1850933201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, -0.24999999, 3.5)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_-22" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=204756794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_w_0_22" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1194063772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.24999999, 2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_e_0_-22" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=1268798468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.24999999, -2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="Win_e_0_22" type="CSGBox3D" parent="East/SouthBlock/HouseC" unique_id=345044675]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.24999999, 2.2)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_xude6")
+
+[node name="HouseCRoof" type="CSGBox3D" parent="East/SouthBlock" unique_id=453086138]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 3.7, 13.5)
+use_collision = true
+size = Vector3(9.6, 0.2, 7.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="Shop" type="CSGBox3D" parent="East/SouthBlock" unique_id=1571250238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 1.9, 13)
+use_collision = true
+size = Vector3(12, 3.8, 8)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Inner" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=925210300]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(11.4, 3.6, 7.4)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_n" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=56104719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, -4)
+operation = 2
+size = Vector3(1.6, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Door_s" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=2012262075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.8, 4)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Vitrine_-3" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=315083326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, -0.2, -4)
+operation = 2
+size = Vector3(3, 1.8, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Vitrine_3" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=1833956601]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, -0.2, -4)
+operation = 2
+size = Vector3(3, 1.8, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_w" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=826016474]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -0.35, 0)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_e" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=1897065057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -0.35, 0)
+operation = 2
+size = Vector3(0.9, 1.1, 1.3)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="Win_s" type="CSGBox3D" parent="East/SouthBlock/Shop" unique_id=78575595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.35, 4)
+operation = 2
+size = Vector3(1.3, 1.1, 0.9)
+material = SubResource("ShaderMaterial_80sep")
+
+[node name="ShopRoof" type="CSGBox3D" parent="East/SouthBlock" unique_id=1951825552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 3.9, 13)
+use_collision = true
+size = Vector3(12.6, 0.2, 8.6)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="ShopCounter" type="CSGBox3D" parent="East/SouthBlock" unique_id=414650729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 0.55, 14.6)
+use_collision = true
+size = Vector3(5, 1.1, 0.7)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="ShopShelf1" type="CSGBox3D" parent="East/SouthBlock" unique_id=840061338]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 0.9, 16.3)
+use_collision = true
+size = Vector3(2, 1.8, 0.5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="ShopShelf2" type="CSGBox3D" parent="East/SouthBlock" unique_id=1732839495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 0.9, 12)
+use_collision = true
+size = Vector3(0.5, 1.8, 2.4)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="RuinsWall0" type="CSGBox3D" parent="East/SouthBlock" unique_id=1532725227]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 1.25, 10.5)
+use_collision = true
+size = Vector3(4, 2.5, 0.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="Breach" type="CSGBox3D" parent="East/SouthBlock/RuinsWall0" unique_id=1689849513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.3, 0)
+operation = 2
+size = Vector3(1.3, 1.1, 1)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall1" type="CSGBox3D" parent="East/SouthBlock" unique_id=1457788369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.7, 0.6, 10.5)
+use_collision = true
+size = Vector3(1.4, 1.2, 0.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall2" type="CSGBox3D" parent="East/SouthBlock" unique_id=61958079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1, 14)
+use_collision = true
+size = Vector3(0.3, 2, 7)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall3" type="CSGBox3D" parent="East/SouthBlock" unique_id=273619733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.6, 15.5)
+use_collision = true
+size = Vector3(0.3, 3.2, 4)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsWall4" type="CSGBox3D" parent="East/SouthBlock" unique_id=745904763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.5, 17.5)
+use_collision = true
+size = Vector3(6, 1, 0.3)
+material = SubResource("ShaderMaterial_qfaf6")
+
+[node name="RuinsRubble1" type="CSGBox3D" parent="East/SouthBlock" unique_id=626826569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0.3, 13)
+use_collision = true
+size = Vector3(1.6, 0.6, 1.2)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="RuinsRubble2" type="CSGBox3D" parent="East/SouthBlock" unique_id=1772143912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3, 0.2, 15.8)
+use_collision = true
+size = Vector3(1.2, 0.4, 1.6)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="RuinsBeam" type="CSGBox3D" parent="East/SouthBlock" unique_id=182033369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.25, 14.5)
+use_collision = true
+size = Vector3(4.5, 0.25, 0.3)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="TableC" type="CSGBox3D" parent="East/SouthBlock" unique_id=88686931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 0.45, 15)
+use_collision = true
+size = Vector3(1.8, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS0" type="CSGBox3D" parent="East/SouthBlock" unique_id=1580770777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.35, 0.4, 23)
+use_collision = true
+size = Vector3(5.299999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS1" type="CSGBox3D" parent="East/SouthBlock" unique_id=235958923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 0.4, 23)
+use_collision = true
+size = Vector3(12.599998, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS2" type="CSGBox3D" parent="East/SouthBlock" unique_id=1482368642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0.4, 23)
+use_collision = true
+size = Vector3(10.599999, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="YardFenceS3" type="CSGBox3D" parent="East/SouthBlock" unique_id=1378507743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.65, 0.4, 23)
+use_collision = true
+size = Vector3(5.3, 0.8, 0.08)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="GardenWall0" type="CSGBox3D" parent="East/SouthBlock" unique_id=1409185794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5, 0.5, 20.25)
+use_collision = true
+size = Vector3(0.45, 1, 5.5)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="GardenTree" type="CSGCylinder3D" parent="East/SouthBlock" unique_id=319463847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 1.35, 20.5)
+use_collision = true
+radius = 0.25
+height = 2.7
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="GardenTreeCrown" type="CSGCylinder3D" parent="East/SouthBlock" unique_id=1946871364]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 4.05, 20.5)
+radius = 1.8
+height = 4.5
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="StreetCover" type="Node3D" parent="East" unique_id=522436903]
+
+[node name="Car1" type="Node3D" parent="East/StreetCover" unique_id=710137210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 0, -2.2)
+
+[node name="Body" type="CSGBox3D" parent="East/StreetCover/Car1" unique_id=1078835440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Cabin" type="CSGBox3D" parent="East/StreetCover/Car1" unique_id=1674810385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Car2" type="Node3D" parent="East/StreetCover" unique_id=1884238246]
+transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -17, 0, 2.3)
+
+[node name="Body" type="CSGBox3D" parent="East/StreetCover/Car2" unique_id=1710194733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_i5b1o")
+
+[node name="Cabin" type="CSGBox3D" parent="East/StreetCover/Car2" unique_id=893435886]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_i5b1o")
+
+[node name="WreckCross" type="Node3D" parent="East/StreetCover" unique_id=133400714]
+transform = Transform3D(-0.34289777, 0, 0.9393727, 0, 1, 0, -0.9393727, 0, -0.34289777, -1.8, 0, -16)
+
+[node name="Body" type="CSGBox3D" parent="East/StreetCover/WreckCross" unique_id=2085012393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="Cabin" type="CSGBox3D" parent="East/StreetCover/WreckCross" unique_id=777533534]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="Car3" type="Node3D" parent="East/StreetCover" unique_id=1303452640]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.2, 0, -32)
+
+[node name="Body" type="CSGBox3D" parent="East/StreetCover/Car3" unique_id=631012856]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+use_collision = true
+size = Vector3(4.3, 0.8, 1.8)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Cabin" type="CSGBox3D" parent="East/StreetCover/Car3" unique_id=1815452205]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, 0)
+use_collision = true
+size = Vector3(2.2, 0.65, 1.6)
+material = SubResource("ShaderMaterial_qkabi")
+
+[node name="Barrier1" type="CSGBox3D" parent="East/StreetCover" unique_id=1212647702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49, 0.45, -2)
+use_collision = true
+size = Vector3(0.6, 0.9, 3)
+material = SubResource("ShaderMaterial_s7bam")
+
+[node name="Barrier2" type="CSGBox3D" parent="East/StreetCover" unique_id=1577800514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.5, 0.45, 2.6)
+use_collision = true
+size = Vector3(0.6, 0.9, 3)
+material = SubResource("ShaderMaterial_s7bam")
+
+[node name="Sandbags1" type="Node3D" parent="East/StreetCover" unique_id=1782936746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -5.8)
+
+[node name="Bags" type="CSGBox3D" parent="East/StreetCover/Sandbags1" unique_id=1267606137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+use_collision = true
+size = Vector3(4, 0.9, 0.7)
+material = SubResource("ShaderMaterial_dkdvd")
+
+[node name="Sandbags2" type="Node3D" parent="East/StreetCover" unique_id=517591932]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.8, 0, -27)
+
+[node name="Bags" type="CSGBox3D" parent="East/StreetCover/Sandbags2" unique_id=448440594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+use_collision = true
+size = Vector3(3, 0.9, 0.7)
+material = SubResource("ShaderMaterial_dkdvd")
+
+[node name="BusStopBack" type="CSGBox3D" parent="East/StreetCover" unique_id=837524929]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 1.1, 5.9)
+use_collision = true
+size = Vector3(3, 2.2, 0.12)
+material = SubResource("ShaderMaterial_ivyfu")
+
+[node name="BusStopRoof" type="CSGBox3D" parent="East/StreetCover" unique_id=820834719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 2.3, 5.4)
+use_collision = true
+size = Vector3(3.2, 0.1, 1.3)
+material = SubResource("ShaderMaterial_ivyfu")
+
+[node name="Crates1" type="CSGBox3D" parent="East/StreetCover" unique_id=556728899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.6, 9.5)
+use_collision = true
+size = Vector3(1.2, 1.2, 1.2)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Crates2" type="CSGBox3D" parent="East/StreetCover" unique_id=1106761275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 1.6, 9.4)
+use_collision = true
+size = Vector3(0.8, 0.8, 0.8)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Crates3" type="CSGBox3D" parent="East/StreetCover" unique_id=525951375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 0.45, 10.4)
+use_collision = true
+size = Vector3(0.9, 0.9, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Outskirts" type="Node3D" parent="East" unique_id=1386943472]
+
+[node name="FieldS" type="CSGBox3D" parent="East/Outskirts" unique_id=2002161023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, -0.04, 34.5)
+use_collision = true
+size = Vector3(66, 0.1, 17)
+material = SubResource("ShaderMaterial_fq5d3")
+
+[node name="FieldN" type="CSGBox3D" parent="East/Outskirts" unique_id=157214410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, -0.04, -35)
+use_collision = true
+size = Vector3(30, 0.1, 16)
+material = SubResource("ShaderMaterial_fq5d3")
+
+[node name="FieldWallS0" type="CSGBox3D" parent="East/Outskirts" unique_id=1151742011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.5, 0.5, 25.5)
+use_collision = true
+size = Vector3(13, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="FieldWallS1" type="CSGBox3D" parent="East/Outskirts" unique_id=1263573673]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0.5, 25.5)
+use_collision = true
+size = Vector3(16, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="FieldWallS2" type="CSGBox3D" parent="East/Outskirts" unique_id=124720021]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0.5, 25.5)
+use_collision = true
+size = Vector3(10, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="FieldWallS3" type="CSGBox3D" parent="East/Outskirts" unique_id=1251860474]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0.5, 25.5)
+use_collision = true
+size = Vector3(7, 1, 0.45)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW0" type="CSGBox3D" parent="East/Outskirts" unique_id=556915786]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, -22)
+use_collision = true
+size = Vector3(0.45, 1, 8)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW1" type="CSGBox3D" parent="East/Outskirts" unique_id=2137419122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, -11.5)
+use_collision = true
+size = Vector3(0.45, 1, 9)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW20" type="CSGBox3D" parent="East/Outskirts" unique_id=545813057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, 10.5)
+use_collision = true
+size = Vector3(0.45, 1, 7)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="TownWallW21" type="CSGBox3D" parent="East/Outskirts" unique_id=175821529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 0.5, 20)
+use_collision = true
+size = Vector3(0.45, 1, 8)
+material = SubResource("ShaderMaterial_ud550")
+
+[node name="Hay0" type="CSGCylinder3D" parent="East/Outskirts" unique_id=101770467]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -66, 0.8, 31)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay1" type="CSGCylinder3D" parent="East/Outskirts" unique_id=2000963012]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -51.3, 0.8, 31)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay2" type="CSGCylinder3D" parent="East/Outskirts" unique_id=828577108]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -36.6, 0.8, 31)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay3" type="CSGCylinder3D" parent="East/Outskirts" unique_id=924040799]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -63.9, 0.8, 38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay4" type="CSGCylinder3D" parent="East/Outskirts" unique_id=296844772]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -49.2, 0.8, 38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Hay5" type="CSGCylinder3D" parent="East/Outskirts" unique_id=2024800781]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -34.5, 0.8, 38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="HayN1" type="CSGCylinder3D" parent="East/Outskirts" unique_id=1231161801]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -62, 0.8, -33)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="HayN2" type="CSGCylinder3D" parent="East/Outskirts" unique_id=1061036015]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -52, 0.8, -38)
+use_collision = true
+radius = 0.8
+height = 1.4
+sides = 12
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="Tractor" type="Node3D" parent="East/Outskirts" unique_id=2143690987]
+transform = Transform3D(0.921061, 0, 0.38941833, 0, 1, 0, -0.38941833, 0, 0.921061, -38, 0, 35)
+
+[node name="Body" type="CSGBox3D" parent="East/Outskirts/Tractor" unique_id=1528049292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1, 0)
+use_collision = true
+size = Vector3(2.6, 1, 1.2)
+material = SubResource("ShaderMaterial_i5b1o")
+
+[node name="Cabin" type="CSGBox3D" parent="East/Outskirts/Tractor" unique_id=1618949154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 2, 0)
+use_collision = true
+size = Vector3(1.3, 1.2, 1.3)
+material = SubResource("ShaderMaterial_ivyfu")
+
+[node name="WheelL" type="CSGBox3D" parent="East/Outskirts/Tractor" unique_id=1654987950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.75, 0.85)
+use_collision = true
+size = Vector3(1.5, 1.5, 0.45)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="WheelR" type="CSGBox3D" parent="East/Outskirts/Tractor" unique_id=680961357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.75, -0.85)
+use_collision = true
+size = Vector3(1.5, 1.5, 0.45)
+material = SubResource("ShaderMaterial_fufrk")
+
+[node name="FieldTree1" type="CSGCylinder3D" parent="East/Outskirts" unique_id=1560826366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 1.575, 38)
+use_collision = true
+radius = 0.25
+height = 3.15
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="FieldTree1Crown" type="CSGCylinder3D" parent="East/Outskirts" unique_id=988110358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 4.725, 38)
+radius = 2.1
+height = 5.25
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="FieldTree2" type="CSGCylinder3D" parent="East/Outskirts" unique_id=19895121]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 1.4625, -30)
+use_collision = true
+radius = 0.25
+height = 2.925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="FieldTree2Crown" type="CSGCylinder3D" parent="East/Outskirts" unique_id=1531441388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 4.3875, -30)
+radius = 1.95
+height = 4.875
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="RoadTree1" type="CSGCylinder3D" parent="East/Outskirts" unique_id=1426245939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 1.35, -6.2)
+use_collision = true
+radius = 0.25
+height = 2.7
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="RoadTree1Crown" type="CSGCylinder3D" parent="East/Outskirts" unique_id=229393569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 4.05, -6.2)
+radius = 1.8
+height = 4.5
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="RoadTree2" type="CSGCylinder3D" parent="East/Outskirts" unique_id=1233014556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 1.4625, 6.5)
+use_collision = true
+radius = 0.25
+height = 2.925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="RoadTree2Crown" type="CSGCylinder3D" parent="East/Outskirts" unique_id=837112320]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 4.3875, 6.5)
+radius = 1.95
+height = 4.875
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="Base" type="Node3D" parent="East" unique_id=1344026948]
+
+[node name="Barn" type="CSGBox3D" parent="East/Base" unique_id=261661226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 2.5, -17)
+use_collision = true
+size = Vector3(9, 5, 12)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Inner" type="CSGBox3D" parent="East/Base/Barn" unique_id=1480182952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+operation = 2
+size = Vector3(8.4, 4.8, 11.4)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Gate" type="CSGBox3D" parent="East/Base/Barn" unique_id=981649484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.7, 0)
+operation = 2
+size = Vector3(0.9, 3.6, 5)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="Door_s" type="CSGBox3D" parent="East/Base/Barn" unique_id=1623223467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1.4, 6)
+operation = 2
+size = Vector3(1.2, 2.3999999, 0.9)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="BarnRoof" type="CSGBox3D" parent="East/Base" unique_id=1421279512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 5.1, -17)
+use_collision = true
+size = Vector3(9.8, 0.2, 12.8)
+material = SubResource("ShaderMaterial_pt3kd")
+
+[node name="BarnHay1" type="CSGBox3D" parent="East/Base" unique_id=158679957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.5, 0.6, -20.5)
+use_collision = true
+size = Vector3(2.4, 1.2, 3)
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="BarnHay2" type="CSGBox3D" parent="East/Base" unique_id=743363099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.8, 1.6, -20.8)
+use_collision = true
+size = Vector3(1.6, 0.8, 1.8)
+material = SubResource("ShaderMaterial_4roq8")
+
+[node name="SupplyCrates1" type="CSGBox3D" parent="East/Base" unique_id=70162303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.5, 0.6, 15)
+use_collision = true
+size = Vector3(2.4, 1.2, 1.2)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="SupplyCrates2" type="CSGBox3D" parent="East/Base" unique_id=741236842]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.5, 0.6, 15.5)
+use_collision = true
+size = Vector3(1.2, 1.2, 1.2)
+material = SubResource("ShaderMaterial_tjy57")
+
+[node name="BaseSandbags" type="Node3D" parent="East/Base" unique_id=1268417925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 0, 11.5)
+
+[node name="Bags" type="CSGBox3D" parent="East/Base/BaseSandbags" unique_id=1230807305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+use_collision = true
+size = Vector3(5, 0.9, 0.7)
+material = SubResource("ShaderMaterial_dkdvd")
+
+[node name="SpawnPoints" type="Node3D" parent="East/Base" unique_id=488744487]
+
+[node name="Spawn0" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=1154430876 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, -8)
+
+[node name="Spawn1" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=1331308598 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, -4)
+
+[node name="Spawn2" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=3978812 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, 0)
+
+[node name="Spawn3" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=2062328213 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, 4)
+
+[node name="Spawn4" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=869029233 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0.05, 8)
+
+[node name="Spawn5" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=711827978 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, -8)
+
+[node name="Spawn6" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=1521614973 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, -4)
+
+[node name="Spawn7" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=968611137 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, 0)
+
+[node name="Spawn8" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=1056808546 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, 4)
+
+[node name="Spawn9" type="Marker3D" parent="East/Base/SpawnPoints" unique_id=1755119019 groups=["spawn_team_2"]]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -67, 0.05, 8)
+
+[node name="Bounds" type="StaticBody3D" parent="." unique_id=773957459]
+collision_layer = 4
+collision_mask = 0
+
+[node name="Wall0" type="CollisionShape3D" parent="Bounds" unique_id=1456938426]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77, 10, 0)
+shape = SubResource("BoxShape3D_fyo3g")
+
+[node name="Wall1" type="CollisionShape3D" parent="Bounds" unique_id=303004324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77, 10, 0)
+shape = SubResource("BoxShape3D_ls2y8")
+
+[node name="Wall2" type="CollisionShape3D" parent="Bounds" unique_id=1912965951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -45)
+shape = SubResource("BoxShape3D_ayw4w")
+
+[node name="Wall3" type="CollisionShape3D" parent="Bounds" unique_id=2038156928]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 45)
+shape = SubResource("BoxShape3D_twemt")
+
+[node name="Horizon" type="Node3D" parent="." unique_id=1152049538]
+
+[node name="TreeNS0" type="CSGCylinder3D" parent="Horizon" unique_id=1469212228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.284355, 1.1733531, -49.106342)
+radius = 0.25
+height = 2.3467062
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS0Crown" type="CSGCylinder3D" parent="Horizon" unique_id=946422128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.284355, 3.520059, -49.106342)
+radius = 1.5644708
+height = 3.9111767
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS1" type="CSGCylinder3D" parent="Horizon" unique_id=1626172712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.10416, 1.2304747, 48.843933)
+radius = 0.25
+height = 2.4609494
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS1Crown" type="CSGCylinder3D" parent="Horizon" unique_id=2042599818]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.10416, 3.691424, 48.843933)
+radius = 1.6406329
+height = 4.101582
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS2" type="CSGCylinder3D" parent="Horizon" unique_id=1723850587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.32592, 1.743924, -48.301517)
+radius = 0.25
+height = 3.487848
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS2Crown" type="CSGCylinder3D" parent="Horizon" unique_id=206377221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.32592, 5.231772, -48.301517)
+radius = 2.325232
+height = 5.81308
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS3" type="CSGCylinder3D" parent="Horizon" unique_id=22663662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.36872, 1.49412, 47.20582)
+radius = 0.25
+height = 2.98824
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS3Crown" type="CSGCylinder3D" parent="Horizon" unique_id=171582894]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.36872, 4.48236, 47.20582)
+radius = 1.9921601
+height = 4.9804
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS4" type="CSGCylinder3D" parent="Horizon" unique_id=1774426025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.37654, 1.6214279, -49.409)
+radius = 0.25
+height = 3.2428558
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS4Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1772841985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.37654, 4.8642836, -49.409)
+radius = 2.1619039
+height = 5.4047594
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS5" type="CSGCylinder3D" parent="Horizon" unique_id=191970357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.981, 1.4854219, 48.057682)
+radius = 0.25
+height = 2.9708438
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS5Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1062300062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.981, 4.4562654, 48.057682)
+radius = 1.9805624
+height = 4.951406
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS6" type="CSGCylinder3D" parent="Horizon" unique_id=1479558411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.48339, 1.7062246, -49.63741)
+radius = 0.25
+height = 3.4124491
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS6Crown" type="CSGCylinder3D" parent="Horizon" unique_id=277084108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.48339, 5.118674, -49.63741)
+radius = 2.2749662
+height = 5.687415
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS7" type="CSGCylinder3D" parent="Horizon" unique_id=1176491723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.453053, 1.3172666, 47.18395)
+radius = 0.25
+height = 2.6345332
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS7Crown" type="CSGCylinder3D" parent="Horizon" unique_id=675094482]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.453053, 3.9517996, 47.18395)
+radius = 1.7563554
+height = 4.390888
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS8" type="CSGCylinder3D" parent="Horizon" unique_id=599192666]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.567444, 1.2552516, -48.54624)
+radius = 0.25
+height = 2.5105033
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS8Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1590660121]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.567444, 3.765755, -48.54624)
+radius = 1.6736689
+height = 4.184172
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS9" type="CSGCylinder3D" parent="Horizon" unique_id=1506412509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.071777, 1.3268663, 48.805027)
+radius = 0.25
+height = 2.6537325
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS9Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1754380354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.071777, 3.980599, 48.805027)
+radius = 1.769155
+height = 4.422888
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS10" type="CSGCylinder3D" parent="Horizon" unique_id=1011805749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.735554, 1.5664728, -47.274155)
+radius = 0.25
+height = 3.1329455
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS10Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1809290913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.735554, 4.699418, -47.274155)
+radius = 2.0886302
+height = 5.2215757
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS11" type="CSGCylinder3D" parent="Horizon" unique_id=1629185069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.596504, 1.6784121, 48.7966)
+radius = 0.25
+height = 3.3568242
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS11Crown" type="CSGCylinder3D" parent="Horizon" unique_id=119323160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.596504, 5.035236, 48.7966)
+radius = 2.2378826
+height = 5.5947065
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS12" type="CSGCylinder3D" parent="Horizon" unique_id=685709889]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.262695, 1.1786759, -47.062668)
+radius = 0.25
+height = 2.3573518
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS12Crown" type="CSGCylinder3D" parent="Horizon" unique_id=218704857]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.262695, 3.5360274, -47.062668)
+radius = 1.5715678
+height = 3.9289193
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS13" type="CSGCylinder3D" parent="Horizon" unique_id=970729217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.810925, 1.7553846, 47.48981)
+radius = 0.25
+height = 3.5107691
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS13Crown" type="CSGCylinder3D" parent="Horizon" unique_id=93421229]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.810925, 5.266154, 47.48981)
+radius = 2.3405128
+height = 5.851282
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS14" type="CSGCylinder3D" parent="Horizon" unique_id=990768062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.702564, 1.5478165, -50.890774)
+radius = 0.25
+height = 3.095633
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS14Crown" type="CSGCylinder3D" parent="Horizon" unique_id=449968087]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.702564, 4.64345, -50.890774)
+radius = 2.0637555
+height = 5.1593885
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS15" type="CSGCylinder3D" parent="Horizon" unique_id=1897483494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.722237, 1.4885412, 49.376225)
+radius = 0.25
+height = 2.9770825
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS15Crown" type="CSGCylinder3D" parent="Horizon" unique_id=117147313]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.722237, 4.465624, 49.376225)
+radius = 1.9847217
+height = 4.9618044
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS16" type="CSGCylinder3D" parent="Horizon" unique_id=517190149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.918077, 1.3746663, -48.165073)
+radius = 0.25
+height = 2.7493327
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS16Crown" type="CSGCylinder3D" parent="Horizon" unique_id=2045008207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.918077, 4.123999, -48.165073)
+radius = 1.8328885
+height = 4.582221
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS17" type="CSGCylinder3D" parent="Horizon" unique_id=929486930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.341526, 1.1719073, 49.77995)
+radius = 0.25
+height = 2.3438146
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS17Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1107579106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.341526, 3.515722, 49.77995)
+radius = 1.5625432
+height = 3.9063578
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS18" type="CSGCylinder3D" parent="Horizon" unique_id=111451275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.91776, 1.1549445, -47.567497)
+radius = 0.25
+height = 2.309889
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS18Crown" type="CSGCylinder3D" parent="Horizon" unique_id=671772178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.91776, 3.4648335, -47.567497)
+radius = 1.539926
+height = 3.849815
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS19" type="CSGCylinder3D" parent="Horizon" unique_id=698842723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.593794, 1.1968832, 47.61682)
+radius = 0.25
+height = 2.3937664
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS19Crown" type="CSGCylinder3D" parent="Horizon" unique_id=583111483]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.593794, 3.5906496, 47.61682)
+radius = 1.5958443
+height = 3.9896107
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS20" type="CSGCylinder3D" parent="Horizon" unique_id=240032054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.28619, 1.4694315, -49.426098)
+radius = 0.25
+height = 2.938863
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS20Crown" type="CSGCylinder3D" parent="Horizon" unique_id=741004539]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.28619, 4.408294, -49.426098)
+radius = 1.959242
+height = 4.8981047
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS21" type="CSGCylinder3D" parent="Horizon" unique_id=19566314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.821037, 1.1905917, 47.77934)
+radius = 0.25
+height = 2.3811834
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS21Crown" type="CSGCylinder3D" parent="Horizon" unique_id=2070614283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.821037, 3.5717752, 47.77934)
+radius = 1.5874556
+height = 3.968639
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS22" type="CSGCylinder3D" parent="Horizon" unique_id=2197030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.810822, 1.2210156, -50.48955)
+radius = 0.25
+height = 2.4420311
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS22Crown" type="CSGCylinder3D" parent="Horizon" unique_id=614915309]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.810822, 3.6630468, -50.48955)
+radius = 1.6280208
+height = 4.070052
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS23" type="CSGCylinder3D" parent="Horizon" unique_id=1572304128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.709928, 1.6320317, 47.334473)
+radius = 0.25
+height = 3.2640634
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS23Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1508095786]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.709928, 4.8960953, 47.334473)
+radius = 2.1760423
+height = 5.4401054
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS24" type="CSGCylinder3D" parent="Horizon" unique_id=1347884065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9767642, 1.7701775, -48.542015)
+radius = 0.25
+height = 3.540355
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS24Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1488778537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9767642, 5.3105326, -48.542015)
+radius = 2.3602366
+height = 5.900592
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS25" type="CSGCylinder3D" parent="Horizon" unique_id=1437351736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.158357, 1.2418281, 47.862476)
+radius = 0.25
+height = 2.4836562
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS25Crown" type="CSGCylinder3D" parent="Horizon" unique_id=578037837]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.158357, 3.7254844, 47.862476)
+radius = 1.6557708
+height = 4.139427
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS26" type="CSGCylinder3D" parent="Horizon" unique_id=382644712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2521677, 1.2772814, -49.810284)
+radius = 0.25
+height = 2.5545628
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS26Crown" type="CSGCylinder3D" parent="Horizon" unique_id=203499452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2521677, 3.8318443, -49.810284)
+radius = 1.7030419
+height = 4.2576046
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS27" type="CSGCylinder3D" parent="Horizon" unique_id=1627143601]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.896573, 1.1461577, 48.361473)
+radius = 0.25
+height = 2.2923155
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS27Crown" type="CSGCylinder3D" parent="Horizon" unique_id=818294112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.896573, 3.4384735, 48.361473)
+radius = 1.5282104
+height = 3.8205261
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS28" type="CSGCylinder3D" parent="Horizon" unique_id=1400457497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.609131, 1.3600003, -49.21477)
+radius = 0.25
+height = 2.7200005
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS28Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1400440000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.609131, 4.080001, -49.21477)
+radius = 1.8133336
+height = 4.5333343
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS29" type="CSGCylinder3D" parent="Horizon" unique_id=1995535430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.993547, 1.390386, 50.547283)
+radius = 0.25
+height = 2.780772
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS29Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1406827836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.993547, 4.171158, 50.547283)
+radius = 1.853848
+height = 4.63462
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS30" type="CSGCylinder3D" parent="Horizon" unique_id=403757782]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.37612, 1.7089014, -49.02041)
+radius = 0.25
+height = 3.4178028
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS30Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1695456899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.37612, 5.126704, -49.02041)
+radius = 2.2785351
+height = 5.6963377
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS31" type="CSGCylinder3D" parent="Horizon" unique_id=2097742947]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.51655, 1.413911, 47.75893)
+radius = 0.25
+height = 2.827822
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS31Crown" type="CSGCylinder3D" parent="Horizon" unique_id=884733561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.51655, 4.241733, 47.75893)
+radius = 1.8852147
+height = 4.7130365
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS32" type="CSGCylinder3D" parent="Horizon" unique_id=1720393076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.77378, 1.547412, -48.731247)
+radius = 0.25
+height = 3.094824
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS32Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1278142343]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.77378, 4.642236, -48.731247)
+radius = 2.0632162
+height = 5.15804
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS33" type="CSGCylinder3D" parent="Horizon" unique_id=436587336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.549658, 1.257937, 50.511425)
+radius = 0.25
+height = 2.515874
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS33Crown" type="CSGCylinder3D" parent="Horizon" unique_id=474938127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.549658, 3.7738109, 50.511425)
+radius = 1.6772492
+height = 4.193123
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS34" type="CSGCylinder3D" parent="Horizon" unique_id=1460761102]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.571049, 1.201571, -47.762856)
+radius = 0.25
+height = 2.403142
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS34Crown" type="CSGCylinder3D" parent="Horizon" unique_id=2013924228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.571049, 3.604713, -47.762856)
+radius = 1.6020947
+height = 4.0052366
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS35" type="CSGCylinder3D" parent="Horizon" unique_id=1401709148]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.128479, 1.2316556, 49.89453)
+radius = 0.25
+height = 2.4633112
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS35Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1707820883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.128479, 3.6949668, 49.89453)
+radius = 1.6422074
+height = 4.1055183
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS36" type="CSGCylinder3D" parent="Horizon" unique_id=137553701]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.483135, 1.7460814, -49.01464)
+radius = 0.25
+height = 3.4921627
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS36Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1575955660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.483135, 5.238244, -49.01464)
+radius = 2.3281085
+height = 5.8202715
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS37" type="CSGCylinder3D" parent="Horizon" unique_id=230072333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.650963, 1.3637784, 48.40042)
+radius = 0.25
+height = 2.7275567
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS37Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1998872290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.650963, 4.0913353, 48.40042)
+radius = 1.8183712
+height = 4.545928
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS38" type="CSGCylinder3D" parent="Horizon" unique_id=603042790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.1635, 1.1473422, -49.390038)
+radius = 0.25
+height = 2.2946844
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS38Crown" type="CSGCylinder3D" parent="Horizon" unique_id=354787733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.1635, 3.4420264, -49.390038)
+radius = 1.5297896
+height = 3.8244739
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS39" type="CSGCylinder3D" parent="Horizon" unique_id=538874896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.930767, 1.3963138, 48.425606)
+radius = 0.25
+height = 2.7926276
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS39Crown" type="CSGCylinder3D" parent="Horizon" unique_id=262838164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.930767, 4.1889415, 48.425606)
+radius = 1.8617518
+height = 4.6543794
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS40" type="CSGCylinder3D" parent="Horizon" unique_id=2028098478]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.133, 1.2514541, -49.72864)
+radius = 0.25
+height = 2.5029082
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS40Crown" type="CSGCylinder3D" parent="Horizon" unique_id=2058703157]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.133, 3.7543623, -49.72864)
+radius = 1.6686056
+height = 4.1715136
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS41" type="CSGCylinder3D" parent="Horizon" unique_id=1049499946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.511852, 1.1257484, 49.75844)
+radius = 0.25
+height = 2.2514968
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS41Crown" type="CSGCylinder3D" parent="Horizon" unique_id=655059109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.511852, 3.377245, 49.75844)
+radius = 1.5009978
+height = 3.7524943
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS42" type="CSGCylinder3D" parent="Horizon" unique_id=1265948587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.490417, 1.7363554, -48.97737)
+radius = 0.25
+height = 3.4727108
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS42Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1860043002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.490417, 5.2090664, -48.97737)
+radius = 2.3151407
+height = 5.7878513
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS43" type="CSGCylinder3D" parent="Horizon" unique_id=1117933567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.95669, 1.30672, 49.06177)
+radius = 0.25
+height = 2.61344
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS43Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1701291224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.95669, 3.92016, 49.06177)
+radius = 1.7422934
+height = 4.3557334
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS44" type="CSGCylinder3D" parent="Horizon" unique_id=2004905056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.14242, 1.4700505, -49.477028)
+radius = 0.25
+height = 2.940101
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS44Crown" type="CSGCylinder3D" parent="Horizon" unique_id=2019042947]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.14242, 4.4101515, -49.477028)
+radius = 1.9600673
+height = 4.900168
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS45" type="CSGCylinder3D" parent="Horizon" unique_id=1344991269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.795284, 1.3624196, 48.00198)
+radius = 0.25
+height = 2.7248392
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS45Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1406031508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.795284, 4.087259, 48.00198)
+radius = 1.8165594
+height = 4.5413985
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS46" type="CSGCylinder3D" parent="Horizon" unique_id=1362899621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68.272, 1.7881533, -48.552162)
+radius = 0.25
+height = 3.5763066
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS46Crown" type="CSGCylinder3D" parent="Horizon" unique_id=358140107]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68.272, 5.36446, -48.552162)
+radius = 2.3842044
+height = 5.960511
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS47" type="CSGCylinder3D" parent="Horizon" unique_id=1919535462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.530014, 1.5351429, 50.348446)
+radius = 0.25
+height = 3.0702858
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS47Crown" type="CSGCylinder3D" parent="Horizon" unique_id=963172089]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.530014, 4.6054287, 50.348446)
+radius = 2.046857
+height = 5.117143
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS48" type="CSGCylinder3D" parent="Horizon" unique_id=1165162847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.23461, 1.4281255, -49.160854)
+radius = 0.25
+height = 2.856251
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS48Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1218097689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.23461, 4.284376, -49.160854)
+radius = 1.9041673
+height = 4.760418
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeNS49" type="CSGCylinder3D" parent="Horizon" unique_id=1109451644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.86204, 1.608038, 50.008144)
+radius = 0.25
+height = 3.216076
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeNS49Crown" type="CSGCylinder3D" parent="Horizon" unique_id=139418336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.86204, 4.824114, 50.008144)
+radius = 2.1440506
+height = 5.3601265
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE50" type="CSGCylinder3D" parent="Horizon" unique_id=404766843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.83285, 1.6712962, -45.149483)
+radius = 0.25
+height = 3.3425925
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE50Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1411203119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.83285, 5.013889, -45.149483)
+radius = 2.228395
+height = 5.5709877
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE51" type="CSGCylinder3D" parent="Horizon" unique_id=1884205926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.87674, 1.1470737, -42.59204)
+radius = 0.25
+height = 2.2941475
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE51Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1953522214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.87674, 3.4412212, -42.59204)
+radius = 1.5294316
+height = 3.823579
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE52" type="CSGCylinder3D" parent="Horizon" unique_id=1809650789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.052666, 1.3378727, -38.68698)
+radius = 0.25
+height = 2.6757455
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE52Crown" type="CSGCylinder3D" parent="Horizon" unique_id=276482195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.052666, 4.0136185, -38.68698)
+radius = 1.7838304
+height = 4.4595757
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE53" type="CSGCylinder3D" parent="Horizon" unique_id=1225171550]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.26189, 1.2984434, -36.632027)
+radius = 0.25
+height = 2.5968869
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE53Crown" type="CSGCylinder3D" parent="Horizon" unique_id=161011219]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.26189, 3.8953304, -36.632027)
+radius = 1.7312579
+height = 4.328145
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE54" type="CSGCylinder3D" parent="Horizon" unique_id=678480157]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.547165, 1.1343535, -30.457285)
+radius = 0.25
+height = 2.268707
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE54Crown" type="CSGCylinder3D" parent="Horizon" unique_id=526975962]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.547165, 3.4030604, -30.457285)
+radius = 1.5124713
+height = 3.7811785
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE55" type="CSGCylinder3D" parent="Horizon" unique_id=597292674]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.36902, 1.1377432, -31.97283)
+radius = 0.25
+height = 2.2754865
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE55Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1943886692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.36902, 3.41323, -31.97283)
+radius = 1.516991
+height = 3.7924776
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE56" type="CSGCylinder3D" parent="Horizon" unique_id=1625425339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.02973, 1.5769012, -22.674274)
+radius = 0.25
+height = 3.1538024
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE56Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1313827497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.02973, 4.7307034, -22.674274)
+radius = 2.1025348
+height = 5.256337
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE57" type="CSGCylinder3D" parent="Horizon" unique_id=1100374118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.31704, 1.3994994, -24.69367)
+radius = 0.25
+height = 2.7989988
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE57Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1798235246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.31704, 4.1984982, -24.69367)
+radius = 1.8659992
+height = 4.664998
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE58" type="CSGCylinder3D" parent="Horizon" unique_id=801100964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.21724, 1.3147122, -18.377073)
+radius = 0.25
+height = 2.6294243
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE58Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1096690512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.21724, 3.9441366, -18.377073)
+radius = 1.7529496
+height = 4.382374
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE59" type="CSGCylinder3D" parent="Horizon" unique_id=1296084628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.8691, 1.5109279, -16.756805)
+radius = 0.25
+height = 3.0218558
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE59Crown" type="CSGCylinder3D" parent="Horizon" unique_id=805949234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.8691, 4.532784, -16.756805)
+radius = 2.0145705
+height = 5.0364265
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE60" type="CSGCylinder3D" parent="Horizon" unique_id=999718885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.21983, 1.720308, -13.222101)
+radius = 0.25
+height = 3.440616
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE60Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1194772090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.21983, 5.160924, -13.222101)
+radius = 2.2937438
+height = 5.7343597
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE61" type="CSGCylinder3D" parent="Horizon" unique_id=1718131165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80.66728, 1.184954, -12.764783)
+radius = 0.25
+height = 2.369908
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE61Crown" type="CSGCylinder3D" parent="Horizon" unique_id=963332641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80.66728, 3.554862, -12.764783)
+radius = 1.5799387
+height = 3.9498467
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE62" type="CSGCylinder3D" parent="Horizon" unique_id=1428373867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.2713, 1.4201477, -6.7561307)
+radius = 0.25
+height = 2.8402953
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE62Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1713663578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.2713, 4.260443, -6.7561307)
+radius = 1.8935302
+height = 4.7338257
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE63" type="CSGCylinder3D" parent="Horizon" unique_id=1271467952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.75386, 1.1621834, -6.7683105)
+radius = 0.25
+height = 2.3243668
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE63Crown" type="CSGCylinder3D" parent="Horizon" unique_id=118413142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.75386, 3.48655, -6.7683105)
+radius = 1.5495778
+height = 3.8739445
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE64" type="CSGCylinder3D" parent="Horizon" unique_id=1746749403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.84138, 1.5226755, 1.0880046)
+radius = 0.25
+height = 3.045351
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE64Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1855865571]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.84138, 4.5680265, 1.0880046)
+radius = 2.0302339
+height = 5.075585
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE65" type="CSGCylinder3D" parent="Horizon" unique_id=253573501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.655876, 1.1678166, 0.75366545)
+radius = 0.25
+height = 2.3356333
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE65Crown" type="CSGCylinder3D" parent="Horizon" unique_id=14839266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.655876, 3.50345, 0.75366545)
+radius = 1.5570889
+height = 3.8927221
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE66" type="CSGCylinder3D" parent="Horizon" unique_id=1501195067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.21124, 1.6664925, 9.317503)
+radius = 0.25
+height = 3.332985
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE66Crown" type="CSGCylinder3D" parent="Horizon" unique_id=833929342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.21124, 4.9994774, 9.317503)
+radius = 2.22199
+height = 5.554975
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE67" type="CSGCylinder3D" parent="Horizon" unique_id=1509355468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.97894, 1.3031965, 10.079798)
+radius = 0.25
+height = 2.606393
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE67Crown" type="CSGCylinder3D" parent="Horizon" unique_id=925646808]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.97894, 3.9095895, 10.079798)
+radius = 1.7375953
+height = 4.3439884
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE68" type="CSGCylinder3D" parent="Horizon" unique_id=2139742665]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.405205, 1.4260161, 18.00557)
+radius = 0.25
+height = 2.8520322
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE68Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1337201606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.405205, 4.278048, 18.00557)
+radius = 1.9013548
+height = 4.753387
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE69" type="CSGCylinder3D" parent="Horizon" unique_id=945002508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.00594, 1.2033035, 16.731983)
+radius = 0.25
+height = 2.406607
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE69Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1319973890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.00594, 3.6099102, 16.731983)
+radius = 1.6044046
+height = 4.0110116
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE70" type="CSGCylinder3D" parent="Horizon" unique_id=1015597058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.498314, 1.2747018, 22.105867)
+radius = 0.25
+height = 2.5494037
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE70Crown" type="CSGCylinder3D" parent="Horizon" unique_id=406797503]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.498314, 3.8241055, 22.105867)
+radius = 1.6996024
+height = 4.2490063
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE71" type="CSGCylinder3D" parent="Horizon" unique_id=1577495337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.48589, 1.4190143, 21.524899)
+radius = 0.25
+height = 2.8380287
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE71Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1556716900]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.48589, 4.257043, 21.524899)
+radius = 1.892019
+height = 4.7300477
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE72" type="CSGCylinder3D" parent="Horizon" unique_id=1457602330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.86409, 1.470335, 27.857178)
+radius = 0.25
+height = 2.94067
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE72Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1320766850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.86409, 4.411005, 27.857178)
+radius = 1.9604467
+height = 4.901117
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE73" type="CSGCylinder3D" parent="Horizon" unique_id=1965253744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.76052, 1.1767216, 28.702196)
+radius = 0.25
+height = 2.3534431
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE73Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1595183758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.76052, 3.5301647, 28.702196)
+radius = 1.5689621
+height = 3.9224052
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE74" type="CSGCylinder3D" parent="Horizon" unique_id=1692815706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.272934, 1.4475538, 35.075684)
+radius = 0.25
+height = 2.8951075
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE74Crown" type="CSGCylinder3D" parent="Horizon" unique_id=369518468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.272934, 4.3426614, 35.075684)
+radius = 1.9300717
+height = 4.825179
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE75" type="CSGCylinder3D" parent="Horizon" unique_id=129710531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80.256065, 1.2384142, 34.828064)
+radius = 0.25
+height = 2.4768283
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE75Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1175917749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80.256065, 3.7152426, 34.828064)
+radius = 1.6512189
+height = 4.1280475
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE76" type="CSGCylinder3D" parent="Horizon" unique_id=852987327]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.16831, 1.6639344, 40.489056)
+radius = 0.25
+height = 3.3278687
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE76Crown" type="CSGCylinder3D" parent="Horizon" unique_id=1740050177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.16831, 4.991803, 40.489056)
+radius = 2.218579
+height = 5.5464478
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
+
+[node name="TreeWE77" type="CSGCylinder3D" parent="Horizon" unique_id=2132244706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.55268, 1.7914444, 37.964714)
+radius = 0.25
+height = 3.5828888
+sides = 6
+material = SubResource("ShaderMaterial_62gnl")
+
+[node name="TreeWE77Crown" type="CSGCylinder3D" parent="Horizon" unique_id=554643068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.55268, 5.3743334, 37.964714)
+radius = 2.3885925
+height = 5.9714813
+sides = 7
+cone = true
+material = SubResource("ShaderMaterial_vfipp")
