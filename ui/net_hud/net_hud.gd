@@ -26,8 +26,8 @@ func _process(_delta: float) -> void:
 	var show_list: bool = Input.is_action_pressed(&"player_list")
 	if show_list != _list_center.visible:
 		_list_center.visible = show_list
-		if show_list:
-			_refresh_list()
+	if show_list:
+		_refresh_list()  # счёт меняется во время боя
 
 
 func _on_player_joined(peer_id: int, player_name: String) -> void:
@@ -61,6 +61,11 @@ func _refresh_list() -> void:
 	lines.append("Игроки: %d / %d" % [Network.players.size(), Network.MAX_PLAYERS])
 	lines.append("")
 	var my_id: int = multiplayer.get_unique_id()
+	var scores: Dictionary[int, Vector2i] = {}
+	for node: Node in get_tree().get_nodes_in_group(Player.PLAYERS_GROUP):
+		var soldier := node as Player
+		if soldier != null:
+			scores[soldier.peer_id] = Vector2i(soldier.kills, soldier.deaths)
 	for peer_id: int in Network.players:
 		var tags := PackedStringArray()
 		if peer_id == 1:
@@ -68,7 +73,8 @@ func _refresh_list() -> void:
 		if peer_id == my_id:
 			tags.append("вы")
 		var suffix: String = "" if tags.is_empty() else "  (%s)" % ", ".join(tags)
-		lines.append("%s%s" % [Network.players[peer_id], suffix])
+		var score: Vector2i = scores.get(peer_id, Vector2i.ZERO)
+		lines.append("%s%s    убийств %d / смертей %d" % [Network.players[peer_id], suffix, score.x, score.y])
 	if not Network.is_host():
 		lines.append("")
 		lines.append("Пинг до хоста: %d мс" % Network.get_ping_ms())

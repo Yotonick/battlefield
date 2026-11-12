@@ -136,6 +136,19 @@ func get_ping_ms() -> int:
 	return int(host_peer.get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME))
 
 
+## Пинг (туда и обратно) от хоста до игрока, мс. Только на хосте.
+func get_peer_rtt_ms(peer_id: int) -> int:
+	if mode != Mode.HOST or peer_id == 1:
+		return 0
+	var enet := multiplayer.multiplayer_peer as ENetMultiplayerPeer
+	if enet == null:
+		return 0
+	var packet_peer: ENetPacketPeer = enet.get_peer(peer_id)
+	if packet_peer == null:
+		return 0
+	return int(packet_peer.get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME))
+
+
 ## IPv4-адреса этого компьютера. Адреса Radmin VPN (26.x.x.x) идут первыми.
 func get_local_ipv4_addresses() -> PackedStringArray:
 	var radmin := PackedStringArray()

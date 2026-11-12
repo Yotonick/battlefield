@@ -7,6 +7,11 @@ extends CharacterBody3D
 ## раз в 1/30 с рассылает состояние через MultiplayerSynchronizer.
 ## У остальных боец — «марионетка»: снимки состояния копятся в буфере и
 ## проигрываются с задержкой interpolation_delay, плавно между снимками.
+##
+## Бой (шаг 3): здоровье, смерть и респавн решает хост. Выстрел владелец
+## делает у себя (пуля для вида) и шлёт хосту; хост пускает «настоящую» пулю
+## и проверяет попадание по бойцам «в прошлом» (компенсация пинга).
+## Здоровье, «жив», убийства и смерти хост рассылает через HostSync.
 
 enum Stance { STAND, CROUCH }
 
@@ -14,6 +19,22 @@ enum Stance { STAND, CROUCH }
 const PITCH_LIMIT: float = 1.5533430  # 89°
 ## Группа, по которой UI находит своего (локального) бойца.
 const LOCAL_PLAYER_GROUP: StringName = &"local_player"
+## Все бойцы (свои и чужие).
+const PLAYERS_GROUP: StringName = &"players"
+const MAX_HEALTH: float = 100.0
+## Сколько секунд хост помнит, где был боец (для компенсации пинга).
+const HISTORY_SECONDS: float = 0.6
+## Больше этого пинга не компенсируем, секунд.
+const MAX_REWIND: float = 0.3
+
+## Только на хосте: бойца убили.
+signal killed_on_host(victim: Player, killer_id: int, headshot: bool)
+## У владельца: в нас попали (откуда стреляли — для индикатора).
+signal damaged(from_position: Vector3, amount: float)
+## У стрелка: хост подтвердил попадание.
+signal hit_confirmed(headshot: bool, killed: bool)
+## На всех машинах: боец умер или ожил.
+signal alive_changed(is_alive: bool)
 
 @export_group("Скорости, м/с")
 @export var walk_speed: float = 4.5
@@ -53,6 +74,12 @@ const LOCAL_PLAYER_GROUP: StringName = &"local_player"
 ## Если снимки перестали приходить, сколько секунд продолжаем движение по инерции.
 @export var max_extrapolation: float = 0.2
 
+@export_group("Столкновения с бойцами")
+## Ближе этого (по горизонтали) бойцы мягко расталкиваются.
+@export var separation_distance: float = 0.7
+## Скорость расталкивания при полном наложении, м/с.
+@export var separation_speed: float = 4.0
+
 @export_group("Камера")
 ## Градусов поворота на один пиксель движения мыши.
 @export var mouse_sensitivity: float = 0.12
@@ -71,6 +98,16 @@ class InputState:
 	var jump_pressed: bool = false
 	var sprint_held: bool = false
 	var wants_crouch: bool = false
+	var fire_held: bool = false
+	var fire_pressed: bool = false
+	var aim_held: bool = false
+	var reload_pressed: bool = false
+
+## Где был боец в момент времени (для проверки попаданий на хосте).
+class HitPose:
+	var time: float = 0.0
+	var position: Vector3 = Vector3.ZERO
+	var crouched: bool = false
 
 ## Снимок состояния чужого бойца.
 class Snapshot:
@@ -86,6 +123,21 @@ var stance: Stance = Stance.STAND
 var is_sprinting: bool = false
 ## Имя игрока (приходит при спавне).
 var display_name: String = ""
+## peer id игрока-владельца.
+var peer_id: int = 0
+## Для автотестов: если задан, используется вместо клавиатуры и мыши.
+var debug_input: InputState = null
+
+# Поля, которые рассылает хост через HostSync (см. player.tscn).
+var health: float = MAX_HEALTH
+var alive: bool = true:
+	set(value):
+		if alive == value:
+			return
+		alive = value
+		_on_alive_changed()
+var kills: int = 0
+var deaths: int = 0
 
 # Поля, которые рассылает MultiplayerSynchronizer (см. player.tscn).
 # Пишет их только владелец, остальные только читают.
@@ -115,6 +167,12 @@ var _crouch_toggled: bool = false
 var _eye_height: float = 0.0
 var _bob_phase: float = 0.0
 var _capsule: CapsuleShape3D
+## Отдача, которая ещё не «доехала» до камеры (рад: x — вверх, y — вбок).
+var _pending_kick: Vector2 = Vector2.ZERO
+## Только на хосте: история положений и ограничение скорострельности.
+var _history: Array[HitPose] = []
+var _server_shot_times: Array[float] = []
+var _awaiting_respawn: bool = false
 
 @onready var _collision: CollisionShape3D = $CollisionShape3D
 @onready var _body_mesh: MeshInstance3D = $BodyMesh
@@ -123,14 +181,18 @@ var _capsule: CapsuleShape3D
 @onready var _visor: MeshInstance3D = $Head/Visor
 @onready var _name_label: Label3D = $NameLabel
 @onready var _sync: MultiplayerSynchronizer = $MultiplayerSynchronizer
+@onready var weapon: WeaponController = $WeaponController
 
 
 ## Вызывается до добавления в дерево (на всех машинах одинаково).
 func setup(peer_id: int, player_name: String, spawn_transform: Transform3D) -> void:
 	name = str(peer_id)
+	self.peer_id = peer_id
 	display_name = player_name
 	transform = spawn_transform
 	set_multiplayer_authority(peer_id)
+	# Здоровье и счёт принадлежат хосту, а не владельцу бойца.
+	get_node(^"HostSync").set_multiplayer_authority(1)
 
 
 func _ready() -> void:
@@ -151,7 +213,9 @@ func _ready() -> void:
 	_head.position.y = stand_eye_height
 	_name_label.text = display_name
 
+	add_to_group(PLAYERS_GROUP)
 	var is_local: bool = is_multiplayer_authority()
+	weapon.setup(self, _camera, _head, is_local)
 	_camera.current = is_local
 	if is_local:
 		add_to_group(LOCAL_PLAYER_GROUP)
@@ -163,6 +227,7 @@ func _ready() -> void:
 		_write_net_state()
 	else:
 		_sync.synchronized.connect(_on_net_state_received)
+	_apply_alive_visuals()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -172,7 +237,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var motion := event as InputEventMouseMotion
 		# screen_relative не зависит от разрешения окна и растяжения.
-		var delta_rad: Vector2 = motion.screen_relative * deg_to_rad(mouse_sensitivity)
+		# В прицеле чувствительность ниже — пропорционально приближению.
+		var zoom: float = _camera.fov / base_fov
+		var delta_rad: Vector2 = motion.screen_relative * deg_to_rad(mouse_sensitivity) * zoom
 		_yaw = wrapf(_yaw - delta_rad.x, -PI, PI)
 		_pitch = clampf(_pitch - delta_rad.y, -PITCH_LIMIT, PITCH_LIMIT)
 
@@ -183,10 +250,13 @@ func _physics_process(delta: float) -> void:
 		_write_net_state()
 	else:
 		_apply_remote_state()
+	if multiplayer.is_server():
+		_record_history()
 
 
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():
+		_apply_pending_kick(delta)
 		_update_camera(delta)
 	else:
 		_update_remote_head(delta)
@@ -198,6 +268,7 @@ func teleport(target: Transform3D) -> void:
 	velocity = Vector3.ZERO
 	_yaw = rotation.y
 	_pitch = 0.0
+	_pending_kick = Vector2.ZERO
 	net_teleport_id += 1
 	reset_physics_interpolation()
 	_write_net_state()
@@ -207,10 +278,53 @@ func get_horizontal_speed() -> float:
 	return Vector2(velocity.x, velocity.z).length()
 
 
+## Направление взгляда (−Z — вперёд).
+func get_view_basis() -> Basis:
+	return Basis.from_euler(Vector3(_pitch, _yaw, 0.0))
+
+
+func get_eye_position() -> Vector3:
+	return global_position + Vector3.UP * _eye_height
+
+
+## Повернуть взгляд (для тестов и спавна). Углы в радианах.
+func set_look(yaw: float, pitch: float) -> void:
+	_yaw = wrapf(yaw, -PI, PI)
+	_pitch = clampf(pitch, -PITCH_LIMIT, PITCH_LIMIT)
+	_pending_kick = Vector2.ZERO
+
+
+func get_pitch() -> float:
+	return _pitch
+
+
+## Толчок камеры от отдачи (радианы). Доезжает до камеры за пару кадров.
+func add_view_kick(pitch_up: float, yaw_side: float) -> void:
+	_pending_kick += Vector2(pitch_up, yaw_side)
+
+
+func _apply_pending_kick(delta: float) -> void:
+	if _pending_kick == Vector2.ZERO:
+		return
+	var step: Vector2 = _pending_kick * (1.0 - exp(-35.0 * delta))
+	if _pending_kick.length() < 0.0002:
+		step = _pending_kick
+	_pending_kick -= step
+	_pitch = clampf(_pitch + step.x, -PITCH_LIMIT, PITCH_LIMIT)
+	_yaw = wrapf(_yaw - step.y, -PI, PI)
+
+
 # --- Ввод -----------------------------------------------------------------
 
 func _read_input() -> InputState:
+	if debug_input != null:
+		var forced: InputState = debug_input
+		if not alive:
+			return InputState.new()
+		return forced
 	var input := InputState.new()
+	if not alive:
+		return input
 	# Курсор свободен (меню паузы, окно не в фокусе) — боец стоит.
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		input.wants_crouch = stance == Stance.CROUCH
@@ -218,6 +332,10 @@ func _read_input() -> InputState:
 	input.move = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
 	input.jump_pressed = Input.is_action_just_pressed(&"jump")
 	input.sprint_held = Input.is_action_pressed(&"sprint")
+	input.fire_held = Input.is_action_pressed(&"fire")
+	input.fire_pressed = Input.is_action_just_pressed(&"fire")
+	input.aim_held = Input.is_action_pressed(&"aim")
+	input.reload_pressed = Input.is_action_just_pressed(&"reload")
 
 	if crouch_toggle:
 		if Input.is_action_just_pressed(&"crouch"):
@@ -242,7 +360,15 @@ func _simulate(input: InputState, delta: float) -> void:
 
 	_try_jump()
 	_apply_horizontal_movement(input, delta)
+
+	# Мягкое расталкивание: добавка к скорости только на этот тик.
+	var push: Vector3 = _get_separation_velocity() if alive else Vector3.ZERO
+	velocity += push
 	move_and_slide()
+	velocity.x -= push.x
+	velocity.z -= push.z
+
+	weapon.tick(input, delta)
 
 
 func _update_timers(input: InputState, delta: float) -> void:
@@ -275,6 +401,8 @@ func _update_sprint(input: InputState) -> void:
 		input.sprint_held
 		and stance == Stance.STAND
 		and _is_moving_forward(input)
+		and not weapon.blocks_sprint()
+		and not input.fire_held
 	)
 	# В воздухе бег не начинается, но и не прерывается.
 	if is_on_floor() or not can_sprint:
@@ -315,11 +443,40 @@ func _apply_horizontal_movement(input: InputState, delta: float) -> void:
 
 
 func _get_target_speed() -> float:
+	var aim_mult: float = lerpf(1.0, weapon.weapon.ads_move_multiplier, weapon.aim_amount)
 	if stance == Stance.CROUCH:
-		return crouch_speed
+		return crouch_speed * aim_mult
 	if is_sprinting:
 		return sprint_speed
-	return walk_speed
+	return walk_speed * aim_mult
+
+
+## Бойцы не проходят друг сквозь друга, но и не стоят «стеной»: если
+## капсулы наложились, свой боец плавно отъезжает. Жёстких столкновений
+## нет специально — чужой боец показан с задержкой 0.1 с, и об него
+## застревали бы и дёргались, а товарищ мог бы перекрыть дверь.
+func _get_separation_velocity() -> Vector3:
+	var push := Vector3.ZERO
+	for node: Node in get_tree().get_nodes_in_group(PLAYERS_GROUP):
+		var other := node as Player
+		if other == null or other == self or not other.alive:
+			continue
+		var offset: Vector3 = global_position - other.global_position
+		if absf(offset.y) > stand_height * 0.8:
+			continue
+		offset.y = 0.0
+		var distance: float = offset.length()
+		if distance >= separation_distance:
+			continue
+		var direction: Vector3
+		if distance > 0.01:
+			direction = offset / distance
+		else:
+			# Стоим точно друг в друге — расходимся в стороны по номеру игрока.
+			var angle: float = float(peer_id) * 2.39996
+			direction = Vector3(cos(angle), 0.0, sin(angle))
+		push += direction * (1.0 - distance / separation_distance) * separation_speed
+	return push
 
 
 func _is_moving_forward(input: InputState) -> bool:
@@ -337,6 +494,8 @@ func _set_stance(new_stance: Stance) -> void:
 func _apply_stance_shape(height: float) -> void:
 	_capsule.height = height
 	_collision.position.y = height * 0.5
+	if not alive:
+		return  # модель лежит (см. _apply_alive_visuals)
 	# Greybox-модель просто сжимаем по высоте.
 	_body_mesh.scale.y = height / stand_height
 	_body_mesh.position.y = height * 0.5
@@ -352,7 +511,10 @@ func _can_stand_up() -> bool:
 
 func _update_camera(delta: float) -> void:
 	var target_eye: float = crouch_eye_height if stance == Stance.CROUCH else stand_eye_height
-	_eye_height = lerpf(_eye_height, target_eye, 1.0 - exp(-eye_height_speed * delta))
+	if not alive:
+		target_eye = 0.35  # камера «падает» вместе с бойцом
+	var eye_speed: float = eye_height_speed if alive else 4.0
+	_eye_height = lerpf(_eye_height, target_eye, 1.0 - exp(-eye_speed * delta))
 
 	var bob_offset := Vector3.ZERO
 	var speed: float = get_horizontal_speed()
@@ -364,7 +526,8 @@ func _update_camera(delta: float) -> void:
 	else:
 		_bob_phase = 0.0
 
-	var view_basis := Basis.from_euler(Vector3(_pitch, _yaw, 0.0))
+	var roll: float = 0.0 if alive else 0.5
+	var view_basis := Basis.from_euler(Vector3(_pitch, _yaw, roll))
 	# Позиция берётся из интерполированного тела — плавно на любом FPS,
 	# а поворот — напрямую из мыши, без задержки.
 	var body_origin: Vector3 = get_global_transform_interpolated().origin
@@ -372,13 +535,20 @@ func _update_camera(delta: float) -> void:
 	eye_pos += view_basis.x * bob_offset.x
 	_camera.global_transform = Transform3D(view_basis, eye_pos)
 
-	var target_fov: float = base_fov + (sprint_fov_bonus if is_sprinting else 0.0)
-	_camera.fov = lerpf(_camera.fov, target_fov, 1.0 - exp(-8.0 * delta))
+	var hip_fov: float = base_fov + (sprint_fov_bonus if is_sprinting else 0.0)
+	var aim: float = weapon.aim_amount
+	var target_fov: float = lerpf(hip_fov, weapon.weapon.ads_fov, aim * aim * (3.0 - 2.0 * aim))
+	# Прицел управляет FOV напрямую, бег — плавно.
+	if aim > 0.0:
+		_camera.fov = target_fov
+	else:
+		_camera.fov = lerpf(_camera.fov, target_fov, 1.0 - exp(-8.0 * delta))
 
 
 # --- Сеть: владелец -------------------------------------------------------
 
-static func _sim_time() -> float:
+## Время симуляции этой машины (номер тика физики / тиков в секунду).
+static func sim_time() -> float:
 	return float(Engine.get_physics_frames()) / float(Engine.physics_ticks_per_second)
 
 
@@ -388,7 +558,7 @@ func _write_net_state() -> void:
 	net_pitch = _pitch
 	net_stance = stance
 	net_sprinting = is_sprinting
-	net_time = _sim_time()
+	net_time = sim_time()
 
 
 # --- Сеть: чужой боец -----------------------------------------------------
@@ -398,7 +568,7 @@ func _on_net_state_received() -> void:
 		return  # старый или повторный пакет
 	_last_snapshot_time = net_time
 
-	var now: float = _sim_time()
+	var now: float = sim_time()
 	var sample: float = now - net_time
 	if not _has_clock_offset or sample < _clock_offset:
 		# Пакет пришёл быстрее обычного — это ближе к настоящей разнице часов.
@@ -424,7 +594,7 @@ func _on_net_state_received() -> void:
 func _apply_remote_state() -> void:
 	if _snapshots.is_empty():
 		return
-	var now: float = _sim_time()
+	var now: float = sim_time()
 	var render_time: float = now - _clock_offset - interpolation_delay
 
 	# Выкидываем снимки, которые уже целиком в прошлом (оставляем один «до»).
@@ -487,3 +657,200 @@ func _update_remote_head(delta: float) -> void:
 	_head.position.y = _eye_height
 	_head.rotation.x = _pitch
 	_name_label.position.y = _eye_height + 0.45
+
+
+# --- Бой: стрельба --------------------------------------------------------
+
+## Владелец выстрелил (вызывает WeaponController).
+func fire_shot(origin: Vector3, direction: Vector3) -> void:
+	var bullets: BulletManager = _get_bullets()
+	var is_host: bool = multiplayer.is_server()
+	if bullets != null:
+		bullets.spawn(origin, direction, weapon.weapon, peer_id, is_host, 0.0, true)
+	if is_host:
+		_client_shot_fx.rpc(origin, direction)
+	else:
+		_server_fire.rpc_id(1, origin, direction)
+
+
+## Клиент → хост: «я выстрелил отсюда туда».
+@rpc("any_peer", "call_remote", "reliable", 1)
+func _server_fire(origin: Vector3, direction: Vector3) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender: int = multiplayer.get_remote_sender_id()
+	if sender != peer_id or not alive:
+		return
+	# Простые проверки от явной ерунды (игра для друзей, без античита).
+	if origin.distance_to(global_position + Vector3.UP * 1.2) > 4.0:
+		return
+	if not _server_rate_ok():
+		return
+	var rewind: float = clampf(float(Network.get_peer_rtt_ms(sender)) / 1000.0, 0.0, MAX_REWIND)
+	var bullets: BulletManager = _get_bullets()
+	if bullets != null:
+		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, true, rewind, false)
+	weapon.play_remote_shot()
+	_client_shot_fx.rpc(origin, direction)
+
+
+## Хост → все: «боец выстрелил» (трассер, вспышка, звук).
+@rpc("any_peer", "call_remote", "unreliable", 1)
+func _client_shot_fx(origin: Vector3, direction: Vector3) -> void:
+	if multiplayer.get_remote_sender_id() != 1 or is_multiplayer_authority():
+		return
+	var bullets: BulletManager = _get_bullets()
+	if bullets != null:
+		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, false, 0.0, false)
+	weapon.play_remote_shot()
+
+
+func _server_rate_ok() -> bool:
+	var now: float = sim_time()
+	while not _server_shot_times.is_empty() and _server_shot_times[0] < now - 1.0:
+		_server_shot_times.pop_front()
+	# Пакеты приходят пачками, поэтому запас в полтора раза + 3 выстрела.
+	var allowed: int = int(weapon.weapon.fire_rate_rpm / 60.0 * 1.5) + 3
+	if _server_shot_times.size() >= allowed:
+		return false
+	_server_shot_times.append(now)
+	return true
+
+
+func _get_bullets() -> BulletManager:
+	return get_tree().get_first_node_in_group(BulletManager.GROUP) as BulletManager
+
+
+# --- Бой: история положений (хост) ----------------------------------------
+
+func _record_history() -> void:
+	var pose := HitPose.new()
+	pose.time = sim_time()
+	pose.position = global_position
+	pose.crouched = stance == Stance.CROUCH
+	_history.append(pose)
+	while _history.size() > 2 and _history[0].time < pose.time - HISTORY_SECONDS:
+		_history.pop_front()
+
+
+## Где был боец в момент time (по часам хоста), с интерполяцией.
+func get_hit_pose(time: float) -> HitPose:
+	if _history.is_empty():
+		var now_pose := HitPose.new()
+		now_pose.time = sim_time()
+		now_pose.position = global_position
+		now_pose.crouched = stance == Stance.CROUCH
+		return now_pose
+	if time <= _history[0].time:
+		return _history[0]
+	for i: int in range(_history.size() - 1, 0, -1):
+		var a: HitPose = _history[i - 1]
+		var b: HitPose = _history[i]
+		if a.time <= time:
+			if time >= b.time:
+				return b
+			var t: float = (time - a.time) / maxf(b.time - a.time, 0.0001)
+			var pose := HitPose.new()
+			pose.time = time
+			# Телепорт (респавн) — не тянем хитбокс через карту.
+			if a.position.distance_to(b.position) > 3.0:
+				pose.position = b.position
+			else:
+				pose.position = a.position.lerp(b.position, t)
+			pose.crouched = b.crouched if t > 0.5 else a.crouched
+			return pose
+	return _history[_history.size() - 1]
+
+
+# --- Бой: урон, смерть, респавн -------------------------------------------
+
+## Только на хосте.
+func server_apply_damage(amount: float, attacker_id: int, headshot: bool, from_position: Vector3) -> void:
+	if not multiplayer.is_server() or not alive:
+		return
+	health = maxf(health - amount, 0.0)
+	var killed: bool = health <= 0.0
+	_client_damaged.rpc_id(peer_id, from_position, amount)
+	if Network.players.has(attacker_id) or attacker_id == 1:
+		_client_hit_confirmed.rpc_id(attacker_id, headshot, killed)
+	if killed:
+		alive = false
+		deaths += 1
+		_awaiting_respawn = true
+		killed_on_host.emit(self, attacker_id, headshot)
+
+
+## Только на хосте: вернуть бойца в бой на точке спавна.
+func server_respawn(spawn_transform: Transform3D) -> void:
+	if not multiplayer.is_server():
+		return
+	_awaiting_respawn = true
+	_client_respawn.rpc_id(peer_id, spawn_transform)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _client_damaged(from_position: Vector3, amount: float) -> void:
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	damaged.emit(from_position, amount)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _client_hit_confirmed(headshot: bool, killed: bool) -> void:
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	# Сигнал шлёт боец-жертва, а слушает HUD стрелка — через своего бойца.
+	var shooter := get_tree().get_first_node_in_group(LOCAL_PLAYER_GROUP) as Player
+	if shooter != null:
+		shooter.hit_confirmed.emit(headshot, killed)
+
+
+## Хост → владелец: «возродись здесь».
+@rpc("any_peer", "call_local", "reliable")
+func _client_respawn(spawn_transform: Transform3D) -> void:
+	if multiplayer.get_remote_sender_id() != 1 or not is_multiplayer_authority():
+		return
+	if stance == Stance.CROUCH:
+		_set_stance(Stance.STAND)
+	teleport(spawn_transform)
+	health = MAX_HEALTH
+	alive = true
+	weapon.reset_ammo()
+	_server_respawn_done.rpc_id(1)
+
+
+## Владелец → хост: «я уже на точке спавна» — теперь можно оживлять для всех.
+@rpc("any_peer", "call_local", "reliable")
+func _server_respawn_done() -> void:
+	if not multiplayer.is_server() or multiplayer.get_remote_sender_id() != peer_id:
+		return
+	if not _awaiting_respawn:
+		return
+	_awaiting_respawn = false
+	_history.clear()
+	health = MAX_HEALTH
+	alive = true
+
+
+func _on_alive_changed() -> void:
+	if not is_node_ready():
+		return
+	_apply_alive_visuals()
+	if not alive and is_multiplayer_authority():
+		weapon.cancel_reload()
+	alive_changed.emit(alive)
+
+
+## Мёртвый боец лежит; оружие и имя скрыты.
+func _apply_alive_visuals() -> void:
+	weapon.set_world_gun_visible(alive)
+	_visor.visible = alive
+	if alive:
+		_body_mesh.rotation = Vector3.ZERO
+		_apply_stance_shape(_capsule.height)
+		_name_label.visible = not is_multiplayer_authority()
+	else:
+		_body_mesh.scale = Vector3.ONE
+		_body_mesh.rotation = Vector3(PI * 0.5, 0.0, 0.0)
+		_body_mesh.position = Vector3(0.0, 0.36, 0.0)
+		_name_label.visible = false
