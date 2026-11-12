@@ -1,0 +1,13 @@
+# Одинаковые переводы строк у всех (Windows/Linux)
+* text=auto eol=lf
+
+# Бинарные ассеты
+*.png binary
+*.jpg binary
+*.ogg binary
+*.wav binary
+*.mp3 binary
+*.glb binary
+*.blend binary
+*.ttf binary
+*.otf binary
