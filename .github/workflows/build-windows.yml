@@ -1,0 +1,81 @@
+# Собирает Battlefield.exe после каждого обновления main и выкладывает его в Releases.
+# Друзьям достаточно ссылки:
+#   https://github.com/Yotonick/battlefield/releases/latest/download/Battlefield-Windows.zip
+name: Сборка для Windows
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-windows
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Версии
+        id: ver
+        run: |
+          godot=$(grep -oP 'GODOT_VER=\K[^"]+' tools/win/config.bat)
+          game=$(grep -oP '^config/version="\K[^"]+' project.godot)
+          echo "godot=$godot" >> "$GITHUB_OUTPUT"
+          echo "game=$game" >> "$GITHUB_OUTPUT"
+          echo "Godot $godot, игра $game"
+
+      - name: Кэш Godot и шаблона Windows
+        uses: actions/cache@v4
+        with:
+          path: ~/godot-cache
+          key: godot-${{ steps.ver.outputs.godot }}-win-template
+
+      - name: Скачать Godot и шаблон экспорта
+        env:
+          V: ${{ steps.ver.outputs.godot }}
+        run: |
+          mkdir -p ~/godot-cache
+          cd ~/godot-cache
+          base="https://github.com/godotengine/godot/releases/download/$V"
+          if [ ! -f godot ]; then
+            curl -sSL --fail -o g.zip "$base/Godot_v${V}_linux.x86_64.zip"
+            unzip -oq g.zip && mv "Godot_v${V}_linux.x86_64" godot && rm g.zip
+          fi
+          if [ ! -f windows_release_x86_64.exe ]; then
+            curl -sSL --fail -o t.tpz "$base/Godot_v${V}_export_templates.tpz"
+            unzip -joq t.tpz templates/windows_release_x86_64.exe templates/version.txt && rm t.tpz
+          fi
+          tpl="$HOME/.local/share/godot/export_templates/${V/-/.}"
+          mkdir -p "$tpl"
+          cp windows_release_x86_64.exe version.txt "$tpl/"
+          chmod +x godot
+
+      - name: Импорт ресурсов и сборка
+        run: |
+          ~/godot-cache/godot --headless --import --path .
+          mkdir -p build/Battlefield
+          ~/godot-cache/godot --headless --path . --export-release "Windows" build/Battlefield/Battlefield.exe
+          test -f build/Battlefield/Battlefield.exe
+          cp tools/win/friends_readme.txt build/Battlefield/README.txt
+          (cd build && zip -qr Battlefield-Windows.zip Battlefield)
+          cp setup.bat build/setup.bat  # .bat уже с CRLF (см. .gitattributes)
+          ls -la build build/Battlefield
+
+      - name: Выложить в Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GAME: ${{ steps.ver.outputs.game }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest build/Battlefield-Windows.zip build/setup.bat \
+            --title "Battlefield $GAME" --latest \
+            --notes "Версия игры: **$GAME** (коммит ${GITHUB_SHA::7}).
+
+          **Просто поиграть:** скачай Battlefield-Windows.zip, распакуй, запусти Battlefield.exe.
+          **С автообновлением:** скачай setup.bat в пустую папку и запусти — дальше играть через play.bat."

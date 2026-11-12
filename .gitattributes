@@ -1,6 +1,10 @@
 # Одинаковые переводы строк у всех (Windows/Linux)
 * text=auto eol=lf
 
+# .bat — только с CRLF, иначе cmd ломается на метках и goto
+*.bat text eol=crlf
+*.txt text eol=crlf
+
 # Бинарные ассеты
 *.png binary
 *.jpg binary
@@ -11,3 +15,7 @@
 *.blend binary
 *.ttf binary
 *.otf binary
+*.fbx binary
+*.obj binary
+*.zip binary
+*.exe binary

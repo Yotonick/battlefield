@@ -4,10 +4,17 @@
 *.translation
 export.cfg
 export_credentials.cfg
-export_presets.cfg
 
 # Сборки
 /build/
+
+# Локальная установка (setup.bat / play.bat)
+/.engine/
+/logs/
+
+# Сырые ассеты, которые владелец кидает пачкой (архивы, большие файлы).
+# Нужное распаковываем и кладём в assets/ — оно уже идёт в git.
+/models/
 
 # ОС / редакторы
 .DS_Store
