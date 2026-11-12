@@ -27,3 +27,5 @@ recoil_horizontal = 0.22
 spread_hip = 1.3
 ads_time = 0.17
 model = ExtResource("2_model")
+grip_right = Vector3(0, -0.2, -0.04)
+grip_left = Vector3(0, -0.115, -0.4)

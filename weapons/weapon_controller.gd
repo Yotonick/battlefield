@@ -81,6 +81,8 @@ var _trigger_buffer: float = 0.0
 var _burst_left: int = 0
 
 var _viewmodel: GunView
+## Руки от первого лица (только у своего бойца).
+var _arms: FirstPersonArms
 var _world_gun: GunView
 ## Номер в каталоге ствола, который сейчас показан «в мире».
 var _world_index: int = -1
@@ -106,6 +108,9 @@ func setup(player: Player, camera: Camera3D, head: Node3D, is_local: bool) -> vo
 		_audio_local.name = "LocalGunAudio"
 		_audio_local.max_polyphony = 6
 		add_child(_audio_local)
+		_arms = FirstPersonArms.new()
+		_arms.visible = _player.alive
+		camera.add_child(_arms)
 		equip_loadout()
 	else:
 		_show_world_weapon(maxi(_player.net_weapon, 0))
@@ -431,6 +436,8 @@ func set_world_gun_visible(value: bool) -> void:
 		_world_gun.visible = value
 	if _viewmodel != null:
 		_viewmodel.visible = value
+	if _arms != null:
+		_arms.visible = value
 
 
 func _process(delta: float) -> void:
@@ -464,6 +471,10 @@ func _process(delta: float) -> void:
 	_viewmodel.position = pos
 	_viewmodel.rotation = rot
 	_viewmodel.visible = _player.alive and not is_scoped()
+	if _arms != null:
+		_arms.visible = _viewmodel.visible
+		if _arms.visible:
+			_arms.solve(_viewmodel, delta)
 
 
 static func _ease(t: float) -> float:

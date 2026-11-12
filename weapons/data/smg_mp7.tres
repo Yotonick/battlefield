@@ -32,3 +32,5 @@ ads_move_multiplier = 0.8
 draw_time = 0.3
 rear_offset = 0.12
 model = ExtResource("2_model")
+grip_right = Vector3(0, -0.15, -0.07)
+grip_left = Vector3(0, -0.09, -0.24)

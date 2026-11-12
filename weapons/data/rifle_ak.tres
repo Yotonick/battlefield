@@ -26,3 +26,5 @@ reload_empty_time = 2.7
 recoil_vertical = 0.55
 recoil_horizontal = 0.3
 model = ExtResource("2_model")
+grip_right = Vector3(0, -0.13, -0.04)
+grip_left = Vector3(0, -0.09, -0.36)

@@ -33,3 +33,5 @@ spread_per_shot = 0.12
 ads_fov = 50.0
 ads_time = 0.2
 model = ExtResource("2_model")
+grip_right = Vector3(0, -0.16, -0.05)
+grip_left = Vector3(0, -0.105, -0.38)

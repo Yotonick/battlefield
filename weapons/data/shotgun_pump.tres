@@ -35,3 +35,6 @@ ads_fov = 65.0
 ads_time = 0.2
 draw_time = 0.5
 model = ExtResource("2_model")
+grip_right = Vector3(0, -0.08, -0.05)
+grip_left = Vector3(0, -0.085, -0.47)
+view_ads = Vector3(0, 0, -0.42)

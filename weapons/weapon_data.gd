@@ -116,7 +116,19 @@ const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Бо
 @export var view_hip: Vector3 = Vector3(0.15, -0.125, -0.27)
 ## Поворот от бедра, градусы (y > 0 — дуло к центру экрана).
 @export var view_hip_rot_deg: Vector3 = Vector3(1.0, 5.0, -3.0)
-@export var view_ads: Vector3 = Vector3(0.0, 0.0, -0.2)
+@export var view_ads: Vector3 = Vector3(0.0, 0.0, -0.3)
+
+@export_group("Хват")
+## Точки хвата в координатах ствола (после выравнивания GunView: дуло в −Z,
+## линия прицела y = 0): середина ладони правой руки на рукоятке
+## и левой — на цевье. Подбираются по виду сбоку (tests/viewmodel_preview.gd --side).
+@export var grip_right: Vector3 = Vector3(0.0, -0.075, 0.02)
+@export var grip_left: Vector3 = Vector3(-0.005, -0.09, -0.3)
+## Направление пальцев правой кисти (от запястья к костяшкам).
+@export var grip_right_fingers: Vector3 = Vector3(0.0, -0.6, -0.8)
+## Левая кисть: направление пальцев и куда смотрит ладонь.
+@export var grip_left_fingers: Vector3 = Vector3(0.55, 0.15, -0.8)
+@export var grip_left_palm: Vector3 = Vector3(0.2, 1.0, 0.0)
 
 
 func get_damage(distance: float, headshot: bool) -> float:

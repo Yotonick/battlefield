@@ -105,3 +105,6 @@
 |---|---|---|---|
 | M4A1, M16, SCAR, MP5, MP7, M1911, M1911 Tactical (FBX) | скачал владелец (папка `models\`) | бесплатные, проект некоммерческий | `assets/weapons/*.fbx` |
 | АК, помповый дробовик, снайперская винтовка — из **Ultimate Gun Pack** (Quaternius): `AssaultRifle_2`, `Shotgun_1`, `SniperRifle_1` | Quaternius | CC0 | `assets/weapons/ak.fbx`, `shotgun_pump.fbx`, `sniper_bolt.fbx` |
+
+## Боец (v0.2, шаг 2)
+- `assets/characters/mannequin.glb` — манекен из **Universal Animation Library [Standard]** (Quaternius, CC0), версия для Godot (`AnimationLibrary_Godot_Standard.glb`). Рост 1.83 м, скелет 53 кости (Rigify `DEF-*`, с пальцами), 46 анимаций. Лицензия — `assets/characters/mannequin_LICENSE.txt`.
