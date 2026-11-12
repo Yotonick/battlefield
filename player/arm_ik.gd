@@ -36,6 +36,9 @@ const FINGER_NAMES: Array[String] = ["f_index", "f_middle", "f_ring", "f_pinky"]
 const JOINT_SHARE: Array[float] = [0.8, 1.0, 0.7]
 ## От запястья до середины ладони вдоль кисти, м.
 const PALM_FROM_WRIST: float = 0.075
+## Наибольший угол между кистью и предплечьем, радианы — чтобы кисть
+## не «ломалась», даже если хват задан неудачно.
+const MAX_WRIST_BEND: float = deg_to_rad(80.0)
 ## От середины ладони (кость) до её поверхности, м.
 const PALM_THICKNESS: float = 0.022
 
@@ -129,8 +132,21 @@ func _solve(skeleton: Skeleton3D, arm: Arm) -> void:
 	var fore_pose := Transform3D(_aim(wrist - elbow, hinge), elbow)
 	skeleton.set_bone_global_pose(arm.fore, fore_pose)
 
-	var hand_pose := Transform3D(arm.target.basis.orthonormalized(), wrist)
+	var hand_basis_target: Basis = _limit_wrist(arm.target.basis.orthonormalized(), (wrist - elbow).normalized())
+	var hand_pose := Transform3D(hand_basis_target, wrist)
 	skeleton.set_bone_global_pose(arm.hand, hand_pose)
+
+
+## Поворачивает кисть к линии предплечья, если угол между ними больше MAX_WRIST_BEND.
+static func _limit_wrist(hand: Basis, forearm_dir: Vector3) -> Basis:
+	var along: Vector3 = hand.y.normalized()
+	var angle: float = along.angle_to(forearm_dir)
+	if angle <= MAX_WRIST_BEND:
+		return hand
+	var axis: Vector3 = along.cross(forearm_dir)
+	if axis.length() < 0.0001:
+		return hand
+	return Basis(axis.normalized(), angle - MAX_WRIST_BEND) * hand
 
 
 ## Базис кости: Y — вдоль кости, X — ось сгиба локтя.

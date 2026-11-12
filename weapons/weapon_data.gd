@@ -129,6 +129,9 @@ const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Бо
 ## Левая кисть: направление пальцев и куда смотрит ладонь.
 @export var grip_left_fingers: Vector3 = Vector3(0.55, 0.15, -0.8)
 @export var grip_left_palm: Vector3 = Vector3(0.2, 1.0, 0.0)
+## Плечи рук от первого лица в координатах ствола (ниже и позади поля зрения).
+@export var shoulder_right: Vector3 = Vector3(0.11, -0.3, 0.42)
+@export var shoulder_left: Vector3 = Vector3(-0.27, -0.24, 0.17)
 
 
 func get_damage(distance: float, headshot: bool) -> float:

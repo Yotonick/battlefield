@@ -76,6 +76,9 @@ func _physics_process(delta: float) -> void:
 	if mode == "ui":
 		_ui_tick()
 		return
+	if mode == "feel":
+		_feel_physics()
+		return
 	if mode == "guns" and _me != null:
 		_guns_tick(delta)
 		_input.fire_pressed = _input.fire_held and not _prev_fire_held
@@ -496,6 +499,90 @@ func _next_gun() -> void:
 		var data: WeaponData = WeaponCatalog.WEAPONS[_gun_index]
 		_me.weapon.slots[0] = WeaponController.Slot.new(data)
 		_me.weapon._select_slot(0, false)
+
+
+# --- Ощущения (--test=feel) ------------------------------------------------
+# Ходьба, повороты камеры, полшага вбок в прицеле. Каждый кадр отрисовки
+# пишет: смещение ствола от камеры, где кисть относительно точки хвата,
+# и расхождение камеры ствола с основной. Всё это должно быть ровным.
+
+var _feel_stage: int = 0
+var _feel_t: float = 0.0
+var _feel_log: Dictionary[String, Array] = {}
+
+
+func _feel_physics() -> void:
+	if _me == null:
+		_me = _match.get_local_player()
+		if _me != null:
+			_me.debug_input = _input
+		return
+
+
+func _process(delta: float) -> void:
+	if mode != "feel" or _me == null or _done:
+		return
+	_feel_t += delta
+	var stages: Array[String] = ["стоим", "ходьба", "поворот", "прицел", "полшага_в_прицеле", "после"]
+	var lengths: Array[float] = [1.0, 2.0, 2.0, 1.0, 0.25, 1.5]
+	if _feel_t > lengths[_feel_stage]:
+		_feel_t = 0.0
+		_feel_stage += 1
+		if _feel_stage >= stages.size():
+			for key: String in _feel_log:
+				var values: Array = _feel_log[key]
+				var lo: float = 1e9
+				var hi: float = -1e9
+				for v: float in values:
+					lo = minf(lo, v)
+					hi = maxf(hi, v)
+				print("[feel] %s: кадров %d, мин %.4f, макс %.4f, размах %.4f" % [key, values.size(), lo, hi, hi - lo])
+			_finish("ощущения")
+			return
+	var stage: String = stages[_feel_stage]
+	_input.move = Vector2.ZERO
+	_input.aim_held = _feel_stage >= 3
+	match stage:
+		"ходьба":
+			_input.move = Vector2(0, -1)
+		"поворот":
+			var look: Vector2 = Vector2(_me.net_yaw + 2.5 * delta, 0.0)
+			_me.set_look(look.x, 0.0)
+		"полшага_в_прицеле":
+			_input.move = Vector2(1, 0)
+	var weapon: WeaponController = _me.weapon
+	var gun: GunView = weapon.get(&"_viewmodel") as GunView
+	var arms: FirstPersonArms = weapon.get(&"_arms") as FirstPersonArms
+	var camera: Camera3D = _me.get_node(^"Camera3D") as Camera3D
+	if gun == null or arms == null:
+		return
+	_feel_add(stage + ": ствол x", gun.position.x)
+	var layer: ViewmodelLayer = _me.get(&"_viewmodel_layer") as ViewmodelLayer
+	_feel_add(stage + ": камеры расходятся, м", layer.camera.global_position.distance_to(camera.global_position))
+	_feel_current = stage
+	if not arms.ik.modification_processed.is_connected(_feel_on_ik):
+		arms.ik.modification_processed.connect(_feel_on_ik.bind(arms, weapon))
+
+
+var _feel_current: String = ""
+
+
+## Позы после IK видны только в этом сигнале (потом скелет их сбрасывает).
+func _feel_on_ik(arms: FirstPersonArms, weapon: WeaponController) -> void:
+	var gun: GunView = weapon.get(&"_viewmodel") as GunView
+	if gun == null or _feel_current == "":
+		return
+	var k: Skeleton3D = arms.skeleton
+	var palm: Transform3D = k.global_transform * k.get_bone_global_pose(k.find_bone("DEF-hand.R"))
+	var in_gun: Vector3 = gun.global_transform.affine_inverse() * palm.origin
+	_feel_add(_feel_current + ": запястье в коорд. ствола x", in_gun.x)
+	_feel_add(_feel_current + ": запястье в коорд. ствола z", in_gun.z)
+
+
+func _feel_add(key: String, value: float) -> void:
+	if not _feel_log.has(key):
+		_feel_log[key] = []
+	_feel_log[key].append(value)
 
 
 # --- Карта «Городок» -----------------------------------------------------

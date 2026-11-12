@@ -12,11 +12,9 @@ const MANNEQUIN: PackedScene = preload("res://assets/characters/mannequin.glb")
 ## Кости, чьи вершины остаются в меше.
 const ARM_BONE_PREFIXES: Array[String] = ["DEF-upper_arm.", "DEF-forearm.", "DEF-hand.",
 		"DEF-f_", "DEF-thumb."]
-## Плечи в координатах ствола (x вправо, y вверх, −z к дулу; 0 — линия прицела
-## на rear_offset от заднего края): руки двигаются вместе со стволом, а плечи
-## всегда ниже и позади поля зрения — в прицеле рука не закрывает экран.
-const SHOULDER_RIGHT := Vector3(0.11, -0.3, 0.42)
-const SHOULDER_LEFT := Vector3(-0.27, -0.24, 0.17)
+## Плечи задаются в координатах ствола (WeaponData.shoulder_right/left):
+## руки двигаются вместе со стволом, а плечи всегда ниже и позади поля
+## зрения — в прицеле рука не закрывает экран.
 ## Куда смотрят локти (координаты камеры).
 const POLE_RIGHT := Vector3(1.0, -0.7, 0.2)
 const POLE_LEFT := Vector3(-0.8, -1.0, 0.1)
@@ -31,6 +29,7 @@ var _mesh: MeshInstance3D
 
 func _init() -> void:
 	name = "Arms"
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var model: Node3D = MANNEQUIN.instantiate() as Node3D
 	add_child(model)
 	# Манекен смотрит в +Z, а камера — в −Z.
@@ -74,8 +73,8 @@ func solve(gun: GunView, delta: float) -> void:
 			Vector3.LEFT)
 	_place_hand(ik.left, true, to_skeleton, gun_xform, data.grip_left, data.grip_left_fingers,
 			data.grip_left_palm)
-	ik.right.shoulder = to_skeleton * (gun_xform * SHOULDER_RIGHT)
-	ik.left.shoulder = to_skeleton * (gun_xform * SHOULDER_LEFT)
+	ik.right.shoulder = to_skeleton * (gun_xform * data.shoulder_right)
+	ik.left.shoulder = to_skeleton * (gun_xform * data.shoulder_left)
 	ik.right.pole = (to_skeleton.basis * (camera_basis * POLE_RIGHT)).normalized()
 	ik.left.pole = (to_skeleton.basis * (camera_basis * POLE_LEFT)).normalized()
 	skeleton.advance(delta)

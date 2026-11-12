@@ -43,6 +43,9 @@ func _init(source: Camera3D) -> void:
 	container.add_child(_viewport)
 
 	camera = Camera3D.new()
+	# Положение камеры ставится каждый кадр отрисовки — интерполяция физики
+	# здесь только мешает (камера отставала бы от основной и «догоняла»).
+	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	camera.cull_mask = VISUAL_LAYER
 	camera.near = 0.01
 	camera.far = 10.0

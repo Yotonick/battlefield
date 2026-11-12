@@ -114,6 +114,9 @@ func _initialize() -> void:
 
 
 func _process(delta: float) -> bool:
+	if OS.get_cmdline_user_args().has("--spin"):
+		# Быстрый поворот камеры каждый кадр: руки не должны отставать от ствола.
+		_camera.rotation.y += 0.15
 	if _arms != null and _curl_override >= 0.0:
 		_arms.ik.right.curl = _curl_override
 		_arms.ik.left.curl = _curl_override

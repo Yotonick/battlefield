@@ -18,6 +18,7 @@ var _flash_timer: float = 0.0
 func _init(data: WeaponData) -> void:
 	weapon = data
 	name = "Gun"
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	_model = data.model.instantiate() as Node3D
 	add_child(_model)
 	_fit_model()
