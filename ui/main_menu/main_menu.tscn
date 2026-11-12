@@ -1,0 +1,119 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ui/main_menu/main_menu.gd" id="1_menu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.11, 0.12, 0.11, 0.94)
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 24.0
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24, 0.26, 0.23, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Center/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "BATTLEFIELD"
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.67, 0.63, 1)
+text = "версия"
+horizontal_alignment = 1
+
+[node name="NameLabel" type="Label" parent="Center/Panel/VBox"]
+layout_mode = 2
+text = "Имя"
+
+[node name="NameEdit" type="LineEdit" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Ваше имя"
+max_length = 16
+
+[node name="HostButton" type="Button" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Создать игру"
+
+[node name="HSeparator" type="HSeparator" parent="Center/Panel/VBox"]
+layout_mode = 2
+
+[node name="AddressLabel" type="Label" parent="Center/Panel/VBox"]
+layout_mode = 2
+text = "IP хоста (Radmin VPN: 26.x.x.x)"
+
+[node name="AddressEdit" type="LineEdit" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "26.123.45.67"
+
+[node name="JoinButton" type="Button" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Подключиться"
+
+[node name="HSeparator2" type="HSeparator" parent="Center/Panel/VBox"]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Выход"
+
+[node name="Status" type="Label" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.62, 0.5, 1)
+autowrap_mode = 3
+
+[node name="Addresses" type="Label" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.67, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3

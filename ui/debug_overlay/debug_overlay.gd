@@ -25,6 +25,7 @@ func _process(_delta: float) -> void:
 		"поза: %s%s",
 		"на земле: %s",
 		"позиция: %s",
+		"сеть: %s, id %d, игроков %d, пинг %d мс",
 	])
 	_label.text = fmt % [
 		Engine.get_frames_per_second(),
@@ -34,4 +35,8 @@ func _process(_delta: float) -> void:
 		" + бег" if player.is_sprinting else "",
 		"да" if player.is_on_floor() else "нет",
 		str(player.global_position.snapped(Vector3.ONE * 0.01)),
+		"хост" if Network.is_host() else "клиент",
+		multiplayer.get_unique_id(),
+		Network.players.size(),
+		Network.get_ping_ms(),
 	]
