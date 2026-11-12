@@ -41,3 +41,5 @@ draw_time = 0.6
 model = ExtResource("2_model")
 grip_right = Vector3(0, -0.1, -0.08)
 grip_left = Vector3(0, -0.085, -0.38)
+sight_rear = Vector3(-0.012, 0.005, -0.15)
+sight_front = Vector3(-0.012, 0.005, -0.35)

@@ -29,3 +29,5 @@ ads_time = 0.17
 model = ExtResource("2_model")
 grip_right = Vector3(0, -0.2, -0.04)
 grip_left = Vector3(0, -0.115, -0.4)
+sight_rear = Vector3(-0.001, 0.0055, -0.065)
+sight_front = Vector3(-0.001, 0.006, -0.475)

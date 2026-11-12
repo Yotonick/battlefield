@@ -117,6 +117,13 @@ const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Бо
 ## Поворот от бедра, градусы (y > 0 — дуло к центру экрана).
 @export var view_hip_rot_deg: Vector3 = Vector3(1.0, 5.0, -3.0)
 @export var view_ads: Vector3 = Vector3(0.0, 0.0, -0.3)
+## Прицельные приспособления в координатах ствола (после выравнивания GunView):
+## центр целика (или верх его «ушей») и вершина мушки. В прицеле ствол
+## поворачивается и сдвигается так, чтобы линия целик → мушка шла точно
+## в центр экрана. Обе точки (0, 0, 0) — линией прицела считается y = 0.
+## Подбираются по виду сбоку и спереди (tests/viewmodel_preview.gd --side, --ads).
+@export var sight_rear: Vector3 = Vector3.ZERO
+@export var sight_front: Vector3 = Vector3.ZERO
 
 @export_group("Хват")
 ## Точки хвата в координатах ствола (после выравнивания GunView: дуло в −Z,

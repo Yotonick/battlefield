@@ -150,13 +150,13 @@ func _process(delta: float) -> bool:
 		_gun = GunView.new(_queue[0])
 		_gun.set_first_person()
 		(_rig_eye if _rig else _camera).add_child(_gun)
-		_gun.position = _gun.weapon.view_hip
-		_gun.rotation = _gun.weapon.view_hip_rot_deg * (PI / 180.0)
+		_gun.position = _gun.hip_position
+		_gun.rotation = _gun.hip_rotation
 		_layer.sync(0.0)
 	elif _step % 3 == 1:
 		_save("%s_hip" % _gun.weapon.id)
-		_gun.position = _gun.weapon.view_ads
-		_gun.rotation = Vector3.ZERO
+		_gun.position = _gun.ads_position
+		_gun.rotation = _gun.ads_rotation
 		_layer.sync(1.0)
 	else:
 		_save("%s_ads" % _gun.weapon.id)
@@ -181,10 +181,11 @@ func _rig_step() -> bool:
 		_gun.set_first_person()
 		_rig_eye.add_child(_gun)
 		if OS.get_cmdline_user_args().has("--ads"):
-			_gun.position = _gun.weapon.view_ads
+			_gun.position = _gun.ads_position
+			_gun.rotation = _gun.ads_rotation
 		else:
-			_gun.position = _gun.weapon.view_hip
-			_gun.rotation = _gun.weapon.view_hip_rot_deg * (PI / 180.0)
+			_gun.position = _gun.hip_position
+			_gun.rotation = _gun.hip_rotation
 	else:
 		if phase > 1:
 			_save("%s_rig_%s" % [_gun.weapon.id, RIG_NAMES[phase - 2]])

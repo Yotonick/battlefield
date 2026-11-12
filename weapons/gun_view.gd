@@ -7,7 +7,17 @@ extends Node3D
 ## rear_offset позади начала координат. Поэтому все стволы ставятся у камеры
 ## одинаково, а различия — в параметрах WeaponData.
 
+## Насколько все стволы дальше от глаза, чем задано в WeaponData (руки
+## вытянуты вперёд; плечи при этом остаются на месте — FirstPersonArms).
+const REACH: float = 0.05
+
 var weapon: WeaponData
+## Положение и поворот у камеры от бедра и в прицеле (с учётом REACH и
+## прицельных приспособлений — см. WeaponData.sight_rear / sight_front).
+var hip_position: Vector3
+var hip_rotation: Vector3
+var ads_position: Vector3
+var ads_rotation: Vector3
 var muzzle: Marker3D
 var _model: Node3D
 var _flash_mesh: MeshInstance3D
@@ -23,6 +33,24 @@ func _init(data: WeaponData) -> void:
 	add_child(_model)
 	_fit_model()
 	_build_flash()
+	_compute_view()
+
+
+func _compute_view() -> void:
+	var back := Vector3(0.0, 0.0, -REACH)
+	hip_position = weapon.view_hip + back
+	hip_rotation = weapon.view_hip_rot_deg * (PI / 180.0)
+	var aim_basis := Basis.IDENTITY
+	var rear := Vector3.ZERO
+	var line: Vector3 = weapon.sight_front - weapon.sight_rear
+	if line.length() > 0.01:
+		# Поворот, при котором линия целик → мушка смотрит в −Z (вперёд камеры).
+		aim_basis = Basis(Quaternion(line.normalized(), Vector3.FORWARD))
+		rear = aim_basis * weapon.sight_rear
+	ads_rotation = aim_basis.get_euler()
+	# Целик — точно на оси камеры (x = y = 0); расстояние до глаза — из view_ads.
+	ads_position = Vector3(weapon.view_ads.x - rear.x, weapon.view_ads.y - rear.y,
+			weapon.view_ads.z) + back
 
 
 ## Масштаб, поворот и сдвиг модели под правила выше.

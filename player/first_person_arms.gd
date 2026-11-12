@@ -73,8 +73,10 @@ func solve(gun: GunView, delta: float) -> void:
 			Vector3.LEFT)
 	_place_hand(ik.left, true, to_skeleton, gun_xform, data.grip_left, data.grip_left_fingers,
 			data.grip_left_palm)
-	ik.right.shoulder = to_skeleton * (gun_xform * data.shoulder_right)
-	ik.left.shoulder = to_skeleton * (gun_xform * data.shoulder_left)
+	# Ствол стоит на GunView.REACH дальше от глаза, а плечи — нет: руки вытянуты.
+	var reach_back: Vector3 = camera_basis * Vector3(0.0, 0.0, GunView.REACH)
+	ik.right.shoulder = to_skeleton * (gun_xform * data.shoulder_right + reach_back)
+	ik.left.shoulder = to_skeleton * (gun_xform * data.shoulder_left + reach_back)
 	ik.right.pole = (to_skeleton.basis * (camera_basis * POLE_RIGHT)).normalized()
 	ik.left.pole = (to_skeleton.basis * (camera_basis * POLE_LEFT)).normalized()
 	skeleton.advance(delta)

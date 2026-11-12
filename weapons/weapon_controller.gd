@@ -159,7 +159,8 @@ func _rebuild_viewmodel() -> void:
 		_viewmodel.queue_free()
 	_viewmodel = GunView.new(weapon)
 	_viewmodel.set_first_person()
-	_viewmodel.position = weapon.view_hip
+	_viewmodel.position = _viewmodel.hip_position
+	_viewmodel.rotation = _viewmodel.hip_rotation
 	_viewmodel.visible = _player.alive
 	_camera.add_child(_viewmodel)
 
@@ -451,11 +452,12 @@ func _process(delta: float) -> void:
 	_vm_kick = lerpf(_vm_kick, 0.0, 1.0 - exp(-18.0 * delta))
 	_vm_sprint = lerpf(_vm_sprint, 1.0 if _player.is_sprinting else 0.0, 1.0 - exp(-10.0 * delta))
 
-	var pos: Vector3 = weapon.view_hip.lerp(weapon.view_ads, _ease(aim_amount))
+	var aim_t: float = _ease(aim_amount)
+	var pos: Vector3 = _viewmodel.hip_position.lerp(_viewmodel.ads_position, aim_t)
 	pos = pos.lerp(SPRINT_POSITION, _vm_sprint)
 	pos.z += 0.045 * _vm_kick * lerpf(1.0, 0.5, aim_amount)
 	var kick_pitch: float = 0.06 if weapon.recoil_vertical < 1.5 else 0.2
-	var hip_rot: Vector3 = weapon.view_hip_rot_deg * (PI / 180.0) * (1.0 - _ease(aim_amount))
+	var hip_rot: Vector3 = _viewmodel.hip_rotation.lerp(_viewmodel.ads_rotation, aim_t)
 	var rot := Vector3(kick_pitch * _vm_kick, 0.0, 0.0) + hip_rot
 	rot = rot.lerp(SPRINT_ROTATION, _vm_sprint)
 	if is_reloading:
