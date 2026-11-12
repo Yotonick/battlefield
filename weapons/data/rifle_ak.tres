@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/ak.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"rifle_ak"
+display_name = "АК"
+slot = 0
+category = 0
+model_length = 0.88
+sight_drop = -0.008
+model_yaw_deg = 90.0
+description = "Надёжный автомат: сильный урон, заметная отдача."
+damage_close = 25
+damage_far = 18
+falloff_start = 40
+falloff_end = 120
+muzzle_velocity = 715
+fire_rate_rpm = 600
+mag_size = 30
+reserve_ammo = 120
+reload_time = 2.2
+reload_empty_time = 2.7
+recoil_vertical = 0.55
+recoil_horizontal = 0.3
+model = ExtResource("2_model")

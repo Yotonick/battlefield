@@ -30,6 +30,8 @@ const HISTORY_SECONDS: float = 0.6
 ## Больше этого пинга не компенсируем, секунд.
 const MAX_REWIND: float = 0.3
 ## Цвет тела по команде (greybox, до настоящих моделей).
+## InputState.switch_to: следующий ствол по кругу (колесо мыши).
+const SWITCH_NEXT: int = 2
 const TEAM_BODY_COLORS: Array[Color] = [Color(0.36, 0.42, 0.3), Color(0.3, 0.4, 0.55), Color(0.58, 0.34, 0.28)]
 
 ## Только на хосте: бойца убили.
@@ -115,6 +117,8 @@ class InputState:
 	var fire_pressed: bool = false
 	var aim_held: bool = false
 	var reload_pressed: bool = false
+	## Смена оружия: −1 — нет, 0 — основное, 1 — пистолет, SWITCH_NEXT — следующее.
+	var switch_to: int = -1
 
 ## Где был боец в момент времени (для проверки попаданий на хосте).
 class HitPose:
@@ -176,6 +180,8 @@ var net_sprinting: bool = false
 var net_time: float = 0.0
 ## Растёт при каждом телепорте: у остальных — «перепрыгнуть», а не плыть.
 var net_teleport_id: int = 0
+## Ствол в руках — номер в WeaponCatalog (−1 — ещё не известен).
+var net_weapon: int = -1
 
 var _snapshots: Array[Snapshot] = []
 ## Разница «наши часы − часы владельца» (включая пинг), сглаженная.
@@ -206,6 +212,8 @@ var _awaiting_respawn: bool = false
 var _body_material: StandardMaterial3D
 ## Команда своего бойца, под которую сейчас настроена подпись (−1 — ещё не настроена).
 var _label_for_team: int = -1
+## Колесо мыши крутнули между тиками физики.
+var _wheel_switch_pending: bool = false
 
 @onready var _collision: CollisionShape3D = $CollisionShape3D
 @onready var _body_mesh: MeshInstance3D = $BodyMesh
@@ -279,6 +287,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		var delta_rad: Vector2 = motion.screen_relative * deg_to_rad(mouse_sensitivity) * zoom
 		_yaw = wrapf(_yaw - delta_rad.x, -PI, PI)
 		_pitch = clampf(_pitch - delta_rad.y, -PITCH_LIMIT, PITCH_LIMIT)
+	elif event is InputEventMouseButton and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		var button := event as InputEventMouseButton
+		if button.pressed and (button.button_index == MOUSE_BUTTON_WHEEL_UP
+				or button.button_index == MOUSE_BUTTON_WHEEL_DOWN):
+			_wheel_switch_pending = true
 
 
 func _physics_process(delta: float) -> void:
@@ -374,6 +387,13 @@ func _read_input() -> InputState:
 	input.fire_pressed = Input.is_action_just_pressed(&"fire")
 	input.aim_held = Input.is_action_pressed(&"aim")
 	input.reload_pressed = Input.is_action_just_pressed(&"reload")
+	if Input.is_action_just_pressed(&"weapon_primary"):
+		input.switch_to = 0
+	elif Input.is_action_just_pressed(&"weapon_secondary"):
+		input.switch_to = 1
+	elif _wheel_switch_pending:
+		input.switch_to = SWITCH_NEXT
+	_wheel_switch_pending = false
 
 	if crouch_toggle:
 		if Input.is_action_just_pressed(&"crouch"):
@@ -763,56 +783,68 @@ func _update_remote_head(delta: float) -> void:
 
 # --- Бой: стрельба --------------------------------------------------------
 
-## Владелец выстрелил (вызывает WeaponController).
-func fire_shot(origin: Vector3, direction: Vector3) -> void:
+## Владелец выстрелил (вызывает WeaponController). У дробовика направлений
+## несколько (по одному на дробинку), но сообщение хосту одно.
+func fire_shot(origin: Vector3, directions: PackedVector3Array, weapon_index: int) -> void:
+	var data: WeaponData = WeaponCatalog.get_by_index(weapon_index)
 	var bullets: BulletManager = _get_bullets()
 	var is_host: bool = multiplayer.is_server()
 	if bullets != null:
-		bullets.spawn(origin, direction, weapon.weapon, peer_id, team, is_host, 0.0, true)
+		for direction: Vector3 in directions:
+			bullets.spawn(origin, direction, data, peer_id, team, is_host, 0.0, true)
 	if is_host:
-		_client_shot_fx.rpc(origin, direction)
+		_client_shot_fx.rpc(origin, directions, weapon_index)
 	else:
-		_server_fire.rpc_id(1, origin, direction)
+		_server_fire.rpc_id(1, origin, directions, weapon_index)
 
 
-## Клиент → хост: «я выстрелил отсюда туда».
+## Клиент → хост: «я выстрелил отсюда туда из такого ствола».
 @rpc("any_peer", "call_remote", "reliable", 1)
-func _server_fire(origin: Vector3, direction: Vector3) -> void:
+func _server_fire(origin: Vector3, directions: PackedVector3Array, weapon_index: int) -> void:
 	if not multiplayer.is_server():
 		return
 	var sender: int = multiplayer.get_remote_sender_id()
 	if sender != peer_id or not alive:
 		return
+	var data: WeaponData = WeaponCatalog.get_by_index(weapon_index)
 	# Простые проверки от явной ерунды (игра для друзей, без античита).
+	if data == null or directions.is_empty() or directions.size() > maxi(data.pellets, 1):
+		return
 	if origin.distance_to(global_position + Vector3.UP * 1.2) > 4.0:
 		return
-	if not _server_rate_ok():
+	if not _server_rate_ok(data):
 		return
 	var rewind: float = clampf(float(Network.get_peer_rtt_ms(sender)) / 1000.0, 0.0, MAX_REWIND)
 	var bullets: BulletManager = _get_bullets()
 	if bullets != null:
-		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, team, true, rewind, false)
-	weapon.play_remote_shot()
-	_client_shot_fx.rpc(origin, direction)
+		for direction: Vector3 in directions:
+			bullets.spawn(origin, direction.normalized(), data, peer_id, team, true, rewind, false)
+	weapon.play_remote_shot(weapon_index)
+	_client_shot_fx.rpc(origin, directions, weapon_index)
 
 
 ## Хост → все: «боец выстрелил» (трассер, вспышка, звук).
 @rpc("any_peer", "call_remote", "unreliable", 1)
-func _client_shot_fx(origin: Vector3, direction: Vector3) -> void:
+func _client_shot_fx(origin: Vector3, directions: PackedVector3Array, weapon_index: int) -> void:
 	if multiplayer.get_remote_sender_id() != 1 or is_multiplayer_authority():
+		return
+	var data: WeaponData = WeaponCatalog.get_by_index(weapon_index)
+	if data == null:
 		return
 	var bullets: BulletManager = _get_bullets()
 	if bullets != null:
-		bullets.spawn(origin, direction.normalized(), weapon.weapon, peer_id, team, false, 0.0, false)
-	weapon.play_remote_shot()
+		for direction: Vector3 in directions:
+			bullets.spawn(origin, direction.normalized(), data, peer_id, team, false, 0.0, false)
+	weapon.play_remote_shot(weapon_index)
 
 
-func _server_rate_ok() -> bool:
+func _server_rate_ok(data: WeaponData) -> bool:
 	var now: float = sim_time()
 	while not _server_shot_times.is_empty() and _server_shot_times[0] < now - 1.0:
 		_server_shot_times.pop_front()
 	# Пакеты приходят пачками, поэтому запас в полтора раза + 3 выстрела.
-	var allowed: int = int(weapon.weapon.fire_rate_rpm / 60.0 * 1.5) + 3
+	# Берём самый скорострельный ствол каталога: игрок мог только что сменить оружие.
+	var allowed: int = int(maxf(data.fire_rate_rpm, 950.0) / 60.0 * 1.5) + 3
 	if _server_shot_times.size() >= allowed:
 		return false
 	_server_shot_times.append(now)
@@ -917,7 +949,8 @@ func _client_respawn(spawn_transform: Transform3D) -> void:
 	teleport(spawn_transform)
 	health = MAX_HEALTH
 	alive = true
-	weapon.reset_ammo()
+	# Снаряжение из меню применяется при каждом появлении.
+	weapon.equip_loadout()
 	_server_respawn_done.rpc_id(1)
 
 

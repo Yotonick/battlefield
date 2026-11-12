@@ -71,7 +71,13 @@ func _update_labels() -> void:
 	var weapon: WeaponController = _player.weapon
 	_hp_label.text = "%d" % ceili(_player.health)
 	_hp_bar.value = _player.health
-	_weapon_label.text = weapon.weapon.display_name
+	var mode: String = ""
+	match weapon.weapon.fire_mode:
+		WeaponData.FireMode.SEMI:
+			mode = "  ·  одиночный"
+		WeaponData.FireMode.BURST:
+			mode = "  ·  очередь"
+	_weapon_label.text = "[%d] %s%s" % [weapon.current_slot + 1, weapon.weapon.display_name, mode]
 	_ammo_label.text = "%d / %d" % [weapon.ammo, weapon.reserve]
 	if weapon.is_reloading:
 		_hint_label.text = "перезарядка…"
@@ -88,7 +94,7 @@ func _update_labels() -> void:
 	if not _player.alive:
 		var left: float = maxf(float(_respawn_at_ms - Time.get_ticks_msec()) / 1000.0, 0.0)
 		var who: String = _killer_name if not _killer_name.is_empty() else "?"
-		_death_label.text = "Вас убил: %s\nВозрождение через %d…" % [who, ceili(left)]
+		_death_label.text = "Вас убил: %s\nВозрождение через %d…\nB — сменить оружие" % [who, ceili(left)]
 
 
 # --- События --------------------------------------------------------------
@@ -161,8 +167,11 @@ func _draw_overlay(canvas: Control) -> void:
 	var weapon: WeaponController = _player.weapon
 	var camera: Camera3D = canvas.get_viewport().get_camera_3d()
 
+	# Оптика: чёрное поле вокруг круга и тонкое перекрестие.
+	if weapon.is_scoped():
+		_draw_scope(canvas, center)
 	# Прицел.
-	if weapon.aim_amount > 0.6:
+	elif weapon.aim_amount > 0.6:
 		canvas.draw_circle(center, 1.6, Color(1, 1, 1, 0.9))
 	elif not _player.is_sprinting and not weapon.is_reloading and camera != null:
 		var spread: float = deg_to_rad(weapon.get_current_spread())
@@ -201,6 +210,23 @@ func _draw_overlay(canvas: Control) -> void:
 			var base: Vector2 = center + dir * 120.0
 			canvas.draw_colored_polygon(PackedVector2Array([
 				tip, base + side * 22.0, base - side * 22.0]), color)
+
+
+func _draw_scope(canvas: Control, center: Vector2) -> void:
+	var radius: float = canvas.size.y * 0.46
+	var black := Color(0.0, 0.0, 0.0, 1.0)
+	# Поле вокруг круга — кольцом из толстых дуг, плюс прямоугольники по бокам.
+	canvas.draw_arc(center, radius + canvas.size.y * 0.5, 0.0, TAU, 96, black, canvas.size.y, true)
+	canvas.draw_rect(Rect2(0.0, 0.0, center.x - radius + 1.0, canvas.size.y), black)
+	canvas.draw_rect(Rect2(center.x + radius - 1.0, 0.0, canvas.size.x, canvas.size.y), black)
+	canvas.draw_arc(center, radius, 0.0, TAU, 96, Color(0.05, 0.05, 0.05), 6.0, true)
+	var line := Color(0.0, 0.0, 0.0, 0.85)
+	canvas.draw_line(center + Vector2(-radius, 0), center + Vector2(radius, 0), line, 1.5)
+	canvas.draw_line(center + Vector2(0, -radius), center + Vector2(0, radius), line, 1.5)
+	# Толстые «пеньки» к краям, как у настоящих прицелов.
+	for dir: Vector2 in [Vector2.LEFT, Vector2.RIGHT, Vector2.DOWN]:
+		canvas.draw_line(center + dir * radius * 0.45, center + dir * radius, line, 5.0)
+	canvas.draw_circle(center, 1.5, Color(0.8, 0.1, 0.1))
 
 
 # --- Построение интерфейса ------------------------------------------------

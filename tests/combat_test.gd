@@ -15,6 +15,11 @@ extends Node
 ##   --test=tdm_idle     раунд по времени (--round-time=6): ждём ничью
 ##
 ## Карта (шаг 4):
+## Оружие (v0.2):
+##   --test=guns         хост, --team=1, --map=test_range: каждый ствол каталога
+##                       от бедра и в прицеле, смена оружия, меню снаряжения;
+##                       скриншоты с --screens=папка
+##
 ##   --test=town         хост, --map=town: точки спавна, подъём по пандусам,
 ##                       скриншоты с --screens=папка
 ##
@@ -47,11 +52,13 @@ var _push_start_ms: int = 0
 ## --screens=папка: сохранять скриншоты ключевых моментов.
 var _screens_dir: String = ""
 var _snapped: Dictionary[String, bool] = {}
+var _prev_fire_held: bool = false
 
 
 func _ready() -> void:
 	_match = get_parent() as Match
-	print("[test] режим %s" % mode)
+	print("[test] режим %s, снаряжение: %s" % [mode, ", ".join(
+			WeaponCatalog.get_loadout().map(func(w: WeaponData) -> String: return w.display_name))])
 	for arg: String in OS.get_cmdline_args() + OS.get_cmdline_user_args():
 		if arg.begins_with("--screens="):
 			_screens_dir = arg.trim_prefix("--screens=")
@@ -68,6 +75,11 @@ func _physics_process(delta: float) -> void:
 		return
 	if mode == "ui":
 		_ui_tick()
+		return
+	if mode == "guns" and _me != null:
+		_guns_tick(delta)
+		_input.fire_pressed = _input.fire_held and not _prev_fire_held
+		_prev_fire_held = _input.fire_held
 		return
 	if _me == null:
 		_me = _match.get_local_player()
@@ -100,6 +112,9 @@ func _physics_process(delta: float) -> void:
 					print("[test] наблюдатель: %s — здоровье %.0f, жив %s, убийств %d, смертей %d" % [
 						soldier.display_name, soldier.health, soldier.alive, soldier.kills, soldier.deaths])
 				_finish("наблюдатель")
+	# Одиночный огонь и очередь срабатывают по нажатию, а не по удержанию.
+	_input.fire_pressed = _input.fire_held and not _prev_fire_held
+	_prev_fire_held = _input.fire_held
 
 
 func _find_other() -> Player:
@@ -400,6 +415,77 @@ func _ui_tick() -> void:
 		Input.action_release(&"player_list")
 		_done = true
 		get_tree().quit()
+
+
+# --- Стволы (--test=guns) -------------------------------------------------
+
+var _gun_index: int = -1
+var _gun_time: float = 0.0
+
+
+func _guns_tick(delta: float) -> void:
+	_gun_time += delta
+	if _gun_index == -1:
+		if _time < 1.5:
+			return
+		_me.teleport(Transform3D(Basis.IDENTITY, Vector3(0.0, 0.05, 8.0)))
+		_me.set_look(0.0, 0.0)
+		_next_gun()
+		return
+	if _gun_index < WeaponCatalog.WEAPONS.size():
+		var data: WeaponData = WeaponCatalog.WEAPONS[_gun_index]
+		if _gun_time > 0.8 and _gun_time < 0.9:
+			_snap("%02d_%s_hip" % [_gun_index, data.id])
+		_input.aim_held = _gun_time > 1.0
+		if _gun_time > 1.0 + data.ads_time + 0.4 and not _snapped.has("%02d_%s_ads" % [_gun_index, data.id]):
+			_snap("%02d_%s_ads" % [_gun_index, data.id])
+		_input.fire_held = _gun_time > 2.0 and _gun_time < 2.05
+		if _gun_time > 2.4:
+			print("[test] ствол %s: магазин %d/%d, в руках %s, net_weapon %d" % [data.display_name,
+				_me.weapon.ammo, data.mag_size, _me.weapon.weapon.display_name, _me.net_weapon])
+			_next_gun()
+		return
+	# Смена на пистолет и обратно клавишами 1/2, потом меню снаряжения.
+	match _gun_index - WeaponCatalog.WEAPONS.size():
+		0:
+			_me.weapon.equip_loadout()
+			_input.switch_to = 1
+			_gun_index += 1
+			_gun_time = 0.0
+		1:
+			_input.switch_to = -1
+			if _gun_time > 0.15 and _gun_time < 0.2:
+				_snap("switch_mid")
+			if _gun_time > 1.0:
+				print("[test] смена: в руках %s (слот %d), идёт смена: %s" % [_me.weapon.weapon.display_name,
+					_me.weapon.current_slot, _me.weapon.is_switching])
+				_input.switch_to = Player.SWITCH_NEXT
+				_gun_index += 1
+				_gun_time = 0.0
+		2:
+			_input.switch_to = -1
+			if _gun_time > 1.0:
+				print("[test] колесо: в руках %s (слот %d)" % [_me.weapon.weapon.display_name, _me.weapon.current_slot])
+				var menu: Node = get_tree().get_first_node_in_group(&"loadout_menu")
+				menu.call(&"open")
+				_gun_index += 1
+				_gun_time = 0.0
+		3:
+			if _gun_time > 0.5:
+				_snap("loadout_menu")
+			if _gun_time > 1.0:
+				_finish("стволы")
+
+
+func _next_gun() -> void:
+	_gun_index += 1
+	_gun_time = 0.0
+	_input.aim_held = false
+	_input.fire_held = false
+	if _gun_index < WeaponCatalog.WEAPONS.size():
+		var data: WeaponData = WeaponCatalog.WEAPONS[_gun_index]
+		_me.weapon.slots[0] = WeaponController.Slot.new(data)
+		_me.weapon._select_slot(0, false)
 
 
 # --- Карта «Городок» -----------------------------------------------------

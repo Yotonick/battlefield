@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/shotgun_pump.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"shotgun_pump"
+display_name = "Помповый дробовик"
+slot = 0
+category = 4
+model_length = 1.0
+model_yaw_deg = 90.0
+description = "8 дробинок: убивает в упор, дальше 20 м почти бесполезен."
+fire_mode = 1
+pellets = 8
+pellet_spread = 3.5
+damage_close = 16
+damage_far = 4
+falloff_start = 8
+falloff_end = 28
+muzzle_velocity = 400
+bullet_lifetime = 0.5
+fire_rate_rpm = 70
+mag_size = 6
+reserve_ammo = 30
+reload_time = 2.6
+reload_empty_time = 3.0
+recoil_vertical = 2.4
+recoil_horizontal = 0.6
+spread_hip = 1.2
+spread_ads = 0.6
+spread_per_shot = 0.0
+ads_fov = 65.0
+ads_time = 0.2
+draw_time = 0.5
+model = ExtResource("2_model")

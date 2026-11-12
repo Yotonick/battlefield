@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/m16.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"rifle_m16"
+display_name = "M16"
+slot = 0
+category = 0
+model_length = 1.0
+sight_drop = 0.004
+description = "Очередь по 3 патрона: точная винтовка для средней дистанции."
+fire_mode = 2
+burst_count = 3
+burst_delay = 0.28
+damage_close = 26
+damage_far = 21
+falloff_start = 50
+falloff_end = 150
+muzzle_velocity = 940
+fire_rate_rpm = 900
+mag_size = 30
+reserve_ammo = 120
+reload_time = 2.3
+reload_empty_time = 2.8
+recoil_vertical = 0.4
+recoil_horizontal = 0.15
+spread_hip = 1.5
+spread_ads = 0.05
+spread_per_shot = 0.12
+ads_fov = 50.0
+ads_time = 0.2
+model = ExtResource("2_model")

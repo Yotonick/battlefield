@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/scar.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"rifle_scar"
+display_name = "SCAR-H"
+slot = 0
+category = 2
+model_length = 0.97
+description = "Тяжёлый калибр 7.62: убивает с 3 попаданий, но сильно уводит вверх."
+damage_close = 34
+damage_far = 27
+falloff_start = 50
+falloff_end = 150
+muzzle_velocity = 790
+fire_rate_rpm = 580
+mag_size = 20
+reserve_ammo = 100
+reload_time = 2.4
+reload_empty_time = 2.9
+recoil_vertical = 0.85
+recoil_horizontal = 0.38
+spread_per_shot = 0.3
+ads_time = 0.22
+ads_move_multiplier = 0.55
+draw_time = 0.55
+model = ExtResource("2_model")

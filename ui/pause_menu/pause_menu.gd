@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var _team_button: Button = %TeamButton
 @onready var _leave_button: Button = %LeaveButton
 @onready var _quit_button: Button = %QuitButton
+var _loadout_button: Button
 
 
 func _ready() -> void:
@@ -15,6 +16,11 @@ func _ready() -> void:
 	_team_button.pressed.connect(_on_team_pressed)
 	_leave_button.pressed.connect(_on_leave_pressed)
 	_quit_button.pressed.connect(_on_quit_pressed)
+	_loadout_button = Button.new()
+	_loadout_button.text = "Снаряжение (B)"
+	_loadout_button.custom_minimum_size = _team_button.custom_minimum_size
+	_loadout_button.pressed.connect(_on_loadout_pressed)
+	_team_button.add_sibling(_loadout_button)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -56,6 +62,13 @@ func _on_team_pressed() -> void:
 	visible = false
 	if team_select != null:
 		team_select.call(&"open")
+
+
+func _on_loadout_pressed() -> void:
+	var menu: Node = get_tree().get_first_node_in_group(&"loadout_menu")
+	visible = false
+	if menu != null:
+		menu.call(&"open")
 
 
 func _on_leave_pressed() -> void:

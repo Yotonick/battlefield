@@ -114,6 +114,12 @@ func _choose(team: int) -> void:
 	_rules.request_team(team)
 
 
+func _open_loadout() -> void:
+	var menu: Node = get_tree().get_first_node_in_group(&"loadout_menu")
+	if menu != null:
+		menu.call(&"open")
+
+
 func _is_pause_open() -> bool:
 	var pause := get_parent().get_node_or_null(^"PauseMenu") as CanvasLayer
 	return pause != null and pause.visible
@@ -183,6 +189,12 @@ func _build() -> void:
 	_auto_button.custom_minimum_size = Vector2(0, 40)
 	_auto_button.pressed.connect(_choose.bind(0))
 	vbox.add_child(_auto_button)
+
+	var loadout_button := Button.new()
+	loadout_button.text = "Снаряжение (B) — выбрать оружие"
+	loadout_button.custom_minimum_size = Vector2(0, 34)
+	loadout_button.pressed.connect(_open_loadout)
+	vbox.add_child(loadout_button)
 
 	_close_button = Button.new()
 	_close_button.text = "Остаться в своей команде (Esc)"

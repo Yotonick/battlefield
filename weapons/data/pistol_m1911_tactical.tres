@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/m1911_tactical.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"pistol_m1911_tactical"
+display_name = "M1911 Tactical"
+slot = 1
+category = 6
+model_length = 0.22
+description = "Удлинённый магазин на 10 патронов, урон чуть ниже."
+fire_mode = 1
+damage_close = 28
+damage_far = 18
+falloff_start = 15
+falloff_end = 50
+muzzle_velocity = 260
+fire_rate_rpm = 420
+mag_size = 10
+reserve_ammo = 50
+reload_time = 1.7
+reload_empty_time = 2.0
+recoil_vertical = 1.1
+recoil_horizontal = 0.35
+spread_hip = 1.1
+spread_ads = 0.15
+spread_per_shot = 0.35
+ads_fov = 65.0
+ads_time = 0.12
+ads_move_multiplier = 0.8
+draw_time = 0.3
+rear_offset = 0.0
+view_hip = Vector3(0.14, -0.15, -0.36)
+view_ads = Vector3(0, 0, -0.42)
+model = ExtResource("2_model")

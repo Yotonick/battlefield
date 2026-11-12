@@ -3,8 +3,19 @@ extends Resource
 ## Параметры оружия. Один файл `.tres` = один ствол.
 ## Все углы — в градусах, расстояния — в метрах, время — в секундах.
 
+enum Slot { PRIMARY, SECONDARY }
+enum FireMode { AUTO, SEMI, BURST }
+enum Category { ASSAULT, CARBINE, BATTLE, SMG, SHOTGUN, SNIPER, PISTOL }
+
+const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Боевая винтовка", "Пистолет-пулемёт",
+		"Дробовик", "Снайперская винтовка", "Пистолет"]
+
 @export var id: StringName = &"rifle"
 @export var display_name: String = "Автомат"
+@export var slot: Slot = Slot.PRIMARY
+@export var category: Category = Category.ASSAULT
+## Короткое описание для меню снаряжения.
+@export_multiline var description: String = ""
 
 @export_group("Урон")
 ## Урон в тело вблизи (до falloff_start).
@@ -25,6 +36,15 @@ extends Resource
 @export var bullet_lifetime: float = 3.0
 
 @export_group("Стрельба")
+@export var fire_mode: FireMode = FireMode.AUTO
+## Выстрелов в очереди (для BURST).
+@export var burst_count: int = 3
+## Пауза после очереди перед следующей, с.
+@export var burst_delay: float = 0.25
+## Дробинок за выстрел (1 — обычная пуля). Урон указан на одну дробинку.
+@export var pellets: int = 1
+## Разлёт дроби, градусов (вокруг точки, куда ушёл бы обычный выстрел).
+@export var pellet_spread: float = 0.0
 ## Выстрелов в минуту.
 @export var fire_rate_rpm: float = 600.0
 @export var mag_size: int = 30
@@ -65,16 +85,41 @@ extends Resource
 
 @export_group("Прицеливание")
 @export var ads_fov: float = 55.0
+## Оптика: в прицеле модель скрывается, на экране — круг прицела.
+@export var has_scope: bool = false
 ## Время подъёма прицела.
 @export var ads_time: float = 0.18
 ## Скорость ходьбы в прицеле (множитель).
 @export var ads_move_multiplier: float = 0.6
+## Время доставания оружия при смене.
+@export var draw_time: float = 0.45
+
+@export_group("Модель")
+## Модель ствола (любая ориентация — см. model_yaw_deg).
+@export var model: PackedScene
+## Длина ствола в игре, м. Модель масштабируется под неё.
+@export var model_length: float = 0.9
+## Поворот модели вокруг вертикали, чтобы дуло смотрело в −Z.
+@export var model_yaw_deg: float = 0.0
+## Насколько линия прицела ниже верха модели, м.
+@export var sight_drop: float = 0.012
+## Насколько дуло ниже верха модели (доля высоты модели).
+@export_range(0.0, 1.0) var muzzle_drop: float = 0.3
+## Насколько задний край модели позади линии взгляда в прицеле, м.
+@export var rear_offset: float = 0.22
+## Положение модели у камеры: от бедра и в прицеле.
+@export var view_hip: Vector3 = Vector3(0.16, -0.19, -0.3)
+@export var view_ads: Vector3 = Vector3(0.0, 0.0, -0.33)
 
 
 func get_damage(distance: float, headshot: bool) -> float:
 	var t: float = clampf(inverse_lerp(falloff_start, falloff_end, distance), 0.0, 1.0)
 	var damage: float = lerpf(damage_close, damage_far, t)
 	return damage * (headshot_multiplier if headshot else 1.0)
+
+
+func is_automatic() -> bool:
+	return fire_mode == FireMode.AUTO
 
 
 func get_shot_interval() -> float:

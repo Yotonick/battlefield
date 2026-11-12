@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/mp7.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"smg_mp7"
+display_name = "MP7"
+slot = 0
+category = 3
+model_length = 0.5
+description = "Самый скорострельный: 40 патронов, вблизи — мясорубка."
+damage_close = 19
+damage_far = 11
+falloff_start = 12
+falloff_end = 35
+muzzle_velocity = 600
+fire_rate_rpm = 950
+mag_size = 40
+reserve_ammo = 160
+reload_time = 1.9
+reload_empty_time = 2.3
+recoil_vertical = 0.32
+recoil_horizontal = 0.25
+spread_hip = 1.1
+spread_move_multiplier = 1.3
+ads_time = 0.13
+ads_move_multiplier = 0.8
+draw_time = 0.3
+rear_offset = 0.12
+model = ExtResource("2_model")

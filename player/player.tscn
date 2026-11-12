@@ -46,6 +46,9 @@ properties/5/replication_mode = 1
 properties/6/path = NodePath(".:net_teleport_id")
 properties/6/spawn = false
 properties/6/replication_mode = 1
+properties/7/path = NodePath(".:net_weapon")
+properties/7/spawn = false
+properties/7/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_host"]
 properties/0/path = NodePath(".:health")

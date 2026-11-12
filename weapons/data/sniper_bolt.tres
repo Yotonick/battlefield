@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/sniper_bolt.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"sniper_bolt"
+display_name = "Снайперская винтовка"
+slot = 0
+category = 5
+model_length = 1.15
+model_yaw_deg = 90.0
+sight_drop = 0.03
+description = "Оптика ×4, ручной затвор. Голова — сразу насмерть, тело — почти."
+fire_mode = 1
+has_scope = true
+damage_close = 95
+damage_far = 80
+falloff_start = 100
+falloff_end = 400
+headshot_multiplier = 2.0
+muzzle_velocity = 850
+fire_rate_rpm = 45
+mag_size = 5
+reserve_ammo = 25
+reload_time = 3.0
+reload_empty_time = 3.6
+recoil_vertical = 3.2
+recoil_horizontal = 0.8
+recoil_recovery = 0.6
+spread_hip = 4.5
+spread_ads = 0.0
+spread_per_shot = 0.0
+spread_move_multiplier = 2.5
+spread_air = 10.0
+ads_fov = 18.0
+ads_time = 0.32
+ads_move_multiplier = 0.45
+draw_time = 0.6
+model = ExtResource("2_model")

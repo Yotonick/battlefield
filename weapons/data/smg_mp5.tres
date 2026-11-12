@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/mp5.fbx" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"smg_mp5"
+display_name = "MP5"
+slot = 0
+category = 3
+model_length = 0.68
+description = "Пистолет-пулемёт для домов: мало отдачи, урон быстро падает с расстоянием."
+damage_close = 22
+damage_far = 13
+falloff_start = 15
+falloff_end = 45
+muzzle_velocity = 400
+fire_rate_rpm = 800
+mag_size = 30
+reserve_ammo = 150
+reload_time = 2.0
+reload_empty_time = 2.4
+recoil_vertical = 0.3
+recoil_horizontal = 0.2
+spread_hip = 1.0
+spread_move_multiplier = 1.4
+ads_time = 0.14
+ads_move_multiplier = 0.75
+draw_time = 0.35
+model = ExtResource("2_model")
