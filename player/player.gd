@@ -62,6 +62,14 @@ signal alive_changed(is_alive: bool)
 ## Сколько секунд помнится нажатие прыжка до приземления.
 @export var jump_buffer_time: float = 0.12
 
+@export_group("Ступеньки")
+## Самая высокая ступенька/бордюр, на которые боец заходит без прыжка, м.
+@export var max_step_height: float = 0.35
+## Насколько за краем ступеньки меряем её высоту. Меньше глубины ступеньки.
+@export var step_probe_distance: float = 0.06
+## Как быстро камера догоняет тело после шага на ступеньку.
+@export var step_camera_smoothing: float = 14.0
+
 @export_group("Присед")
 @export var stand_height: float = 1.8
 @export var crouch_height: float = 1.15
@@ -91,9 +99,9 @@ signal alive_changed(is_alive: bool)
 @export var base_fov: float = 80.0
 @export var sprint_fov_bonus: float = 6.0
 @export var head_bob_enabled: bool = true
-## Шагов покачивания на метр пройденного пути.
-@export var bob_frequency: float = 0.9
-@export var bob_amplitude: float = 0.035
+## Длина шага, м: один кач камеры вверх-вниз на шаг.
+@export var bob_step_length: float = 1.6
+@export var bob_amplitude: float = 0.03
 
 ## Ввод за один тик физики. На шаге с сетью именно эту структуру
 ## будем передавать/получать вместо прямого чтения клавиатуры.
@@ -182,7 +190,13 @@ var _jump_buffer_timer: float = 0.0
 var _crouch_toggled: bool = false
 var _eye_height: float = 0.0
 var _bob_phase: float = 0.0
-var _capsule: CapsuleShape3D
+## Плавное покачивание: 0..1, растёт/спадает, а не обрывается.
+var _bob_strength: float = 0.0
+## Смещение камеры вниз после шага на ступеньку (тянется к 0).
+var _step_camera_offset: float = 0.0
+## Плоский низ (цилиндр), а не капсула: края ступенек не превращаются
+## в «горки», и высота шага считается точно.
+var _body_shape: CylinderShape3D
 ## Отдача, которая ещё не «доехала» до камеры (рад: x — вверх, y — вбок).
 var _pending_kick: Vector2 = Vector2.ZERO
 ## Только на хосте: история положений и ограничение скорострельности.
@@ -218,8 +232,8 @@ func setup(peer_id: int, player_name: String, spawn_transform: Transform3D, team
 func _ready() -> void:
 	# Форма из сцены общая для всех копий бойца — делаем свою,
 	# иначе присед одного игрока «присаживал» бы всех.
-	_capsule = (_collision.shape as CapsuleShape3D).duplicate() as CapsuleShape3D
-	_collision.shape = _capsule
+	_body_shape = (_collision.shape as CylinderShape3D).duplicate() as CylinderShape3D
+	_collision.shape = _body_shape
 	_apply_stance_shape(stand_height)
 
 	_yaw = rotation.y
@@ -388,7 +402,16 @@ func _simulate(input: InputState, delta: float) -> void:
 	# Мягкое расталкивание: добавка к скорости только на этот тик.
 	var push: Vector3 = _get_separation_velocity() if alive else Vector3.ZERO
 	velocity += push
+	var y_before: float = global_position.y
+	var was_on_floor: bool = is_on_floor()
+	if was_on_floor:
+		_try_step_up(delta)
 	move_and_slide()
+	# Шаг на ступеньку вверх или вниз — тело переставляется сразу, а камера
+	# догоняет плавно (на пандусах изменения мелкие и сюда не попадают).
+	var dy: float = global_position.y - y_before
+	if was_on_floor and is_on_floor() and absf(dy) > 0.06:
+		_step_camera_offset = clampf(_step_camera_offset - dy, -max_step_height, max_step_height)
 	velocity.x -= push.x
 	velocity.z -= push.z
 
@@ -466,6 +489,54 @@ func _apply_horizontal_movement(input: InputState, delta: float) -> void:
 	velocity.z = horizontal.z
 
 
+## Подъём на ступеньку: если впереди невысокое препятствие, а над ним есть
+## пол — поднимаем бойца на его высоту, дальше move_and_slide идёт уже по нему.
+## Пандусы сюда не попадают — по ним move_and_slide едет сам.
+func _try_step_up(delta: float) -> bool:
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
+	if horizontal.length_squared() < 0.01:
+		return false
+	var dir: Vector3 = horizontal.normalized()
+	var start: Transform3D = global_transform
+	var hit := KinematicCollision3D.new()
+
+	# 1. Впереди что-то мешает? И это именно стенка, а не пандус.
+	var motion: Vector3 = dir * maxf(horizontal.length() * delta, 0.05)
+	if not test_move(start, motion, hit):
+		return false
+	if hit.get_normal().angle_to(Vector3.UP) <= floor_max_angle:
+		return false
+
+	# 2. Высота ступеньки — лучом сверху вниз сразу за точкой касания.
+	#    (Капсула внизу круглая, по ней высота края получается неточной.)
+	var into: Vector3 = -Vector3(hit.get_normal().x, 0.0, hit.get_normal().z).normalized()
+	var probe_xz: Vector3 = hit.get_position() + into * step_probe_distance
+	var ray := PhysicsRayQueryParameters3D.create(
+		Vector3(probe_xz.x, start.origin.y + max_step_height + 0.05, probe_xz.z),
+		Vector3(probe_xz.x, start.origin.y - 0.01, probe_xz.z),
+		collision_mask, [get_rid()])
+	var ray_hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(ray)
+	if ray_hit.is_empty():
+		return false
+	var rise: float = (ray_hit["position"] as Vector3).y - start.origin.y
+	if rise < 0.002 or rise > max_step_height:
+		return false  # это уже стена
+	if (ray_hit["normal"] as Vector3).angle_to(Vector3.UP) > floor_max_angle:
+		return false
+
+	# 3. Над ступенькой должно хватать места: поднимаемся и пробуем шагнуть.
+	var lifted: Transform3D = start
+	lifted.origin.y += rise + 0.003
+	if test_move(start, lifted.origin - start.origin):
+		return false  # упёрлись головой
+	if test_move(lifted, dir * 0.1, hit) and hit.get_travel().length() < 0.02:
+		return false  # над «ступенькой» стена (подоконник и т.п.)
+
+	# Поднимаем тело, горизонтальный шаг сделает move_and_slide, пол прижмёт floor_snap.
+	global_position = lifted.origin
+	return true
+
+
 func _get_target_speed() -> float:
 	var aim_mult: float = lerpf(1.0, weapon.weapon.ads_move_multiplier, weapon.aim_amount)
 	if stance == Stance.CROUCH:
@@ -516,7 +587,7 @@ func _set_stance(new_stance: Stance) -> void:
 
 ## Меняем высоту капсулы так, чтобы ноги оставались на месте.
 func _apply_stance_shape(height: float) -> void:
-	_capsule.height = height
+	_body_shape.height = height
 	_collision.position.y = height * 0.5
 	if not alive:
 		return  # модель лежит (см. _apply_alive_visuals)
@@ -527,7 +598,7 @@ func _apply_stance_shape(height: float) -> void:
 
 ## Есть ли место над головой, чтобы встать.
 func _can_stand_up() -> bool:
-	var rise: float = stand_height - _capsule.height
+	var rise: float = stand_height - _body_shape.height
 	return not test_move(global_transform, Vector3.UP * rise)
 
 
@@ -542,13 +613,20 @@ func _update_camera(delta: float) -> void:
 
 	var bob_offset := Vector3.ZERO
 	var speed: float = get_horizontal_speed()
-	if head_bob_enabled and is_on_floor() and speed > 0.5:
-		_bob_phase = fmod(_bob_phase + speed * bob_frequency * delta * TAU, TAU)
-		var strength: float = clampf(speed / sprint_speed, 0.0, 1.0)
-		bob_offset.y = sin(_bob_phase * 2.0) * bob_amplitude * strength
-		bob_offset.x = cos(_bob_phase) * bob_amplitude * 0.5 * strength
+	var walking: bool = head_bob_enabled and is_on_floor() and speed > 0.5
+	# Сила покачивания меняется плавно: на ступеньках и кочках is_on_floor
+	# может мигать — камера от этого не должна дёргаться.
+	var target_strength: float = clampf(speed / sprint_speed, 0.0, 1.0) if walking else 0.0
+	_bob_strength = lerpf(_bob_strength, target_strength, 1.0 - exp(-8.0 * delta))
+	if _bob_strength > 0.001:
+		# Фаза: полный круг = два шага (левой-правой). Вверх-вниз — раз на шаг.
+		_bob_phase = fmod(_bob_phase + speed / (bob_step_length * 2.0) * delta * TAU, TAU)
+		bob_offset.y = sin(_bob_phase * 2.0) * bob_amplitude * _bob_strength
+		bob_offset.x = cos(_bob_phase) * bob_amplitude * 0.5 * _bob_strength
 	else:
 		_bob_phase = 0.0
+	_step_camera_offset = lerpf(_step_camera_offset, 0.0, 1.0 - exp(-step_camera_smoothing * delta))
+	bob_offset.y += _step_camera_offset
 
 	var roll: float = 0.0 if alive else 0.5
 	var view_basis := Basis.from_euler(Vector3(_pitch, _yaw, roll))
@@ -871,7 +949,7 @@ func _apply_alive_visuals() -> void:
 	_visor.visible = alive
 	if alive:
 		_body_mesh.rotation = Vector3.ZERO
-		_apply_stance_shape(_capsule.height)
+		_apply_stance_shape(_body_shape.height)
 		_label_for_team = -1  # подпись снова покажет _update_name_label
 	else:
 		_body_mesh.scale = Vector3.ONE

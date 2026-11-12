@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://weapons/weapon_controller.gd" id="2_weapon"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_body"]
 radius = 0.35
 height = 1.8
 
@@ -67,13 +67,13 @@ properties/4/replication_mode = 2
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 5
-floor_snap_length = 0.3
+floor_snap_length = 0.4
 safe_margin = 0.01
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-shape = SubResource("CapsuleShape3D_body")
+shape = SubResource("CylinderShape3D_body")
 
 [node name="BodyMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
