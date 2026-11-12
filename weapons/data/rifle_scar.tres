@@ -9,6 +9,7 @@ id = &"rifle_scar"
 display_name = "SCAR-H"
 slot = 0
 category = 2
+model_yaw_deg = 180.0
 model_length = 0.97
 description = "Тяжёлый калибр 7.62: убивает с 3 попаданий, но сильно уводит вверх."
 damage_close = 34

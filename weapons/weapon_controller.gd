@@ -448,7 +448,8 @@ func _process(delta: float) -> void:
 	pos = pos.lerp(SPRINT_POSITION, _vm_sprint)
 	pos.z += 0.045 * _vm_kick * lerpf(1.0, 0.5, aim_amount)
 	var kick_pitch: float = 0.06 if weapon.recoil_vertical < 1.5 else 0.2
-	var rot := Vector3(kick_pitch * _vm_kick, 0.0, 0.0)
+	var hip_rot: Vector3 = weapon.view_hip_rot_deg * (PI / 180.0) * (1.0 - _ease(aim_amount))
+	var rot := Vector3(kick_pitch * _vm_kick, 0.0, 0.0) + hip_rot
 	rot = rot.lerp(SPRINT_ROTATION, _vm_sprint)
 	if is_reloading:
 		var dip: float = sin(PI * get_reload_progress())

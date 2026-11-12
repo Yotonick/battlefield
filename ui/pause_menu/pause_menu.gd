@@ -21,6 +21,41 @@ func _ready() -> void:
 	_loadout_button.custom_minimum_size = _team_button.custom_minimum_size
 	_loadout_button.pressed.connect(_on_loadout_pressed)
 	_team_button.add_sibling(_loadout_button)
+	_build_settings()
+
+
+## Ползунки настроек (GameSettings): применяются сразу.
+func _build_settings() -> void:
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override(&"separation", 4)
+	_info.add_sibling(box)
+	_add_slider(box, GameSettings.FOV_MIN, GameSettings.FOV_MAX, 1.0, GameSettings.get_fov(),
+			func(value: float) -> String:
+				var aspect: float = get_viewport().get_visible_rect().size.aspect()
+				return "Угол обзора: %d° (по горизонтали %d°)" % [roundi(value),
+						roundi(GameSettings.horizontal_fov(value, aspect))],
+			func(value: float) -> void: GameSettings.set_fov(value))
+	_add_slider(box, GameSettings.SENS_MIN, GameSettings.SENS_MAX, 0.005, GameSettings.get_sensitivity(),
+			func(value: float) -> String: return "Чувствительность мыши: %.3f" % value,
+			func(value: float) -> void: GameSettings.set_sensitivity(value))
+
+
+func _add_slider(box: VBoxContainer, min_value: float, max_value: float, step: float, value: float,
+		caption: Callable, apply: Callable) -> void:
+	var label := Label.new()
+	label.add_theme_font_size_override(&"font_size", 14)
+	box.add_child(label)
+	var slider := HSlider.new()
+	slider.min_value = min_value
+	slider.max_value = max_value
+	slider.step = step
+	slider.value = value
+	slider.custom_minimum_size = Vector2(0, 22)
+	box.add_child(slider)
+	label.text = caption.call(value)
+	slider.value_changed.connect(func(new_value: float) -> void:
+		apply.call(new_value)
+		label.text = caption.call(new_value))
 
 
 func _unhandled_input(event: InputEvent) -> void:

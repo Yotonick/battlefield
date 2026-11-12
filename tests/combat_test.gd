@@ -474,6 +474,16 @@ func _guns_tick(delta: float) -> void:
 			if _gun_time > 0.5:
 				_snap("loadout_menu")
 			if _gun_time > 1.0:
+				get_tree().get_first_node_in_group(&"loadout_menu").call(&"close")
+				var pause: Node = _match.get_node_or_null(^"PauseMenu")
+				if pause != null:
+					pause.call(&"open")
+				_gun_index += 1
+				_gun_time = 0.0
+		4:
+			if _gun_time > 0.5:
+				_snap("pause_menu")
+			if _gun_time > 1.0:
 				_finish("стволы")
 
 

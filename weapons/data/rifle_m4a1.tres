@@ -9,6 +9,7 @@ id = &"rifle_m4a1"
 display_name = "M4A1"
 slot = 0
 category = 1
+model_yaw_deg = 180.0
 model_length = 0.84
 description = "Быстрый карабин: высокий темп, слабая отдача, урон меньше."
 damage_close = 22

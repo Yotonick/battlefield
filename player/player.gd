@@ -96,9 +96,7 @@ signal alive_changed(is_alive: bool)
 @export var separation_speed: float = 4.0
 
 @export_group("Камера")
-## Градусов поворота на один пиксель движения мыши.
-@export var mouse_sensitivity: float = 0.12
-@export var base_fov: float = 80.0
+## Угол обзора и чувствительность мыши — в GameSettings (меню паузы).
 @export var sprint_fov_bonus: float = 6.0
 @export var head_bob_enabled: bool = true
 ## Длина шага, м: один кач камеры вверх-вниз на шаг.
@@ -218,6 +216,8 @@ var _wheel_switch_pending: bool = false
 @onready var _collision: CollisionShape3D = $CollisionShape3D
 @onready var _body_mesh: MeshInstance3D = $BodyMesh
 @onready var _camera: Camera3D = $Camera3D
+## Отдельная камера для ствола и рук (только у своего бойца).
+var _viewmodel_layer: ViewmodelLayer
 @onready var _head: Node3D = $Head
 @onready var _visor: MeshInstance3D = $Head/Visor
 @onready var _name_label: Label3D = $NameLabel
@@ -250,7 +250,7 @@ func _ready() -> void:
 	# Камера живёт отдельно от тела (top_level) и обновляется каждый кадр
 	# отрисовки — так обзор мышью не отстаёт на тик физики.
 	_camera.top_level = true
-	_camera.fov = base_fov
+	_camera.fov = GameSettings.get_fov()
 
 	_head.position.y = stand_eye_height
 	_name_label.text = display_name
@@ -260,6 +260,8 @@ func _ready() -> void:
 	weapon.setup(self, _camera, _head, is_local)
 	_camera.current = is_local
 	if is_local:
+		_viewmodel_layer = ViewmodelLayer.new(_camera)
+		add_child(_viewmodel_layer)
 		add_to_group(LOCAL_PLAYER_GROUP)
 		# Своё тело не видим, но тень от него остаётся.
 		_body_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
@@ -283,8 +285,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var motion := event as InputEventMouseMotion
 		# screen_relative не зависит от разрешения окна и растяжения.
 		# В прицеле чувствительность ниже — пропорционально приближению.
-		var zoom: float = _camera.fov / base_fov
-		var delta_rad: Vector2 = motion.screen_relative * deg_to_rad(mouse_sensitivity) * zoom
+		var zoom: float = _camera.fov / GameSettings.get_fov()
+		var delta_rad: Vector2 = motion.screen_relative * deg_to_rad(GameSettings.get_sensitivity()) * zoom
 		_yaw = wrapf(_yaw - delta_rad.x, -PI, PI)
 		_pitch = clampf(_pitch - delta_rad.y, -PITCH_LIMIT, PITCH_LIMIT)
 	elif event is InputEventMouseButton and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -657,14 +659,19 @@ func _update_camera(delta: float) -> void:
 	eye_pos += view_basis.x * bob_offset.x
 	_camera.global_transform = Transform3D(view_basis, eye_pos)
 
+	var base_fov: float = GameSettings.get_fov()
 	var hip_fov: float = base_fov + (sprint_fov_bonus if is_sprinting else 0.0)
 	var aim: float = weapon.aim_amount
-	var target_fov: float = lerpf(hip_fov, weapon.weapon.ads_fov, aim * aim * (3.0 - 2.0 * aim))
+	# ads_fov в данных ствола задан для обзора 80° — приближение одинаковое при любой настройке.
+	var ads_fov: float = weapon.weapon.ads_fov * base_fov / WeaponData.ADS_FOV_REFERENCE
+	var target_fov: float = lerpf(hip_fov, ads_fov, aim * aim * (3.0 - 2.0 * aim))
 	# Прицел управляет FOV напрямую, бег — плавно.
 	if aim > 0.0:
 		_camera.fov = target_fov
 	else:
 		_camera.fov = lerpf(_camera.fov, target_fov, 1.0 - exp(-8.0 * delta))
+	if _viewmodel_layer != null:
+		_viewmodel_layer.sync(aim)
 
 
 # --- Сеть: владелец -------------------------------------------------------

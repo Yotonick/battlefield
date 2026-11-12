@@ -27,7 +27,9 @@ func _init(data: WeaponData) -> void:
 ## Масштаб, поворот и сдвиг модели под правила выше.
 func _fit_model() -> void:
 	_model.transform = Transform3D.IDENTITY
-	_model.rotation.y = deg_to_rad(weapon.model_yaw_deg)
+	# Сначала поворот вокруг вертикали (дуло в −Z), потом вокруг оси ствола.
+	_model.basis = Basis(Vector3.FORWARD, deg_to_rad(weapon.model_roll_deg)) \
+			* Basis(Vector3.UP, deg_to_rad(weapon.model_yaw_deg))
 	var box: AABB = _get_model_aabb()
 	var length: float = maxf(box.size.z, 0.001)
 	var factor: float = weapon.model_length / length
@@ -124,9 +126,14 @@ func set_shadow_only(enabled: bool) -> void:
 			if enabled else GeometryInstance3D.SHADOW_CASTING_SETTING_ON)
 
 
-## Модель от первого лица: без теней на мир, иначе тень «висит» у лица.
+## Модель от первого лица: без теней на мир (иначе тень «висит» у лица)
+## и на отдельном визуальном слое — её рисует камера ViewmodelLayer.
 func set_first_person() -> void:
 	_set_shadows(GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
+	for node: Node in find_children("*", "GeometryInstance3D", true, false):
+		(node as GeometryInstance3D).layers = ViewmodelLayer.VISUAL_LAYER
+	# Вспышка освещает и мир, и сам ствол — её видят обе камеры.
+	_flash_light.layers |= ViewmodelLayer.VISUAL_LAYER
 
 
 func _set_shadows(mode: GeometryInstance3D.ShadowCastingSetting) -> void:

@@ -5,6 +5,8 @@ extends Resource
 
 enum Slot { PRIMARY, SECONDARY }
 enum FireMode { AUTO, SEMI, BURST }
+## Обзор, для которого заданы ads_fov.
+const ADS_FOV_REFERENCE: float = 80.0
 enum Category { ASSAULT, CARBINE, BATTLE, SMG, SHOTGUN, SNIPER, PISTOL }
 
 const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Боевая винтовка", "Пистолет-пулемёт",
@@ -84,6 +86,7 @@ const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Бо
 @export_range(0.0, 1.0) var recoil_recovery: float = 0.4
 
 @export_group("Прицеливание")
+## Обзор в прицеле при настройке обзора 80° (при другой — пропорционально).
 @export var ads_fov: float = 55.0
 ## Оптика: в прицеле модель скрывается, на экране — круг прицела.
 @export var has_scope: bool = false
@@ -101,6 +104,8 @@ const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Бо
 @export var model_length: float = 0.9
 ## Поворот модели вокруг вертикали, чтобы дуло смотрело в −Z.
 @export var model_yaw_deg: float = 0.0
+## Поворот модели вокруг оси ствола (180 — если модель в файле вверх ногами).
+@export var model_roll_deg: float = 0.0
 ## Насколько линия прицела ниже верха модели, м.
 @export var sight_drop: float = 0.012
 ## Насколько дуло ниже верха модели (доля высоты модели).
@@ -108,8 +113,10 @@ const CATEGORY_NAMES: Array[String] = ["Автомат", "Карабин", "Бо
 ## Насколько задний край модели позади линии взгляда в прицеле, м.
 @export var rear_offset: float = 0.22
 ## Положение модели у камеры: от бедра и в прицеле.
-@export var view_hip: Vector3 = Vector3(0.16, -0.19, -0.3)
-@export var view_ads: Vector3 = Vector3(0.0, 0.0, -0.33)
+@export var view_hip: Vector3 = Vector3(0.15, -0.125, -0.27)
+## Поворот от бедра, градусы (y > 0 — дуло к центру экрана).
+@export var view_hip_rot_deg: Vector3 = Vector3(1.0, 5.0, -3.0)
+@export var view_ads: Vector3 = Vector3(0.0, 0.0, -0.2)
 
 
 func get_damage(distance: float, headshot: bool) -> float:
